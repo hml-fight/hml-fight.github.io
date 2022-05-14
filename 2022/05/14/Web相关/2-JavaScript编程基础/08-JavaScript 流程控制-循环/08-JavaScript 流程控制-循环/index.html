@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JS编程基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-JS基础（八、流程控制-循环）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="JS编程基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image-20220102211640655_iDzAdb6tAx.png">
+<meta property="og:image" content="http://example.com/image/image-20220102212122800_EE82Iwcp4F.png">
+<meta property="og:image" content="http://example.com/image/image-20220102212127119_afSW2FkJx7.png">
+<meta property="og:image" content="http://example.com/image/image-20220102212731649_16X-duqZm6.png">
+<meta property="og:image" content="http://example.com/image/image-20220102213042559_B-wtVk2J41.png">
+<meta property="og:image" content="http://example.com/image/image-20220102213201421_hyo3mkciKL.png">
+<meta property="og:image" content="http://example.com/image/image-20220102214122490_10sHXTwZ8_.png">
+<meta property="og:image" content="http://example.com/image/image-20220102214715054_oMMx8bW0UR.png">
+<meta property="article:published_time" content="2022-05-14T07:33:28.546Z">
+<meta property="article:modified_time" content="2022-05-14T07:57:56.546Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image-20220102211640655_iDzAdb6tAx.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-JS基础（八、流程控制-循环） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/08-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-JS基础（八、流程控制-循环）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：15:57:56" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/JS%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">JS基础</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JS编程基础</p>
+<span id="more"></span>
+<h1 id="javascript-流程控制-循环">JavaScript 流程控制-循环</h1>
+<h1 id="循环">循环</h1>
+<p><strong>循环目的</strong></p>
+<p>在实际问题中，有许多具有规律性的重复操作，因此在程序中要完成这类操作就需要重复执行某些语句</p>
+<p>在Js 中，主要有三种类型的循环语句：</p>
+<ul>
+<li><p>for 循环</p></li>
+<li><p>while 循环</p></li>
+<li><p>do...while 循环</p></li>
+</ul>
+<h1 id="for-循环">for 循环</h1>
+<p>在程序中，一组被重复执行的语句被称之为循环体，能否继续重复执行，取决于循环的终止条件。由循环体及循环的终止条件组成的语句，被称之为<strong>循环语句</strong></p>
+<h2 id="语法结构">语法结构</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( 初始化变量; 条件表达式; 操作表达式 )&#123;</span><br><span class="line">    <span class="comment">//循环体语句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>执行过程：</strong></p>
+<p>\1. 初始化变量，初始化操作在整个 for 循环只会执行一次**。**</p>
+<p>\2.
+执行条件表达式，如果为true，则执行循环体语句，否则退出循环，循环结束。</p>
+<p>\3. 执行操作表达式，此时第一轮结束。</p>
+<p>\4. 第二轮开始，直接去执行条件表达式（不再初始化变量），如果为 true
+，则去执行循环体语句，否则退出循环。</p>
+<p>\5. 继续执行操作表达式，第二轮结束。</p>
+<p>\6. 后续跟第二轮一致，直至条件表达式为假，结束整个 for 循环。</p>
+<h2 id="for-循环重复相同的代码">for 循环重复相同的代码</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  基本写法</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;媳妇我错了~&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 用户输入次数</span></span><br><span class="line"><span class="keyword">var</span> num = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入次数:&#x27;</span>)；</span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">var</span> i = <span class="number">1</span> ; i &lt;= num; i++) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;媳妇我错了~&#x27;</span>);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h2 id="for-循环重复不相同的代码">for 循环重复不相同的代码</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  基本写法</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这个人今年&#x27;</span> + i + <span class="string">&#x27;岁了&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// for 里面是可以添加其他语句的 </span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</span><br><span class="line"> <span class="keyword">if</span> (i == <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这个人今年1岁了， 它出生了&#x27;</span>);</span><br><span class="line"> &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">100</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这个人今年100岁了，它死了&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这个人今年&#x27;</span> + i + <span class="string">&#x27;岁了&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2
+id="课堂案例1求1-100之间所有整数的累加和">课堂案例1：求1-100之间所有整数的累加和</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>;i &lt;= <span class="number">100</span>; i++)&#123;</span><br><span class="line">        sumNum += i;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;1-100之间整数的和 = &#x27;</span> + sum);</span><br></pre></td></tr></table></figure>
+<h2 id="课堂案例-2求学生成绩">课堂案例 2：求学生成绩</h2>
+<p>要求用户输入班级人数，之后依次输入每个学生的成绩，最后打印出该班级总的成绩以及平均成绩。</p>
+<p><img src="/image/image-20220102211640655_iDzAdb6tAx.png" /></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">var</span> numPeople = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入班级总人数：&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">var</span> sumScore = <span class="number">0</span>;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">var</span> avgScore = <span class="number">0</span>;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; numPeople; i++)&#123;</span></span><br><span class="line"><span class="language-javascript">                sumScore += <span class="built_in">parseFloat</span>(<span class="title function_">prompt</span>(<span class="string">&#x27;请输入成绩&#x27;</span>))</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">alert</span>(<span class="string">&#x27;总成绩:&#x27;</span> + sumScore + <span class="string">&#x27;;&#x27;</span> + <span class="string">&#x27;平均成绩:&#x27;</span> + (sumScore / numPeople));</span></span><br><span class="line"><span class="language-javascript">        </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="双重-for-循环">双重 for 循环</h1>
+<h2 id="双重-for-循环概述">双重 for 循环****概述</h2>
+<p>很多情况下，单层 for 循环并不能满足我们的需求，比如我们要打印一个 5
+行 5 列的图形、打印一个倒</p>
+<p>直角三角形等，此时就可以通过循环嵌套来实现。</p>
+<p><img src="/image/image-20220102212122800_EE82Iwcp4F.png" /></p>
+<p><img src="/image/image-20220102212127119_afSW2FkJx7.png" /></p>
+<p><strong>循环****嵌套</strong>是指在一个循环语句中再定义一个循环语句的语法结构，例如在for循环语句中，可以再嵌套一个for
+循环，这样的 for 循环语句我们称之为双重for循环。</p>
+<h2 id="双重-for-循环语法">双重 for 循环语法</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (外循环的初始; 外循环的条件; 外循环的操作表达式) &#123;</span><br><span class="line">    <span class="keyword">for</span> (内循环的初始; 内循环的条件; 内循环的操作表达式) &#123;  </span><br><span class="line">       需执行的代码;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>l内层循环可以看做外层循环的语句</p>
+<p>l内层循环执行的顺序也要遵循 for 循环的执行顺序</p>
+<p>l外层循环执行一次，内层循环要执行全部次数</p>
+<h2 id="课堂案例-1打印-n-行-n-列的星星">课堂案例 1：打印 n 行 n
+列的星星</h2>
+<p>要求用户输入行数和列数，之后在控制台打印出用户输入行数和列数的星星。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> row = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几行星星:&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> col = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几列星星:&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= row; i++) &#123;</span><br><span class="line">   <span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= col; j++) &#123;</span><br><span class="line">       str += <span class="string">&#x27;☆&#x27;</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   str += <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="variable language_">console</span>.<span class="title function_">log</span>(str);</span><br></pre></td></tr></table></figure>
+<p><strong>课堂****案例</strong>
+<strong>2</strong>**：打印****倒三角形**</p>
+<p><img src="/image/image-20220102212731649_16X-duqZm6.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> row = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几行星星:&#x27;</span>);</span><br><span class="line">            <span class="keyword">var</span> col = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几列星星:&#x27;</span>);</span><br><span class="line">            <span class="keyword">var</span> str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= row; i++) &#123;</span><br><span class="line">                <span class="keyword">for</span> (j = i; j &lt;= col; j++) &#123;</span><br><span class="line">                    str += <span class="string">&#x27;☆&#x27;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                str += <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(str);</span><br></pre></td></tr></table></figure>
+<h2 id="思考打印正三角形">思考：打印正三角形</h2>
+<p><img src="/image/image-20220102213042559_B-wtVk2J41.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> row = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几行星星:&#x27;</span>);</span><br><span class="line">            <span class="keyword">var</span> col = <span class="title function_">prompt</span>(<span class="string">&#x27;请输入您打印几列星星:&#x27;</span>);</span><br><span class="line">            <span class="keyword">var</span> str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= row; i++) &#123;</span><br><span class="line">                <span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= i; j++) &#123;</span><br><span class="line">                    str += <span class="string">&#x27;☆&#x27;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                str += <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(str);</span><br></pre></td></tr></table></figure>
+<h2 id="课堂案例3打印九九乘法表">课堂案例3：打印九九乘法表</h2>
+<p><img src="/image/image-20220102213201421_hyo3mkciKL.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">9</span>; i++) &#123; <span class="comment">//  外层for控制 行数  9行</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">1</span>; j &lt;= i; j++) &#123; <span class="comment">// j 控制列数    列数和行数是一样的  j &lt;= i  </span></span><br><span class="line">        str += j + <span class="string">&quot; × &quot;</span> + i + <span class="string">&quot; = &quot;</span> + i * j + <span class="string">&#x27;\t&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    str += <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(str);</span><br></pre></td></tr></table></figure>
+<h2 id="or-循环小结">or 循环小结</h2>
+<ol type="1">
+<li><p>for 循环可以重复执行某些相同代码</p></li>
+<li><p>for 循环可以重复执行些许不同的代码，因为我们有计数器</p></li>
+<li><p>for 循环可以重复执行某些操作，比如算术运算符加法操作</p></li>
+<li><p>随着需求增加，双重for循环可以做更多、更好看的效果</p></li>
+<li><p>双重 for 循环，外层循环一次，内层 for 循环全部执行</p></li>
+<li><p>for 循环是循环条件和数字直接相关的循环</p></li>
+<li><p>分析要比写代码更重要</p></li>
+<li><p>一些核心算法想不到，但是要学会，分析它执行过程</p></li>
+<li><p>举一反三，自己经常总结，做一些相似的案例</p></li>
+</ol>
+<h1 id="while-循环">while 循环</h1>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (条件表达式) &#123;</span><br><span class="line">    <span class="comment">// 循环体代码 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>执行思路</strong>**：**</p>
+<p>①先执行条件表达式，如果结果为 true，则执行循环体代码；如果为
+false，则退出循环，执行后面代码</p>
+<p>②执行循环体代码</p>
+<p>③循环体代码执行完毕后，程序会继续判断执行条件表达式，如条件仍为true，则会继续执行循环体，直到循环条件为
+false 时，整个循环过程才会结束</p>
+<p><strong>注意：</strong></p>
+<p>①使用 while
+循环时一定要注意，它必须要有退出条件，否则会成为死循环</p>
+<p>②while 循环和 for 循环的不同之处在于 while
+循环可以做较为复杂的条件判断，比如判断用户名和密码</p>
+<h2 id="课堂案例-1">课堂案例 1：</h2>
+<p>①打印人的一生，从1岁到100岁</p>
+<p>②计算 1 ~ 100 之间所有整数的和</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (age &lt;= <span class="number">100</span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(age)</span><br><span class="line">    age ++</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> age = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (age &lt;= <span class="number">100</span>)&#123;</span><br><span class="line">    sum += age</span><br><span class="line">    age ++</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sum)</span><br></pre></td></tr></table></figure>
+<h2 id="课堂案例-2询问你爱我吗">课堂案例 2：询问你爱我吗</h2>
+<p>弹出一个提示框， 你爱我吗？
+如果输入我爱你，就提示结束，否则，一直询问</p>
+<p><img src="/image/image-20220102214122490_10sHXTwZ8_.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">while</span> (str !== <span class="string">&#x27;我爱你&#x27;</span>)&#123;</span><br><span class="line">  str = <span class="title function_">prompt</span>(<span class="string">&#x27;你爱我吗？&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">            </span><br></pre></td></tr></table></figure>
+<h1 id="do-while-循环">do while 循环</h1>
+<p>do... while 语句其实是 while
+语句的一个变体。该循环会先执行一次代码块，然后对条件表达式进行判断，如果条件为真，就会重复执行循环体，否则退出循环。</p>
+<p>do... while 语句的语法结构如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line">    <span class="comment">// 循环体代码 - 条件表达式为 true 时重复执行循环体代码</span></span><br><span class="line">&#125; <span class="keyword">while</span>(条件表达式);</span><br></pre></td></tr></table></figure>
+<p><strong>执行****思路：</strong></p>
+<p>①先执行一次循环体代码</p>
+<p>②再执行条件表达式，如果结果为 true，则继续执行循环体代码，如果为
+false，则退出循环，继续执行后面代码</p>
+<p><strong>注意：先再执行循环体，再判断，我们会发现 do…while
+循环语句至少会执行一次循环体代码</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">do</span> &#123;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">var</span> love = <span class="title function_">prompt</span>(<span class="string">&#x27;你爱我吗？&#x27;</span>);</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">while</span> (love != <span class="string">&#x27;我爱你&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">alert</span>(<span class="string">&#x27;登录成功&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="循环小结">循环小结</h2>
+<p>lJS 中循环有 for 、while 、 do while</p>
+<p>l三个循环很多情况下都可以相互替代使用</p>
+<p>l如果是用来计次数，跟数字相关的，三者使用基本相同，但是我们更喜欢用
+for</p>
+<p>lwhile 和 do…while 可以做更复杂的判断条件，比 for 循环灵活一些</p>
+<p>lwhile 和 do…while 执行顺序不一样，while 先判断后执行，do…while
+先执行一次，再判断执行</p>
+<p>lwhile 和 do…while 执行次数不一样，do…while 至少会执行一次循环体， 而
+while 可能一次也不执行</p>
+<p>l实际工作中，我们更常用for 循环语句，它写法更简洁直观，
+所以这个要重点学习</p>
+<h1 id="continue-break">continue break</h1>
+<h2 id="continue-关键字">continue 关键字</h2>
+<p><strong>c****ontinue</strong>
+<strong>关键字</strong>用于立即<strong>跳出本次循环</strong>，<strong>继续下一次循环</strong>（本次循环体中
+continue 之后的代码就会少执行一次）。</p>
+<p>例如，吃5个包子，第3个有虫子，就扔掉第3个，继续吃第4个第5个包子，其代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">     <span class="keyword">if</span> (i == <span class="number">3</span>) &#123;</span><br><span class="line">         <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;这个包子有虫子，扔掉&#x27;</span>);</span><br><span class="line">         <span class="keyword">continue</span>; <span class="comment">// 跳出本次循环，跳出的是第3次循环 </span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;我正在吃第&#x27;</span> + i + <span class="string">&#x27;个包子呢&#x27;</span>);</span><br><span class="line"> &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="break-关键字">break 关键字</h2>
+<p><strong>break</strong>
+<strong>关键字用于</strong>立即<strong>跳出整个循环</strong>（循环结束）。</p>
+<p>例如，吃5个包子，吃到第3个发现里面有半个虫子，其余的不吃了，其代码实现如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++) &#123;</span><br><span class="line">   <span class="keyword">if</span> (i == <span class="number">3</span>) &#123;</span><br><span class="line">       <span class="keyword">break</span>; <span class="comment">// 直接退出整个for 循环，跳到整个for下面的语句</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;我正在吃第&#x27;</span> + i + <span class="string">&#x27;个包子呢&#x27;</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="小组项目-简易atm">小组项目： 简易ATM</h1>
+<p><img src="/image/image-20220102214715054_oMMx8bW0UR.png" /></p>
+<ul>
+<li><p>里面现存有 100 块钱。</p></li>
+<li><p>如果存钱，就用输入钱数加上先存的钱数,
+之后弹出显示余额提示框</p></li>
+<li><p>如果取钱，就减去取的钱数，之后弹出显示余额提示框</p></li>
+<li><p>如果显示余额，就输出余额</p></li>
+<li><p>如果退出，弹出退出信息提示框</p></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">        &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">        &lt;script&gt;</span><br><span class="line">            var balance = 1000;</span><br><span class="line">            while (true)&#123;</span><br><span class="line">                var choose = prompt(&#x27;请输入您要的操作：\n1.存钱\n2.取钱\n3.显示余额\n4.退出&#x27;)</span><br><span class="line">                if (choose == 1) &#123;</span><br><span class="line">                    var money = parseInt(prompt(&#x27;存多少啊?&#x27;)) </span><br><span class="line">                    if (money &lt;= 0)&#123;</span><br><span class="line">                        alert(&#x27;SB，滚！！！&#x27;)</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        balance += money</span><br><span class="line">                        alert(&#x27;您现在的余额为：&#x27; + balance)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; else if (choose == 2) &#123;</span><br><span class="line">                    var money = parseInt(prompt(&#x27;取多少啊?&#x27;)) </span><br><span class="line">                    if (money &lt;= 0 || money &gt; balance)&#123;</span><br><span class="line">                        alert(&#x27;SB，滚！！！&#x27;)</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        balance -= money</span><br><span class="line">                        alert(&#x27;您现在的余额为：&#x27; + balance)</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; else if (choose == 3) &#123;</span><br><span class="line">                    alert(&#x27;您现在的余额为：&#x27; + balance)</span><br><span class="line">                &#125; else if (choose == 4) &#123;</span><br><span class="line">                    break</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    alert(&#x27;SB，滚！！！&#x27;)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">        &lt;/script&gt;</span><br><span class="line">        </span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        </span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/07-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%88%86%E6%94%AF/07-JavaScript%20%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%88%86%E6%94%AF/" rel="prev" title="web相关-JS基础（七、流程控制-分支）">
+      <i class="fa fa-chevron-left"></i> web相关-JS基础（七、流程控制-分支）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/09-JavaScript%20%E6%95%B0%E7%BB%84/09-JavaScript%20%E6%95%B0%E7%BB%84/" rel="next" title="web相关-JS基础（九、数组）">
+      web相关-JS基础（九、数组） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#javascript-%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.</span> <span class="nav-text">JavaScript 流程控制-循环</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF"><span class="nav-number">2.</span> <span class="nav-text">循环</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#for-%E5%BE%AA%E7%8E%AF"><span class="nav-number">3.</span> <span class="nav-text">for 循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">3.1.</span> <span class="nav-text">语法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for-%E5%BE%AA%E7%8E%AF%E9%87%8D%E5%A4%8D%E7%9B%B8%E5%90%8C%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">3.2.</span> <span class="nav-text">for 循环重复相同的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for-%E5%BE%AA%E7%8E%AF%E9%87%8D%E5%A4%8D%E4%B8%8D%E7%9B%B8%E5%90%8C%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">for 循环重复不相同的代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B1%E6%B1%821-100%E4%B9%8B%E9%97%B4%E6%89%80%E6%9C%89%E6%95%B4%E6%95%B0%E7%9A%84%E7%B4%AF%E5%8A%A0%E5%92%8C"><span class="nav-number">3.4.</span> <span class="nav-text">课堂案例1：求1-100之间所有整数的累加和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B-2%E6%B1%82%E5%AD%A6%E7%94%9F%E6%88%90%E7%BB%A9"><span class="nav-number">3.5.</span> <span class="nav-text">课堂案例 2：求学生成绩</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%8C%E9%87%8D-for-%E5%BE%AA%E7%8E%AF"><span class="nav-number">4.</span> <span class="nav-text">双重 for 循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E9%87%8D-for-%E5%BE%AA%E7%8E%AF%E6%A6%82%E8%BF%B0"><span class="nav-number">4.1.</span> <span class="nav-text">双重 for 循环****概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E9%87%8D-for-%E5%BE%AA%E7%8E%AF%E8%AF%AD%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">双重 for 循环语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B-1%E6%89%93%E5%8D%B0-n-%E8%A1%8C-n-%E5%88%97%E7%9A%84%E6%98%9F%E6%98%9F"><span class="nav-number">4.3.</span> <span class="nav-text">课堂案例 1：打印 n 行 n
+列的星星</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E6%89%93%E5%8D%B0%E6%AD%A3%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="nav-number">4.4.</span> <span class="nav-text">思考：打印正三角形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B3%E6%89%93%E5%8D%B0%E4%B9%9D%E4%B9%9D%E4%B9%98%E6%B3%95%E8%A1%A8"><span class="nav-number">4.5.</span> <span class="nav-text">课堂案例3：打印九九乘法表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#or-%E5%BE%AA%E7%8E%AF%E5%B0%8F%E7%BB%93"><span class="nav-number">4.6.</span> <span class="nav-text">or 循环小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#while-%E5%BE%AA%E7%8E%AF"><span class="nav-number">5.</span> <span class="nav-text">while 循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B-1"><span class="nav-number">5.1.</span> <span class="nav-text">课堂案例 1：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E5%A0%82%E6%A1%88%E4%BE%8B-2%E8%AF%A2%E9%97%AE%E4%BD%A0%E7%88%B1%E6%88%91%E5%90%97"><span class="nav-number">5.2.</span> <span class="nav-text">课堂案例 2：询问你爱我吗</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#do-while-%E5%BE%AA%E7%8E%AF"><span class="nav-number">6.</span> <span class="nav-text">do while 循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E5%B0%8F%E7%BB%93"><span class="nav-number">6.1.</span> <span class="nav-text">循环小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#continue-break"><span class="nav-number">7.</span> <span class="nav-text">continue break</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#continue-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.1.</span> <span class="nav-text">continue 关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#break-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">7.2.</span> <span class="nav-text">break 关键字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%84%E9%A1%B9%E7%9B%AE-%E7%AE%80%E6%98%93atm"><span class="nav-number">8.</span> <span class="nav-text">小组项目： 简易ATM</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

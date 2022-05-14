@@ -1,0 +1,4013 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="SQL+运行原理+运算数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据分析自学课程（第四课：SQL基础语法+运行原理+云端数据库搭建）">
+<meta property="og:url" content="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E5%9B%9B%E8%AF%BE-SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95+%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86+%E4%BA%91%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="SQL+运行原理+运算数据库">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_t_FxO3erP7.png">
+<meta property="og:image" content="http://example.com/image/image_JS5BDjg4sy.png">
+<meta property="og:image" content="http://example.com/image/image_4DNe9CeMwj.png">
+<meta property="og:image" content="http://example.com/image/image_UMBHo6_L5q.png">
+<meta property="og:image" content="http://example.com/image/image_IzpeCpocPt.png">
+<meta property="og:image" content="http://example.com/image/image_2jEmUfnFiV.png">
+<meta property="og:image" content="http://example.com/image/image_HSw0O9ffho.png">
+<meta property="og:image" content="http://example.com/image/image_XZqvhzRpOr.png">
+<meta property="og:image" content="http://example.com/image/image_vekHLaBbqZ.png">
+<meta property="og:image" content="http://example.com/image/image_k_SPe5HcX0.png">
+<meta property="og:image" content="http://example.com/image/image_2ABAUJFu3m.png">
+<meta property="og:image" content="http://example.com/image/image_KdcS4I4aiK.png">
+<meta property="og:image" content="http://example.com/image/image_JleGxviLIb.png">
+<meta property="og:image" content="http://example.com/image/image_eprN3bn6uz.png">
+<meta property="og:image" content="http://example.com/image/image_y9VBoSklmd.png">
+<meta property="og:image" content="http://example.com/image/image_NOS-4niVhF.png">
+<meta property="og:image" content="http://example.com/image/image_hytmqS5P91.png">
+<meta property="og:image" content="http://example.com/image/image_miMIo9AC_h.png">
+<meta property="og:image" content="http://example.com/image/image_MYFEYkNcAE.png">
+<meta property="og:image" content="http://example.com/image/image_eWLvDsT2Vz.png">
+<meta property="og:image" content="http://example.com/image/image_fC561TlltE.png">
+<meta property="og:image" content="http://example.com/image/image_5_7jIq-97W.png">
+<meta property="og:image" content="http://example.com/image/image_kTiQvITey6.png">
+<meta property="og:image" content="http://example.com/image/image_wWIeMoChYa.png">
+<meta property="og:image" content="http://example.com/image/image_XFF4BHsVh2.png">
+<meta property="og:image" content="http://example.com/image/image_yJw57a0LNL.png">
+<meta property="og:image" content="http://example.com/image/image_137bksxZp1.png">
+<meta property="og:image" content="http://example.com/image/image_mxVqNBajEw.png">
+<meta property="og:image" content="http://example.com/image/image_8x2D00V4ae.png">
+<meta property="og:image" content="http://example.com/image/image_8FaNnUD_5g.png">
+<meta property="og:image" content="http://example.com/image/image__1SziUMpwA.png">
+<meta property="og:image" content="http://example.com/image/image_cPefzrOTC-.png">
+<meta property="og:image" content="http://example.com/image/image_XNJtHwoWPV.png">
+<meta property="og:image" content="http://example.com/image/image_GBCGsOlP-v.png">
+<meta property="og:image" content="http://example.com/image/image_HEhm8kZKiM.png">
+<meta property="og:image" content="http://example.com/image/image_PnyySROVNi.png">
+<meta property="og:image" content="http://example.com/image/image_5OW-WxNQ1w.png">
+<meta property="og:image" content="http://example.com/image/image_QztSkNvxz7.png">
+<meta property="og:image" content="http://example.com/image/image_LsAX_0fSrx.png">
+<meta property="og:image" content="http://example.com/image/image_pQ8mw4I9Qj.png">
+<meta property="og:image" content="http://example.com/image/image_BLrciXRwdd.png">
+<meta property="og:image" content="http://example.com/image/image_AvUTq_0VzM.png">
+<meta property="og:image" content="http://example.com/image/image_Pkav4ZujCJ.png">
+<meta property="og:image" content="http://example.com/image/image_3nyqJFmU9v.png">
+<meta property="og:image" content="http://example.com/image/image_lkGy6UekM3.png">
+<meta property="og:image" content="http://example.com/image/image_idYCN6vlQp.png">
+<meta property="og:image" content="http://example.com/image/image_VTKE99W-84.png">
+<meta property="og:image" content="http://example.com/image/image_igPkI9l6LU.png">
+<meta property="og:image" content="http://example.com/image/image_arJoUZfMIP.png">
+<meta property="og:image" content="http://example.com/image/image_zoEvtyHjGV.png">
+<meta property="og:image" content="http://example.com/image/image_MXyaAfIKbE.png">
+<meta property="og:image" content="http://example.com/image/image_WWL81l76A1.png">
+<meta property="og:image" content="http://example.com/image/image_cjpXL81OTg.png">
+<meta property="og:image" content="http://example.com/image/image_rnj38WA9k-.png">
+<meta property="og:image" content="http://example.com/image/image_3twWdyVz1Q.png">
+<meta property="og:image" content="http://example.com/image/image_vvWalsjxNl.png">
+<meta property="og:image" content="http://example.com/image/image_1FpBJjlItA.png">
+<meta property="og:image" content="http://example.com/image/image_ajxvgqM3hQ.png">
+<meta property="og:image" content="http://example.com/image/image_BkPM_0O83I.png">
+<meta property="og:image" content="http://example.com/image/image_poIU4UMpnJ.png">
+<meta property="og:image" content="http://example.com/image/image_vrZAU3_UOs.png">
+<meta property="og:image" content="http://example.com/image/image_ee2RWBgkHb.png">
+<meta property="og:image" content="http://example.com/image/image_L-n9GVr3oh.png">
+<meta property="og:image" content="http://example.com/image/image_tos9rLWTuP.png">
+<meta property="og:image" content="http://example.com/image/image_GvkChBIqiX.png">
+<meta property="og:image" content="http://example.com/image/image_T4gfoluE-0.png">
+<meta property="og:image" content="http://example.com/image/image_z8jzU2ij_4.png">
+<meta property="og:image" content="http://example.com/image/image_HTvVeZxlsy.png">
+<meta property="og:image" content="http://example.com/image/image_q5ZPy__Pdv.png">
+<meta property="og:image" content="http://example.com/image/image_fGinPX5iey.png">
+<meta property="og:image" content="http://example.com/image/image_JSlamYg2qi.png">
+<meta property="og:image" content="http://example.com/image/image_jps9N0HTxC.png">
+<meta property="og:image" content="http://example.com/image/image_AwJd-T-hhB.png">
+<meta property="og:image" content="http://example.com/image/image_oBi1DGKQ4V.png">
+<meta property="og:image" content="http://example.com/image/image_TJ_nBzl4Vh.png">
+<meta property="og:image" content="http://example.com/image/image_J3_d6Ig0OT.png">
+<meta property="og:image" content="http://example.com/image/image_t8DrwXy3rA.png">
+<meta property="og:image" content="http://example.com/image/image_mMlDOaM70J.png">
+<meta property="og:image" content="http://example.com/image/image_nHsHqg6DFB.png">
+<meta property="og:image" content="http://example.com/image/image_IYdz7PGypP.png">
+<meta property="og:image" content="http://example.com/image/image_930Bjs_pKm.png">
+<meta property="og:image" content="http://example.com/image/image_xk6CiVaq4s.png">
+<meta property="og:image" content="http://example.com/image/image_bt7N2KmpZU.png">
+<meta property="og:image" content="http://example.com/image/image_PDo_lPnG9s.png">
+<meta property="og:image" content="http://example.com/image/image_AVAzbduTnL.png">
+<meta property="og:image" content="http://example.com/image/image_7rJ619T1NQ.png">
+<meta property="og:image" content="http://example.com/image/image_J7L1o_6cRn.png">
+<meta property="og:image" content="http://example.com/image/image_S9cEhzmBSF.png">
+<meta property="og:image" content="http://example.com/image/image_2ZLnCF6h-t.png">
+<meta property="og:image" content="http://example.com/image/image_Ps6n9vYYL4.png">
+<meta property="og:image" content="http://example.com/image/image_n2inLXcV6S.png">
+<meta property="og:image" content="http://example.com/image/image_VUIIyMIZx5.png">
+<meta property="og:image" content="http://example.com/image/image_VoQmByJy-h.png">
+<meta property="og:image" content="http://example.com/image/image_rD8IMz-EoR.png">
+<meta property="og:image" content="http://example.com/image/image_AspnX2766E.png">
+<meta property="og:image" content="http://example.com/image/image_9GQ45Tj6h0.png">
+<meta property="og:image" content="http://example.com/image/image_gA0NUlAUOe.png">
+<meta property="og:image" content="http://example.com/image/image_7_-luxUcEE.png">
+<meta property="og:image" content="http://example.com/image/image_r5FDyPCS0X.png">
+<meta property="og:image" content="http://example.com/image/image_ZISKtWsXK1.png">
+<meta property="og:image" content="http://example.com/image/image_q9oy043RC8.png">
+<meta property="og:image" content="http://example.com/image/image_x4L1y_iMBl.png">
+<meta property="og:image" content="http://example.com/image/image_LZwPrv5V4S.png">
+<meta property="og:image" content="http://example.com/image/image_7uFIBnosag.png">
+<meta property="og:image" content="http://example.com/image/image_6DfhWfTHWn.png">
+<meta property="og:image" content="http://example.com/image/image_Yd84sEXZF5.png">
+<meta property="og:image" content="http://example.com/image/image_Dny8qNHguV.png">
+<meta property="og:image" content="http://example.com/image/image_ByuflMO9HS.png">
+<meta property="og:image" content="http://example.com/image/image_cLVlYh3Bj0.png">
+<meta property="og:image" content="http://example.com/image/image_KIpWVx8Yad.png">
+<meta property="og:image" content="http://example.com/image/image_JF1brmsd2l.png">
+<meta property="og:image" content="http://example.com/image/image_1sw8xxCK12.png">
+<meta property="og:image" content="http://example.com/image/image_zOTFDeJnBU.png">
+<meta property="og:image" content="http://example.com/image/image_A9xTWk9iM8.png">
+<meta property="og:image" content="http://example.com/image/image_tBLIPCZhlb.png">
+<meta property="og:image" content="http://example.com/image/image_F1HCVoYkZ0.png">
+<meta property="og:image" content="http://example.com/image/image_oiAoQY46Xe.png">
+<meta property="og:image" content="http://example.com/image/image_CPu8Wm8n1o.png">
+<meta property="og:image" content="http://example.com/image/image_Z-UYc76b-h.png">
+<meta property="og:image" content="http://example.com/image/image_ya_DJ4LRKl.png">
+<meta property="og:image" content="http://example.com/image/image_TJF-_dGvpF.png">
+<meta property="og:image" content="http://example.com/image/image_IHv_jAqlF-.png">
+<meta property="og:image" content="http://example.com/image/image_BGzyqboJc-.png">
+<meta property="og:image" content="http://example.com/image/image_7cP_TEDs74.png">
+<meta property="og:image" content="http://example.com/image/image_Ef1t8oViza.png">
+<meta property="og:image" content="http://example.com/image/image_-7nvB9HVYa.png">
+<meta property="og:image" content="http://example.com/image/image_G66Rmbphuk.png">
+<meta property="og:image" content="http://example.com/image/image_yqCNlXLmKE.png">
+<meta property="og:image" content="http://example.com/image/image_ZJCZjLUQLQ.png">
+<meta property="og:image" content="http://example.com/image/image_9QP-d6xuLY.png">
+<meta property="og:image" content="http://example.com/image/image_CjCpzshHOs.png">
+<meta property="og:image" content="http://example.com/image/image_e817n-BnAV.png">
+<meta property="og:image" content="http://example.com/image/image_M7sJTs0mDY.png">
+<meta property="og:image" content="http://example.com/image/image_LPaNEPkMsB.png">
+<meta property="og:image" content="http://example.com/image/image_2T1MyGeEkp.png">
+<meta property="og:image" content="http://example.com/image/image_0l-2EbBqxV.png">
+<meta property="og:image" content="http://example.com/image/image_dk6gmIg7BP.png">
+<meta property="og:image" content="http://example.com/image/image_-G-za2RRYK.png">
+<meta property="og:image" content="http://example.com/image/image_ZJKf4QHnR-.png">
+<meta property="og:image" content="http://example.com/image/image_zbzQVqakaM.png">
+<meta property="og:image" content="http://example.com/image/image_68Dkyasefc.png">
+<meta property="og:image" content="http://example.com/image/image_tAHR-3LKuu.png">
+<meta property="og:image" content="http://example.com/image/image_OXN49mipIk.png">
+<meta property="og:image" content="http://example.com/image/image_KYzBtIEvyt.png">
+<meta property="og:image" content="http://example.com/image/image_IR03pOYru6.png">
+<meta property="og:image" content="http://example.com/image/image_1ytOeUp-5T.png">
+<meta property="og:image" content="http://example.com/image/image_VuMMs59pLt.png">
+<meta property="og:image" content="http://example.com/image/image_UeZd_lYwJN.png">
+<meta property="og:image" content="http://example.com/image/image_CYAd3meLsJ.png">
+<meta property="og:image" content="http://example.com/image/image_C2KVgv_kd4.png">
+<meta property="og:image" content="http://example.com/image/image_lBQGna4NaG.png">
+<meta property="og:image" content="http://example.com/image/image_vNHe3qUD7j.png">
+<meta property="og:image" content="http://example.com/image/image_ckS_bCFGsV.png">
+<meta property="og:image" content="http://example.com/image/image_aNo-O5_XLD.png">
+<meta property="og:image" content="http://example.com/image/image_2AEVrib6Yn.png">
+<meta property="og:image" content="http://example.com/image/image_5-P5agPiUU.png">
+<meta property="og:image" content="http://example.com/image/image_NLW7Y5ZPx1.png">
+<meta property="og:image" content="http://example.com/image/image_KQxFLQLoLr.png">
+<meta property="og:image" content="http://example.com/image/image_YG2VEtcUQb.png">
+<meta property="og:image" content="http://example.com/image/image_SbNbll4umn.png">
+<meta property="og:image" content="http://example.com/image/image_UOZmmki0f2.png">
+<meta property="og:image" content="http://example.com/image/image_Wr0tX62wo8.png">
+<meta property="og:image" content="http://example.com/image/image_oFnLw112LJ.png">
+<meta property="og:image" content="http://example.com/image/image_epiOuJ0nGO.png">
+<meta property="og:image" content="http://example.com/image/image_9jbEUvJ0Py.png">
+<meta property="og:image" content="http://example.com/image/image_fIuz05mDyK.png">
+<meta property="og:image" content="http://example.com/image/image_SfSLM0sAeC.png">
+<meta property="og:image" content="http://example.com/image/image_i8L-K3TZrr.png">
+<meta property="og:image" content="http://example.com/image/image_CVoZuEDJPQ.png">
+<meta property="og:image" content="http://example.com/image/image_1v5iQ-AcFE.png">
+<meta property="og:image" content="http://example.com/image/image_SGylMnI7Ju.png">
+<meta property="og:image" content="http://example.com/image/image_erDD9n7Pwj.png">
+<meta property="og:image" content="http://example.com/image/image_zQOuh5ihsR.png">
+<meta property="og:image" content="http://example.com/image/image_6jdHh7rlh9.png">
+<meta property="og:image" content="http://example.com/image/image_2QxbP-BRgm.png">
+<meta property="og:image" content="http://example.com/image/image_J31zZqFmwL.png">
+<meta property="og:image" content="http://example.com/image/image_mXQKuSzyTG.png">
+<meta property="og:image" content="http://example.com/image/image_YA5ztRKFC2.png">
+<meta property="og:image" content="http://example.com/image/image_ay_PdXiqgR.png">
+<meta property="og:image" content="http://example.com/image/image__KKyS8SkZ_.png">
+<meta property="og:image" content="http://example.com/image/image_6O1DgNeVNe.png">
+<meta property="og:image" content="http://example.com/image/image_5oWL6ocfQ-.png">
+<meta property="og:image" content="http://example.com/image/image_RQwXg-JJVS.png">
+<meta property="og:image" content="http://example.com/image/image_ENwNwt2tXc.png">
+<meta property="og:image" content="http://example.com/image/image_UenXF5KXo3.png">
+<meta property="og:image" content="http://example.com/image/image_URvMPP_9jp.png">
+<meta property="og:image" content="http://example.com/image/image_K6CUiSW_d5.png">
+<meta property="og:image" content="http://example.com/image/image_Ul5kgvip0a.png">
+<meta property="og:image" content="http://example.com/image/image_8Vs6BkLGIQ.png">
+<meta property="og:image" content="http://example.com/image/image_D_UbHSc-gt.png">
+<meta property="og:image" content="http://example.com/image/image_zRgkfqT6iJ.png">
+<meta property="og:image" content="http://example.com/image/image_nuu0w_tz8S.png">
+<meta property="og:image" content="http://example.com/image/image__Y8eIBE1ms.png">
+<meta property="og:image" content="http://example.com/image/image_M0E-KRhpqJ.png">
+<meta property="og:image" content="http://example.com/image/image_jaw9673-CB.png">
+<meta property="og:image" content="http://example.com/image/image_4CfR-ma53B.png">
+<meta property="og:image" content="http://example.com/image/image_r3cVscyXqF.png">
+<meta property="og:image" content="http://example.com/image/image_E93gkeEVUu.png">
+<meta property="og:image" content="http://example.com/image/image_CVz-7Ij8uJ.png">
+<meta property="og:image" content="http://example.com/image/image_RrvM8IaY03.png">
+<meta property="og:image" content="http://example.com/image/image_YoHtHRVlzJ.png">
+<meta property="og:image" content="http://example.com/image/image_5Ivwvgp_Jk.png">
+<meta property="og:image" content="http://example.com/image/image_-ofrWHlHB5.png">
+<meta property="og:image" content="http://example.com/image/image_GJyk37Hssq.png">
+<meta property="og:image" content="http://example.com/image/image_OEvnVhPXtz.png">
+<meta property="og:image" content="http://example.com/image/image_Dgc4eW6jLF.png">
+<meta property="og:image" content="http://example.com/image/image_HWAJZX06T3.png">
+<meta property="og:image" content="http://example.com/image/image_0nQCf1CExu.png">
+<meta property="og:image" content="http://example.com/image/image_Ox02K-sFE-.png">
+<meta property="og:image" content="http://example.com/image/image_L8N5KjUgFt.png">
+<meta property="og:image" content="http://example.com/image/image_LMNtjD5wBO.png">
+<meta property="og:image" content="http://example.com/image/image_KYEWfHjuCk.png">
+<meta property="og:image" content="http://example.com/image/image_p08En9qeTA.png">
+<meta property="og:image" content="http://example.com/image/image_Av28EVkvRj.png">
+<meta property="og:image" content="http://example.com/image/image_Zb8v6x1rpS.png">
+<meta property="og:image" content="http://example.com/image/image_eNQcq-pciO.png">
+<meta property="og:image" content="http://example.com/image/image_kN9pjdLvkH.png">
+<meta property="og:image" content="http://example.com/image/image_zEZIuFbyxL.png">
+<meta property="og:image" content="http://example.com/image/image_4ZYNKfXSAI.png">
+<meta property="og:image" content="http://example.com/image/image_VaVvOfpGui.png">
+<meta property="og:image" content="http://example.com/image/image_sCzedB8_Ss.png">
+<meta property="og:image" content="http://example.com/image/image_P8bpZiEJrv.png">
+<meta property="og:image" content="http://example.com/image/image_cuh45rneDn.png">
+<meta property="og:image" content="http://example.com/image/image_K4vlCivUK2.png">
+<meta property="og:image" content="http://example.com/image/image_JtWm7yuL1q.png">
+<meta property="og:image" content="http://example.com/image/image_K77tJBgMP8.png">
+<meta property="og:image" content="http://example.com/image/image_di7GlsjTaM.png">
+<meta property="og:image" content="http://example.com/image/image_4O6n4HhZQQ.png">
+<meta property="og:image" content="http://example.com/image/image_t6zsYnLEAV.png">
+<meta property="og:image" content="http://example.com/image/image_r-ZdZYjCYx.png">
+<meta property="og:image" content="http://example.com/image/image_aqfgsAVE6s.png">
+<meta property="og:image" content="http://example.com/image/image_Ey9lXBUAoe.png">
+<meta property="og:image" content="http://example.com/image/image_pkjef9IJdo.png">
+<meta property="og:image" content="http://example.com/image/image_MdyW9jrwlR.png">
+<meta property="og:image" content="http://example.com/image/image_mrDxk4F62Y.png">
+<meta property="og:image" content="http://example.com/image/image_8kkrTauDL0.png">
+<meta property="og:image" content="http://example.com/image/image_nHHlv7KbX6.png">
+<meta property="og:image" content="http://example.com/image/image_RD6-6PZjja.png">
+<meta property="og:image" content="http://example.com/image/image_rSrpX1bhyL.png">
+<meta property="og:image" content="http://example.com/image/image_Ln6r5WC3dT.png">
+<meta property="og:image" content="http://example.com/image/image_1YTbX7AycX.png">
+<meta property="og:image" content="http://example.com/image/image_IAVTc8uOEM.png">
+<meta property="og:image" content="http://example.com/image/image_YgG-9WNR8q.png">
+<meta property="og:image" content="http://example.com/image/image_oDglwZOnJF.png">
+<meta property="og:image" content="http://example.com/image/image_hDO-sRBadD.png">
+<meta property="og:image" content="http://example.com/image/image_Ore71PonUd.png">
+<meta property="og:image" content="http://example.com/image/image_BQK57WQ-Nj.png">
+<meta property="og:image" content="http://example.com/image/image_za2UM-rH2O.png">
+<meta property="og:image" content="http://example.com/image/image_7Dez-12Hfe.png">
+<meta property="og:image" content="http://example.com/image/image_Q25Ajuf69o.png">
+<meta property="og:image" content="http://example.com/image/image_j7y35YILwY.png">
+<meta property="og:image" content="http://example.com/image/image_9PYu0kkH6I.png">
+<meta property="og:image" content="http://example.com/image/image_QBuKKX-kDa.png">
+<meta property="og:image" content="http://example.com/image/image_SQL0zayiHC.png">
+<meta property="og:image" content="http://example.com/image/image_xocoQS1oVM.png">
+<meta property="og:image" content="http://example.com/image/image_AU_Q5iczTN.png">
+<meta property="og:image" content="http://example.com/image/image_XWh1uCappa.png">
+<meta property="og:image" content="http://example.com/image/image_2EpvHGnGY0.png">
+<meta property="og:image" content="http://example.com/image/image_FFTPPb_L2F.png">
+<meta property="og:image" content="http://example.com/image/image_OYAhbczSmh.png">
+<meta property="og:image" content="http://example.com/image/image_LhRpTJeE1v.png">
+<meta property="og:image" content="http://example.com/image/image_UPr_KwPD_3.png">
+<meta property="og:image" content="http://example.com/image/image_5HOqQfvZTm.png">
+<meta property="og:image" content="http://example.com/image/image_nkphNm3EPc.png">
+<meta property="og:image" content="http://example.com/image/image_TjYmArXXCt.png">
+<meta property="og:image" content="http://example.com/image/image_3wknup2p6Z.png">
+<meta property="og:image" content="http://example.com/image/image_C2VdkM0SNM.png">
+<meta property="og:image" content="http://example.com/image/image_bT6opf3Ip_.png">
+<meta property="og:image" content="http://example.com/image/image_B9MF3c3PPM.png">
+<meta property="og:image" content="http://example.com/image/image_Ikv-UQpouG.png">
+<meta property="og:image" content="http://example.com/image/image_CaALjpJ1P4.png">
+<meta property="og:image" content="http://example.com/image/image_S1dgw0-jRA.png">
+<meta property="og:image" content="http://example.com/image/image_eFM6I42IHa.png">
+<meta property="og:image" content="http://example.com/image/image_KMk_T-3PAP.png">
+<meta property="og:image" content="http://example.com/image/image_qAxzG2_FGb.png">
+<meta property="og:image" content="http://example.com/image/image_f_CYrewbhm.png">
+<meta property="article:published_time" content="2022-05-13T15:09:00.714Z">
+<meta property="article:modified_time" content="2022-05-13T15:15:48.558Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="Tableau">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_t_FxO3erP7.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E5%9B%9B%E8%AF%BE-SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95+%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86+%E4%BA%91%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E6%90%AD%E5%BB%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据分析自学课程（第四课：SQL基础语法+运行原理+云端数据库搭建） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E5%9B%9B%E8%AF%BE-SQL%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95+%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86+%E4%BA%91%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据分析自学课程（第四课：SQL基础语法+运行原理+云端数据库搭建）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 23:09:00 / 修改时间：23:15:48" itemprop="dateCreated datePublished" datetime="2022-05-13T23:09:00+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>SQL+运行原理+运算数据库</p>
+<span id="more"></span>
+<h1 id="课程食用说明">【课程食用说明】</h1>
+<ul>
+<li><p>学前须知</p>
+<ul>
+<li><p>主要适用于MySQL数据库，不过核心语句也通用于其他数据库</p></li>
+<li><p>只学习SQL语句的查询语句部分，对于数据分析师而言完全足够</p></li>
+<li><p>主要使用资源：基础语法部分基于公开网站sqlzoo的MySQL数据库引擎，必须使用英文界面练习代码（不同语言界面不同引擎可能导致数据库数据不同），并切换至Mysql引擎；小进阶部分基于自行搭建的云端数据库和外卖场景数据</p></li>
+<li><p>课程SQL代码并非为最优，欢迎并鼓励大家在评论区分享最优代码；同时重新设计了部分题目，可能与sqlzoo给的例题完全无关，所以例题及练习题的题目和答案以本课程出示的为准</p></li>
+<li><p>建议优先理解Excel部分的表格结构（行、列、字段）和聚合的理论，方便更快理解数据库表结构</p></li>
+<li><p>课程会为大家提供包含例题、知识点总结、练习题及答案的学习资料，所有的代码和知识点讲解部分希望大家可以自己手敲一遍并且记笔记进行整理，SQL的学习就是一个不断积累练习的过程，不仅要看更要多写哦~</p></li>
+<li><p>学习资料已经保存为opml格式一起放在了视频简介的网盘内，大家导入幕布后即可查看</p>
+<ul>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>SQL查询语句语法结构和运行顺序</p>
+<ul>
+<li><p>语法结构：select--from--where--group by--having--order
+by--limit</p></li>
+<li><p>运行顺序：from--where--group by--having--order
+by--limit--select</p></li>
+</ul>
+<p><img src="/image/image_t_FxO3erP7.png" /></p>
+<ul>
+<li><p>本课程运行逻辑是为了能让大家快速理解的运行顺序，真正的SQL运行逻辑涉及很多数据工程概念，对开发和编程没有过多兴趣的小伙伴掌握到课程程度即可</p></li>
+<li><p>至于select是否在order
+by之前运行，课程中有系统的解答，大家可以学习后再做判断，很多我们之前学过的知识并不一定正确哦~</p></li>
+</ul></li>
+<li><p>SQL语句本身并不难，更难的是理清实际需求中的逻辑转换为SQL代码和每个表格所呈现的业务信息及多个表之间的不同连接逻辑及应用</p></li>
+<li><p>本次课程是为了帮助大家快速入门SQL，理解SQL主要语句、语法和使用方法，可以帮助你快速解决80%以上场景的SQL问题，但仍然需要你在实战中继续练习，课程的最后也提供了对应的提升路径</p></li>
+</ul>
+<p>--</p>
+<h1 id="sqlzoo数据介绍">【sqlzoo数据介绍】</h1>
+<ul>
+<li><p>师兄会简单讲解此次课程在例题中涉及的sqlzoo数据表格，在后面的例题中将不再重复讲解</p></li>
+<li><p>大家可以回到这部分查看题目所需的数据</p></li>
+<li><p>&lt;world&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>一张包含每个国家信息（大洲、面积、人口、gdp、国家首都等）的表</p></li>
+<li><p>每一行数据记录了一个国家的相关信息</p></li>
+<li><p>数据部分示例</p>
+<p><img src="/image/image_JS5BDjg4sy.png" /></p></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>name-国家名</p></li>
+<li><p>continent-大洲-共有七大洲分别为：亚洲(Asia)、欧洲(Europe)、北美洲(North
+America)、南美洲(South
+America)、非洲(Africa)、大洋洲(Oceania)与南极洲(Antarctica)</p></li>
+<li><p>area-面积-国家面积</p></li>
+<li><p>population-人口</p></li>
+<li><p>gdp-gdp-Gross Domestic
+Product(GDP，国内生产总值)，一个国家（或地区）所有常住单位在一定时期内生产活动的最终成果，是国民经济核算的核心指标</p></li>
+<li><p>capital-首都-国家首都</p></li>
+<li><p>tld-顶级域名-国家顶级域名，<a
+target="_blank" rel="noopener" href="http://xn--fiq0a648a6ndk6a673ln0wb.cn"
+title="中国顶级域名为.cn">中国顶级域名为.cn</a></p></li>
+<li><p>flag-旗帜</p></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>列数：8列</p></li>
+<li><p>行数：195行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_4DNe9CeMwj.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;nobel&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>一张诺贝尔奖获得者的名单表</p></li>
+<li><p>每一行数据记录了一名诺贝尔奖获得者及这个诺贝尔奖所属科目和年份</p></li>
+<li><p>数据部分示例</p>
+<p><img src="/image/image_UMBHo6_L5q.png" /></p></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>yr-年份-获奖年份</p></li>
+<li><p>subject-科目-获得的诺贝尔奖所属科目</p></li>
+<li><p>winner-获奖者-诺贝尔奖获得者的姓名</p></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>列数：3列</p></li>
+<li><p>行数：895行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_IzpeCpocPt.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;covid&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>一张记录了2020年1月22号到10月9号各国每天新冠相关信息的表</p></li>
+<li><p>每一行数据记录了一个国家到截至时间的累计确诊人数、累计死亡人数、累计治愈人数</p></li>
+<li><p>数据部分示例</p>
+<p><img src="/image/image_2jEmUfnFiV.png" /></p></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>name-国家名</p></li>
+<li><p>whn-截至时间</p></li>
+<li><p>confirmed-累计确诊-截至该时间的累计确诊人数</p></li>
+<li><p>deaths-累计死亡-截至该时间的累计死亡人数</p></li>
+<li><p>recovered-累计治愈-截至该时间的累计治愈人数</p></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>列数：5列</p></li>
+<li><p>行数：47946行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_HSw0O9ffho.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;ge&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>一张记录了2015、2017、2019年的竞选的候选人信息表</p></li>
+<li><p>每一行数据记录了当年竞选候选人的名字、姓名、所在选区编号、所属团体和得票数</p></li>
+<li><p>数据部分示例</p>
+<p><img src="/image/image_XZqvhzRpOr.png" /></p></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>yr-年份-举办的年份</p></li>
+<li><p>firstName-名字-候选人名字</p></li>
+<li><p>lastName-姓氏-候选人姓氏</p></li>
+<li><p>constituency-选区-所在选区编号</p></li>
+<li><p>party-团体-所属团体</p></li>
+<li><p>votes-得票数-获得选票的数量</p></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>列数：6列</p></li>
+<li><p>行数：10595行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_vekHLaBbqZ.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;game、goal、eteam&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>&lt;game&gt;</p>
+<ul>
+<li><p>一张记录赛事的表</p></li>
+<li><p>每一条数据记录一场赛事的编号（id），赛事的举办时间（mdate），赛事举办的场地（stadium），参加本场比赛的两个队伍（team1，team2）</p></li>
+</ul></li>
+<li><p>&lt;goal&gt;</p>
+<ul>
+<li><p>一张记录球员进球得分的表</p></li>
+<li><p>每一条数据记录一名进球的球员的姓名（player），进球时间（gtime），所在队伍编号（teamid），当时的赛事编号（matchid）</p></li>
+</ul></li>
+<li><p>&lt;eteam&gt;</p>
+<ul>
+<li><p>一张队伍表</p></li>
+<li><p>每一条数据记录一个队伍的编号（id）、名字（teamname）和教练姓名（coach）</p></li>
+</ul></li>
+<li><p>数据部分示例</p>
+<ul>
+<li><p>&lt;game&gt;</p>
+<p><img src="/image/image_k_SPe5HcX0.png" /></p></li>
+<li><p>&lt;goal&gt;</p>
+<p><img src="/image/image_2ABAUJFu3m.png" /></p></li>
+<li><p>&lt;eteam&gt;</p>
+<p><img src="/image/image_KdcS4I4aiK.png" /></p></li>
+</ul></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>&lt;game&gt;</p>
+<ul>
+<li><p>id-编号-赛事编号</p></li>
+<li><p>mdate-日期-举办赛事的日期</p></li>
+<li><p>stadium-场馆-赛事场馆</p></li>
+<li><p>team1-队伍1-参与赛事队伍1</p></li>
+<li><p>team2-队伍2-参与赛事队伍2</p></li>
+</ul></li>
+<li><p>&lt;goal&gt;</p>
+<ul>
+<li><p>matchid-赛事编号</p></li>
+<li><p>teamid-队伍编号-入球球员所在的队伍编号</p></li>
+<li><p>player-入球球员</p></li>
+<li><p>gtime-入球时间-比赛开始到入球时间的分钟数</p></li>
+</ul></li>
+<li><p>&lt;eteam&gt;</p>
+<ul>
+<li><p>id-编号-队伍编号</p></li>
+<li><p>teamname-队名-队伍名字</p></li>
+<li><p>coach-教练-队伍的教练</p></li>
+</ul></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>&lt;game&gt;</p>
+<ul>
+<li><p>列数：5列</p></li>
+<li><p>行数：31行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_JleGxviLIb.png" /></p></li>
+</ul></li>
+<li><p>&lt;goal&gt;</p>
+<ul>
+<li><p>列数：4列</p></li>
+<li><p>行数：76行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_eprN3bn6uz.png" /></p></li>
+</ul></li>
+<li><p>&lt;eteam&gt;</p>
+<ul>
+<li><p>列数：3列</p></li>
+<li><p>行数：16行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_y9VBoSklmd.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;teacher、dept&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>&lt;teacher&gt;</p>
+<ul>
+<li><p>一张记录教师信息的表</p></li>
+<li><p>每一条数据记录一名教师的编号、教授科目编号、教师名、教师电话号码和教师手机号</p></li>
+</ul></li>
+<li><p>&lt;dept&gt;</p>
+<ul>
+<li><p>一张记录科目信息的表</p></li>
+<li><p>每一条数据记录一个科目名及其对应的编号</p></li>
+</ul></li>
+<li><p>数据部分示例</p>
+<ul>
+<li><p>&lt;teacher&gt;</p>
+<p><img src="/image/image_NOS-4niVhF.png" /></p></li>
+<li><p>&lt;dept&gt;</p>
+<p><img src="/image/image_hytmqS5P91.png" /></p></li>
+</ul></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>&lt;teacher&gt;</p>
+<ul>
+<li><p>id-编号-教师编号</p></li>
+<li><p>dept-科目编号</p></li>
+<li><p>name-名字-教师名字</p></li>
+<li><p>phone-电话号码-教师的电话号码</p></li>
+<li><p>mobile-手机号-教师的手机号</p></li>
+</ul></li>
+<li><p>&lt;dept&gt;</p>
+<ul>
+<li><p>id-科目编号</p></li>
+<li><p>name-科目名</p></li>
+</ul></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>&lt;teacher&gt;</p>
+<ul>
+<li><p>列数：5列</p></li>
+<li><p>行数：6行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_miMIo9AC_h.png" /></p></li>
+</ul></li>
+<li><p>&lt;dept&gt;</p>
+<ul>
+<li><p>列数：2列</p></li>
+<li><p>行数：3行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_MYFEYkNcAE.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>&lt;movie、casting、actor&gt;</p>
+<ul>
+<li><p>数据库引擎-MySQL</p></li>
+<li><p>&lt;movie&gt;</p>
+<ul>
+<li><p>一张记录电影相关信息的表</p></li>
+<li><p>每一行数据记录了一部电影的id、电影名称（title）、首影年份（yr）、导演（director）、制作费（budget）、票房收入（gross）</p></li>
+</ul></li>
+<li><p>&lt;actor&gt;</p>
+<ul>
+<li><p>一张记录了演员信息的表</p></li>
+<li><p>每一行数据记录了一名演员的id号和姓名</p></li>
+</ul></li>
+<li><p>&lt;casting&gt;</p>
+<ul>
+<li><p>一张记录每部电影中参演演员的角色次序的表，也是一张中间表用来连接movie和actor表</p></li>
+<li><p>每一行数据记录了一部电影中的一个演员及其所对应的角色次序</p></li>
+</ul></li>
+<li><p>数据部分示例</p>
+<ul>
+<li><p>&lt;movie&gt;</p>
+<p><img src="/image/image_eWLvDsT2Vz.png" /></p></li>
+<li><p>&lt;casting&gt;</p>
+<p><img src="/image/image_fC561TlltE.png" /></p></li>
+<li><p>&lt;actor&gt;</p>
+<p><img src="/image/image_5_7jIq-97W.png" /></p></li>
+</ul></li>
+<li><p>字段名-译名-解释</p>
+<ul>
+<li><p>&lt;movie&gt;</p>
+<ul>
+<li><p>id-编号-电影编号</p></li>
+<li><p>title-电影名称</p></li>
+<li><p>yr-首影年份-电影第一次上映年份</p></li>
+<li><p>director-导演</p></li>
+<li><p>budget-制作费</p></li>
+<li><p>gross-票房收入</p></li>
+</ul></li>
+<li><p>&lt;casting&gt;</p>
+<ul>
+<li><p>movieid-电影编号</p></li>
+<li><p>actorid-演员编号</p></li>
+<li><p>ord-角色次序-角色次序代表第1主角是1,
+第2主角是2...如此类推</p></li>
+</ul></li>
+<li><p>&lt;actor&gt;</p>
+<ul>
+<li><p>id-演员编号</p></li>
+<li><p>name-演员姓名</p></li>
+</ul></li>
+</ul></li>
+<li><p>数据库表信息</p>
+<ul>
+<li><p>&lt;movie&gt;</p>
+<ul>
+<li><p>列数：6列</p></li>
+<li><p>行数：12026行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_kTiQvITey6.png" /></p></li>
+</ul></li>
+<li><p>&lt;casting&gt;</p>
+<ul>
+<li><p>列数：3列</p></li>
+<li><p>行数：120172行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_wWIeMoChYa.png" /></p></li>
+</ul></li>
+<li><p>&lt;actor&gt;</p>
+<ul>
+<li><p>列数：2列</p></li>
+<li><p>行数：48148行</p></li>
+<li><p>字段类型</p>
+<p><img src="/image/image_XFF4BHsVh2.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>--</p>
+<h1 id="基础语法和运行原理">【基础语法和运行原理】</h1>
+<ul>
+<li><p>【基础语句】</p>
+<ul>
+<li><p>主知识点一：select&amp;from</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>select 字段名 决定这一段查询最后展示的字段</p></li>
+<li><p>from 表名 指定这段查询语句涉及的数据来源</p></li>
+</ul></li>
+<li><p>这是一段查询语句中必不可少的两个核心语句，select和from分别是两个核心语句中的关键字</p></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号1）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial"
+title="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial">https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial</a>
+涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【基础查询select单列&amp;多列&amp;所有列&amp;别名应用】</p>
+<ul>
+<li><p>【例题1】：阅读&lt;world&gt;表格的信息，观察这一题在框中给出的SQL代码点击Submit
+SQL(提交SQL代码)运行</p>
+<p><img src="/image/image_yJw57a0LNL.png" /></p>
+<ul>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_137bksxZp1.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题2】：将上一题的代码修改为select * from
+world，并点击运行</p>
+<p><img src="/image/image_mxVqNBajEw.png" /></p>
+<ul>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_8x2D00V4ae.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题3】：将上一题的代码修改为select name as 国家名, continent
+大洲, population 人口 from world，并点击运行</p>
+<p><img src="/image/image_8FaNnUD_5g.png" /></p>
+<ul>
+<li><p>【运行结果】</p>
+<p><img src="/image/image__1SziUMpwA.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+<li><p>【select中使用distinct去重】</p>
+<ul>
+<li><p>select中还可以加distinct对重复的行数据进行去重</p></li>
+<li><p>【例题4】：列出world表中所有大洲（continent），且仅出现一次</p>
+<ul>
+<li><p>如果运行代码select continent from
+world，就会发现大洲多次出现在查询结果里，这不是我们所要的答案，题目要求仅出现一次，总共七大洲，所以应该得到7行数据</p>
+<p><img src="/image/image_cPefzrOTC-.png" /></p></li>
+<li><p>此时在select后加入distinct对重复的数据去重</p>
+<ul>
+<li><p>运行代码select distinct continent from world得到去重后的数据</p>
+<p><img src="/image/image_XNJtHwoWPV.png" /></p></li>
+<li><p>【运行结果】正确答案</p>
+<p><img src="/image/image_GBCGsOlP-v.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题5】：尝试运行以下两段代码</p>
+<ul>
+<li><p>select distinct name,continent from world</p>
+<p><img src="/image/image_HEhm8kZKiM.png" /></p>
+<ul>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_PnyySROVNi.png" /></p></li>
+</ul></li>
+<li><p>select name,distinct continent name from world</p>
+<p><img src="/image/image_5OW-WxNQ1w.png" /></p>
+<ul>
+<li><p>【运行结果】</p>
+<ul>
+<li>翻译：您的SQL语法有错误；请查看与您的服务器版本对应的手册，以了解在第1行“distinct
+continental name from world”附近使用的正确语法</li>
+</ul>
+<p><img src="/image/image_QztSkNvxz7.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【select中计算字段的运用】</p>
+<ul>
+<li><p>select中还可以直接进行计算</p></li>
+<li><p>【例题6】：查询国家名、gdp、人口及其人均gdp</p>
+<ul>
+<li><p>国家名、gdp、人口这三个字段都是现成的，直接写select
+name,gdp,population from world即可</p></li>
+<li><p>那人均gdp并没有这个字段怎么办？</p></li>
+<li><p>已知计算公式：人均gdp=gdp/人口</p></li>
+<li><p>gdp和人口字段在world表中都有，只需要对现有字段进行计算就可以得到新的人均gdp字段，因此我们在select后写算式GDP/population构建计算字段</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name,gdp,population,gdp/population 人均gdp from world</p>
+<p><img src="/image/image_LsAX_0fSrx.png" /></p></li>
+</ul></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_pQ8mw4I9Qj.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>基础语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+</ul></li>
+<li><p>别名语法</p>
+<ul>
+<li><p>select 字段名 as 别名</p></li>
+<li><p>from 表名</p></li>
+<li><p>注意：as可以省略</p></li>
+</ul></li>
+<li><p>查询多列</p>
+<ul>
+<li><p>select 字段名1,字段名2,字段名3</p></li>
+<li><p>from 表名</p></li>
+</ul></li>
+<li><p>查询所有列</p>
+<ul>
+<li><p>select *</p></li>
+<li><p>from 表名</p></li>
+</ul></li>
+<li><p>数据去重</p>
+<ul>
+<li><p>select distinct 字段名</p></li>
+<li><p>from 表名</p></li>
+</ul></li>
+<li><p>select中的计算字段</p>
+<ul>
+<li><p>select 字段名,计算字段</p></li>
+<li><p>from 表名称</p></li>
+<li><p>注意：计算字段中的算式所涉及的字段必须是表格中包含的，或者算式本身可以独立运算</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li>自己完整敲一遍知识点中出现的代码，也可以直接在sqlzoo中写代码尝试自己的想法~</li>
+</ul></li>
+</ul></li>
+<li><p>主知识点二：where</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>where 表达式 限定查询行必须满足的条件</p></li>
+<li><p>where核心子句是可选项，使用该子句是为了通过表达式筛选出符合查询条件的行数据</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号3）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial"
+title="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial">https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial</a>
+涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【运算符】</p>
+<ul>
+<li><p>where 表达式中最常用的是运算符</p>
+<ul>
+<li><p>where 表达式 中运算符标准语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 字段名 运算符 值</p></li>
+</ul></li>
+<li><p>【运算符一览】</p>
+<p><img src="/image/image_BLrciXRwdd.png" /></p>
+<ul>
+<li><p>=、&gt;、&lt;、&gt;=、&lt;=、&lt;&gt;、!=为比较运算符，用于判断表中的哪些数据符合条件</p></li>
+<li><p>and、or和not为逻辑运算符</p>
+<ul>
+<li><p>and
+：一般用于组合两个及以上表达式，要求同时满足多个查询条件</p></li>
+<li><p>or：一般用于组合两个及以上表达式，要求满足多个查询条件中的一个</p></li>
+<li><p>not：not一般和与其他连用例如not in，用于条件取反</p></li>
+<li><p>and和not可以一起使用，但是默认and优先级高于or，可以使用括号来界定优先级</p></li>
+</ul></li>
+<li><p>between and，用于查询两个值之间范围的值（包含这两个值）</p></li>
+<li><p>in，用于查询指定条件范围内的数据，一般为in
+(xxx,xxx,......)，用括号将条件括起来</p></li>
+<li><p>is
+null，用于查询空值（NULL），空值不同于0，也不同于null字符串</p>
+<ul>
+<li>空值</li>
+</ul>
+<p><img src="/image/image_AvUTq_0VzM.png" /></p>
+<ul>
+<li>null字符</li>
+</ul>
+<p><img src="/image/image_Pkav4ZujCJ.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题7】查询人口数至少2亿的国家名和人均gdp</p>
+<ul>
+<li><p>人均gdp如何查询我们已经在前面讲过了，这里就不再赘述了</p></li>
+<li><p>这里着重看的是“人口数至少2亿”这个查询条件</p></li>
+<li><p>写成成表达式为population&gt;=200000000，由于是对行数据的限定，该表达式写在where关键字后</p></li>
+<li><p>题目要求查询结果为国家名和人均gdp，数据来源为world表</p></li>
+<li><p>将代码组合在一起得到符合条件的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name,gdp/population 人均gdp</p></li>
+<li><p>from world</p></li>
+<li><p>where population&gt;=200000000</p></li>
+</ul>
+<p><img src="/image/image_3nyqJFmU9v.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_lkGy6UekM3.png" /></p></li>
+</ul></li>
+<li><p>【例题8】查询德国（Germany）的人口</p>
+<ul>
+<li><p>查询条件：name为Germany</p></li>
+<li><p>查询结果：人口</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>转换为查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select population</p></li>
+<li><p>from world</p></li>
+<li><p>where name = 'Germany'</p></li>
+</ul>
+<p><img src="/image/image_idYCN6vlQp.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_VTKE99W-84.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题9】查询瑞典(Sweden)、挪威 (Norway) 和丹麦
+(Denmark)的国家名和人口</p>
+<ul>
+<li><p>查询条件：name为Sweden或Norway或Denmark</p></li>
+<li><p>查询结果：国家名和人口</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>例题8只查询德国(Germany)的数据，但这里要查询3个国家的数据，在多条件的情况下可以用in操作符</p></li>
+<li><p>转换为查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,population</p></li>
+<li><p>from world</p></li>
+<li><p>where name in ('Sweden', 'Norway', 'Denmark')</p></li>
+</ul>
+<p><img src="/image/image_igPkI9l6LU.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_arJoUZfMIP.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题10】查询面积(area)在250000和300000之间的国家名和面积</p>
+<ul>
+<li><p>查询条件：area在250000和300000之间</p></li>
+<li><p>查询结果：国家名和面积</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>该题的查询条件是一个数值范围，可以使用between...and...</p></li>
+<li><p>转换为查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,area</p></li>
+<li><p>from world</p></li>
+<li><p>where area between 250000 and 300000</p></li>
+</ul>
+<p><img src="/image/image_zoEvtyHjGV.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_MXyaAfIKbE.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+<li><p>【模糊查询like】</p>
+<ul>
+<li><p>where子句的表达式中除了使用运算符来进行条件判断，还可以使用like操作符组合通配符进行模糊查询</p>
+<ul>
+<li><p>模糊查询标准语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 字段名 like '通配符+字符'</p></li>
+</ul></li>
+<li><p>通配符用来匹配值的一部分，跟在like后面进行数据过滤常用的通配符有%和_，%用来匹配多个字符可以是零个、一个也可以是多个字符，_仅能用来匹配单个字符</p>
+<p><img src="/image/image_WWL81l76A1.png" /></p></li>
+</ul></li>
+<li><p>【例题11】查询国家名中以C开头ia结尾的国家</p>
+<ul>
+<li><p>查询条件：name字段值以C开头ia结尾</p></li>
+<li><p>查询结果：name</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>查询条件不是一个确定的要求，比较模糊，所以此时使用模糊查询</p></li>
+<li><p>由于C和ia之间没有限定字符数，所以我们使用%通配符</p></li>
+<li><p>写成代码就是where name like 'C%ia'</p></li>
+<li><p>转换为查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where name like 'C%ia'</p></li>
+</ul>
+<p><img src="/image/image_cjpXL81OTg.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_rnj38WA9k-.png" /></p></li>
+</ul></li>
+<li><p>【例题12】查询国家名中第二个字符为't'的国家</p>
+<ul>
+<li><p>查询条件：name字段值第二个字符为't</p></li>
+<li><p>查询结果：name</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>指定第二个字符为t，此时先使用_通配符来代替任意的第一个字符，但未指定字符t后的字符数因此t后用通配符%</p></li>
+<li><p>写成代码 where name like '_t%'</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where name like '_t%'</p></li>
+</ul>
+<p><img src="/image/image_3twWdyVz1Q.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_vvWalsjxNl.png" /></p></li>
+</ul></li>
+<li><p>【例题13】查询国家名中含有两个o且被两个字符隔开的国家名</p>
+<ul>
+<li><p>查询条件：name字段值有两个o且这两个o之间间隔两个字符</p></li>
+<li><p>查询结果：name</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>指定有两个o且被两个字符隔开，这两个字符用两个_进行匹配而不能用%，因为一个_仅指代一个字符，不能没有也不能是两个，而%匹配数量不定的字符，可能没有也可能有二三四五六个</p></li>
+<li><p>题目只指明两个o之间有两个字符但没有指明两个o前或者后有多少个字符，因此使用%通配符</p></li>
+<li><p>写成代码where name like '%o__o%'</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where name like '%o__o%'</p></li>
+</ul>
+<p><img src="/image/image_1FpBJjlItA.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_ajxvgqM3hQ.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【多条件查询】</p>
+<ul>
+<li><p>使用and或者or逻辑运算符对多个条件进行组合筛选想要的数据</p></li>
+<li><p>【例题14】查询国家名中含有三个a且面积大于60万(600000)的国家及其面积</p>
+<ul>
+<li><p>查询条件：name字段值含有三个a且面积大于60万</p></li>
+<li><p>查询结果：name和area</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>这里有两个条件，一个是模糊查询name字段值中有三个a，另一个是面积大于60万的，这两个条件需要同时满足，因此这两个条件用and逻辑运算符来连接</p></li>
+<li><p>写成代码where name like '%a%a%a%' and area &gt;= 600000</p></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,area</p></li>
+<li><p>from world</p></li>
+<li><p>where name like '%a%a%a%'</p></li>
+<li><p>and area &gt;= 600000</p></li>
+</ul>
+<p><img src="/image/image_BkPM_0O83I.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_poIU4UMpnJ.png" /></p></li>
+</ul></li>
+<li><p>【例题15】查询国家名中含有三个a且面积大于60万(600000)的国家及其面积，或者人口大于13亿(1300000000)且面积大于500万(5000000)的国家及其面积</p>
+<ul>
+<li><p>查询条件：name字段值含有三个且面积大于60万，或者人口大于13亿且面积大于500万</p></li>
+<li><p>查询结果：name和area</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>这里有两组条件：第一组是含有三个a且面积大于60万，第二组人口大于13亿且面积大于500万，每个组间的条件关系且，需要同时满足，使用and逻辑运算符，两个组之间条件关系为或，只需要满足一个，使用or逻辑运算符</p></li>
+<li><p>写成代码</p>
+<ul>
+<li><p>where name like '%a%a%a%'</p></li>
+<li><p>and area &gt;= 600000</p></li>
+<li><p>or population &gt; 1300000000</p></li>
+<li><p>and area &gt;= 5000000</p></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,area</p></li>
+<li><p>from world</p></li>
+<li><p>where name like '%a%a%a%'</p></li>
+<li><p>and area &gt;= 600000</p></li>
+<li><p>or population &gt; 1300000000</p></li>
+<li><p>and area &gt;= 5000000</p></li>
+</ul>
+<p><img src="/image/image_vrZAU3_UOs.png" /></p></li>
+<li><p>【运行结果】</p>
+<ul>
+<li>相比上一题的8行的查询结果多了一行china的数据</li>
+</ul>
+<p><img src="/image/image_ee2RWBgkHb.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题16】将例题9和例题10转换为多条件代码</p>
+<ul>
+<li><p>例题9转换为如下代码</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,population</p></li>
+<li><p>from world</p></li>
+<li><p>where name = 'Sweden'</p></li>
+<li><p>or name = 'Norway'</p></li>
+<li><p>or name ='Denmark'</p></li>
+</ul></li>
+<li><p>例题10转换为如下代码</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,area</p></li>
+<li><p>from world</p></li>
+<li><p>where area &gt;= 250000</p></li>
+<li><p>and area &lt;= 300000</p></li>
+</ul></li>
+<li><p>分别运行两段代码得到一样的答案</p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>标准语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 表达式</p></li>
+</ul></li>
+<li><p>运算符查询语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 字段名 运算符 值</p></li>
+</ul></li>
+<li><p>模糊查询语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 字段名 like '通配符+字符'</p></li>
+</ul></li>
+<li><p>使用多条件查询</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>where 条件代码1 and|or 条件代码2</p></li>
+</ul></li>
+<li><p>运算符</p>
+<p><img src="/image/image_L-n9GVr3oh.png" /></p></li>
+<li><p>通配符</p>
+<p><img src="/image/image_tos9rLWTuP.png" /></p></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial（链接中标号4）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询南美洲（south america）所有国家的名称以及它们以百万（1000000
+）为单位的人口数量</li>
+</ul>
+<p><img src="/image/image_GvkChBIqiX.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_T4gfoluE-0.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>, population/1000000 population_in_millions</p></li>
+<li><p>from world</p></li>
+<li><p>where continent = 'South America';</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial（链接中标号9）涉及数据表：&lt;nobel&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询1980年除诺贝尔化学奖和诺贝尔医学奖外其余奖项获奖者的所有信息</li>
+</ul>
+<p><img src="/image/image_z8jzU2ij_4.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_HTvVeZxlsy.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select *</p></li>
+<li><p>from nobel</p></li>
+<li><p>where yr = 1980</p></li>
+<li><p>and subject not in ('Chemistry','Medicine')</p></li>
+</ul></li>
+</ul></li>
+<li><p>【3】点击链接https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial（链接中标号13）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询既包含有所有元音字母（a,e,i,o,u），同时国家名中没有空格的国家，最后显示他们的名字</p></li>
+<li><p>例如，赤道几内亚Equatorial Guinea 和 多米尼加共和国Dominican
+Republic
+，都包括有五个元音字母（a,e,i,o,u)，但这些国家不会被记录，因为国家名中，由两个单词构成（有空格）</p></li>
+</ul>
+<p><img src="/image/image_q5ZPy__Pdv.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_fGinPX5iey.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where name like '%a%'</p></li>
+<li><p>and name like '%e%'</p></li>
+<li><p>and name like '%i%'</p></li>
+<li><p>and name like '%o%'</p></li>
+<li><p>and name like '%u%'</p></li>
+<li><p>and name not like '% %';</p></li>
+</ul></li>
+</ul></li>
+<li><p>【4】点击链接https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial（链接中标号10）涉及数据表：&lt;nobel&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询1910年以前（不含1910）诺贝尔医学奖获得者和2004年及以后诺贝尔文学奖获得者的所有信息</li>
+</ul>
+<p><img src="/image/image_JSlamYg2qi.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_jps9N0HTxC.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select *</p></li>
+<li><p>from nobel</p></li>
+<li><p>where (subject = 'Medicine' and yr &lt; 1910)</p></li>
+<li><p>or (subject = 'Literature' and yr &gt;= 2004)</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点三：order by</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>order by 字段名 asc|desc 规定查询出的结果集显示的顺序</p></li>
+<li><p>order
+by核心子句是可选项，使用该子句是为了对被查询出的结果集，指定依据字段排序</p></li>
+<li><p>asc指定该字段升序排序，desc为降序排序，不写则默认为升序排序</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号13）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial"
+title="https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial">https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial</a>
+涉及数据表：&lt;nobel&gt;</p>
+<ul>
+<li><p>首先阅读并理解nobel数据表相关信息</p></li>
+<li><p>【例题17】查询姓名以Sir开头的获奖者(winner)，获奖年份(yr)和科目(subject)，查询结果按照年份从近到远排序，再按照姓名顺序升序排序</p>
+<ul>
+<li><p>查询条件：获奖者的姓名以Sir开头</p>
+<ul>
+<li>where winner like 'Sir%'</li>
+</ul></li>
+<li><p>查询结果：获奖者，获奖年份和科目</p>
+<ul>
+<li>select winner,yr,subject</li>
+</ul></li>
+<li><p>数据来源：nobel</p>
+<ul>
+<li>from nobel</li>
+</ul></li>
+<li><p>排序要求：按照年份从近到远排序，即按照年份降序；按照姓名字母顺序升序排序</p></li>
+<li><p>该题排序要求有两个，一个是年份降序，另一个是姓名升序，主排序字段为年份，次排序字段为获奖者姓名</p></li>
+<li><p>写成代码order by yr desc,winner asc</p></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>winner</p></li>
+<li><p>,yr</p></li>
+<li><p>,subject</p></li>
+<li><p>from nobel</p></li>
+<li><p>where winner like 'Sir%'</p></li>
+<li><p>order by yr desc,winner asc</p></li>
+</ul>
+<p><img src="/image/image_AwJd-T-hhB.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_oBi1DGKQ4V.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名1</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial（链接中标号14）涉及数据表：&lt;nobel&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询1984年所有获奖者的姓名和奖项科目。结果将诺贝尔化学奖和物理学奖排在最后，然后按照科目排序，再按照获奖者姓名排序</li>
+</ul>
+<p><img src="/image/image_TJ_nBzl4Vh.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_J3_d6Ig0OT.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>winner</p></li>
+<li><p>,subject</p></li>
+<li><p>from nobel</p></li>
+<li><p>where yr = 1984</p></li>
+<li><p>order by subject in ('chemistry','physics') , subject,
+winner</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点四：limit</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit [位置偏移量,]行数]</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>limit [位置偏移量,]行数 限制查询结果集显示的行数</p></li>
+<li><p>limit子句是可选项，行数是子句中的必选参数，参数位置偏移量是可选参数</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号1）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial"
+title="https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial">https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial</a>
+涉及数据表：&lt;world&gt;l</p>
+<ul>
+<li><p>【例题18】查询面积排名前三的国家</p>
+<ul>
+<li><p>查询需求：面积排名前三</p></li>
+<li><p>查询结果：name</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>现在我们并不知道排名前三的面积数值是多少，无法使用where子句，那如何查询面积排名前三？</p>
+<ul>
+<li><p>order by 可以对数值进行排序，limit n返回前n条数据</p></li>
+<li><p>因此可以通过order by和limit子句来达成查询面积前三的需求</p></li>
+<li><p>写出代码</p>
+<ul>
+<li><p>order by area desc</p></li>
+<li><p>limit 3</p></li>
+</ul></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>order by area desc</p></li>
+<li><p>limit 3</p></li>
+</ul>
+<p><img src="/image/image_t8DrwXy3rA.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_mMlDOaM70J.png" /></p></li>
+</ul></li>
+<li><p>【例题19】查询人口数第4到第7的国家和人口</p>
+<ul>
+<li><p>查询需求：人口数第4到第8</p></li>
+<li><p>查询结果：name</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>limit n返回查询结果的前n行，那如何查询人口数第4到第7？</p>
+<ul>
+<li><p>limit x,n意味从x+1行开始返回n行</p></li>
+<li><p>那么第4到第7，共4行，就是在排序后使用limit 3,4</p></li>
+<li><p>写出代码</p>
+<ul>
+<li><p>order by population desc</p></li>
+<li><p>limit 3,4</p></li>
+</ul></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>order by population desc</p></li>
+<li><p>limit 3,4</p></li>
+</ul>
+<p><img src="/image/image_nHsHqg6DFB.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_IYdz7PGypP.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>【查询结果返回前n行】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit n]</p></li>
+</ul></li>
+<li><p>【查询结果返回第x+1行开始的n行到x+n行】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit x,n]</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial（链接中标号1）涉及数据表：&lt;nobel&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询nobel表中第100行到120行的数据</li>
+</ul>
+<p><img src="/image/image_930Bjs_pKm.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_xk6CiVaq4s.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select *</p></li>
+<li><p>from nobel</p></li>
+<li><p>limit 99,20</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点五：聚合函数&amp;group by</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>聚合函数</p>
+<p><img src="/image/image_bt7N2KmpZU.png" /></p>
+<ul>
+<li>聚合函数适用于需要获取数据的汇总信息，例如某字段行数、某字段平均值、某字段中最大最小数等</li>
+</ul></li>
+<li><p>【标准语法】group by</p>
+<ul>
+<li><p>select 字段名1</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[group by 字段名1]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit [位置偏移量,]行数]</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>group by 字段名 规定依据哪个字段分组聚合</p></li>
+<li><p>group
+by核心子句是可选项，使用该子句是为了依据相同字段值分组后进行聚合运算，常和聚合函数联用</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号1）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SUM_and_COUNT"
+title="https://sqlzoo.net/wiki/SUM_and_COUNT">https://sqlzoo.net/wiki/SUM_and_COUNT</a>
+涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【单独使用聚合函数】</p>
+<ul>
+<li><p>【例题20】查询非洲总人口数</p>
+<ul>
+<li><p>查询需求：非洲总人口数</p></li>
+<li><p>查询条件：非洲</p>
+<ul>
+<li>where continent = 'Africa'</li>
+</ul></li>
+<li><p>查询结果：population</p>
+<ul>
+<li>select population</li>
+</ul></li>
+<li><p>数据来源：world</p>
+<ul>
+<li>from world</li>
+</ul></li>
+<li><p>怎么计算非洲总人口数？</p>
+<ul>
+<li><p>现在表中有每个国家的人口数，只需要把非洲的国家筛选出来，再对这些数据中的人口数全部相加就是非洲人口数</p></li>
+<li><p>所以此时使用sum()函数对字段数据求和</p></li>
+<li><p>写出代码：select sum(population)</p></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select sum(population) 人口总数</p></li>
+<li><p>from world</p></li>
+<li><p>where continent = 'Africa'</p></li>
+</ul>
+<p><img src="/image/image_PDo_lPnG9s.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_AVAzbduTnL.png" /></p></li>
+<li><p>将sum函数依次修改为avg()、max()、min()，依次计算平均人口数、最大人口数、最小人口数</p>
+<p><img src="/image/image_7rJ619T1NQ.png" /></p>
+<p><img src="/image/image_J7L1o_6cRn.png" /></p>
+<p><img src="/image/image_S9cEhzmBSF.png" /></p></li>
+</ul></li>
+<li><p>【例题21】计算表格行数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select count(*)</p></li>
+<li><p>from world</p></li>
+</ul>
+<p><img src="/image/image_2ZLnCF6h-t.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_Ps6n9vYYL4.png" /></p></li>
+</ul></li>
+<li><p>【例题22】尝试运行以下代码</p>
+<ul>
+<li><p>select</p></li>
+<li><p>count(name)</p></li>
+<li><p>,count(continent)</p></li>
+<li><p>,count(area)</p></li>
+<li><p>,count(population)</p></li>
+<li><p>,count(gdp)</p></li>
+<li><p>,count(*)</p></li>
+<li><p>from world</p>
+<p><img src="/image/image_n2inLXcV6S.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_VUIIyMIZx5.png" /></p></li>
+<li><p>select</p></li>
+<li><p>sum(gdp)/195</p></li>
+<li><p>,sum(gdp)/192</p></li>
+<li><p>,avg(gdp)</p></li>
+<li><p>from world</p>
+<p><img src="/image/image_VoQmByJy-h.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_rD8IMz-EoR.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【单独使用group by】</p>
+<ul>
+<li><p>【例题23】运行以下代码，用group by 对大洲进行分组</p>
+<ul>
+<li><p>select continent</p></li>
+<li><p>from world</p></li>
+<li><p>group by continent</p>
+<p><img src="/image/image_AspnX2766E.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_9GQ45Tj6h0.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【聚合函数和group by联用1】</p>
+<ul>
+<li><p>【例题24】查询每个大洲（continent）和大洲内的国家（name）数量</p>
+<ul>
+<li><p>查询需求：每个大洲的国家数量</p></li>
+<li><p>查询结果：continent，数量</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>怎么计算每个大洲的国家数量？</p>
+<ul>
+<li><p>只用聚合函数就只能算出所有国家的数量，此时需要使用group
+by子句依据大洲字段对数据分组，然后聚合计算组内国家数</p></li>
+<li><p>写出代码</p>
+<ul>
+<li><p>select continent,count(name)</p></li>
+<li><p>group by continent</p></li>
+</ul></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>continent</p></li>
+<li><p>,count(name)</p></li>
+<li><p>from world</p></li>
+<li><p>group by continent</p></li>
+</ul>
+<p><img src="/image/image_gA0NUlAUOe.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_7_-luxUcEE.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>例题链接：（链接中标号1）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial%E6%B6%89%E5%8F%8A%E6%95%B0%E6%8D%AE%E8%A1%A8%EF%BC%9A"
+title="https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial涉及数据表：">https://sqlzoo.net/wiki/SELECT_from_Nobel_Tutorial涉及数据表：</a>&lt;nobel&gt;</p>
+<ul>
+<li><p>【聚合函数和group by联用2】</p>
+<ul>
+<li><p>【例题25】查询2013至2015年每年每个科目的获奖人数，结果按年份从大到小，人数从大到小排序</p>
+<ul>
+<li><p>查询需求：每年每个科目的获奖人数</p>
+<ul>
+<li>group by yr,subject</li>
+</ul></li>
+<li><p>查询条件：2013至2015年</p>
+<ul>
+<li>where yr between 2013 and 2015</li>
+</ul></li>
+<li><p>查询结果：yr,subject,count(winner)</p>
+<ul>
+<li>select yr,subject,count(winner)</li>
+</ul></li>
+<li><p>数据来源：nobel</p>
+<ul>
+<li>from nobel</li>
+</ul></li>
+<li><p>排序要求：yr降序，人数降序</p>
+<ul>
+<li>order by yr desc,count(winner) desc</li>
+</ul></li>
+<li><p>转换为正确语法顺序的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>yr</p></li>
+<li><p>,subject</p></li>
+<li><p>,count(winner) 获奖人数</p></li>
+<li><p>from nobel</p></li>
+<li><p>where yr between 2013 and 2015</p></li>
+<li><p>group by yr,subject</p></li>
+<li><p>order by yr desc,count(winner) desc</p></li>
+</ul>
+<p><img src="/image/image_r5FDyPCS0X.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_ZISKtWsXK1.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>聚合函数</p>
+<p><img src="/image/image_q9oy043RC8.png" /></p></li>
+<li><p>标准语法</p>
+<ul>
+<li><p>select 字段名1,聚合函数(字段名)</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[group by 字段名1]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit [位置偏移量,]行数]</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SUM_and_COUNT（链接中标号5）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>计算Estonia, Latvia, Lithuania这几个国家的总人口数</li>
+</ul>
+<p><img src="/image/image_x4L1y_iMBl.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_LZwPrv5V4S.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select sum(population) 人口数</p></li>
+<li><p>from world</p></li>
+<li><p>where name in ('Estonia', 'Latvia', 'Lithuania')</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/SUM_and_COUNT（链接中标号7）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询每个大洲和该大洲里人口数超过1千万的国家的数量</li>
+</ul>
+<p><img src="/image/image_7uFIBnosag.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_6DfhWfTHWn.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>continent</p></li>
+<li><p>,count(name) 'number of countries'</p></li>
+<li><p>from world</p></li>
+<li><p>where population &gt;= 10000000</p></li>
+<li><p>group by continent</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点六：having&amp;简单运行原理</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[group by 字段名]</p></li>
+<li><p>[having 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit [位置偏移量,]行数]</p></li>
+</ul></li>
+<li><p>【语法解释】</p>
+<ul>
+<li><p>having 表达式 限定分组聚合后的查询行必须满足的条件</p></li>
+<li><p>having核心子句是可选项，使用该子句是为了对group
+by分组后的数据进行筛选</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号8）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SUM_and_COUNT"
+title="https://sqlzoo.net/wiki/SUM_and_COUNT">https://sqlzoo.net/wiki/SUM_and_COUNT</a>
+涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【例题26】查询总人口数量至少为1亿（100000000）的大洲</p>
+<ul>
+<li><p>查询条件：大洲人口数量至少为1亿</p></li>
+<li><p>查询结果：continent</p></li>
+<li><p>数据来源：world</p></li>
+<li><p>world表中只有每个国家的人口数，没有大洲的人口数</p></li>
+<li><p>根据前面的例题可知，通过依据大洲分组，使用sum函数对人口字段聚合运算可以得到大洲的人口数，此时在分组聚合的基础上对数据进行筛选使用having子句，筛选出大洲人口数量至少为1亿的数据行</p></li>
+<li><p>写出代码</p>
+<ul>
+<li><p>group by continent</p></li>
+<li><p>having sum(population) &gt;= 100000000</p></li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select continent</p></li>
+<li><p>from world</p></li>
+<li><p>group by continent</p></li>
+<li><p>having sum(population) &gt;= 100000000</p></li>
+</ul>
+<p><img src="/image/image_Yd84sEXZF5.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_Dny8qNHguV.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题27*】（运行原理）查询总人口数至少为3亿的大洲和其平均gdp，其中只有gdp高于200亿且人口数大于6000万或者gdp低于80亿且首都中含有三个a的国家的计入计算，最后按国家数从大到小排序，只显示第一行</p>
+<ul>
+<li><p>这道题是集成了前面很多知识点的题目，题目描述也有点长，需要进行拆解才能更好理解写出代码</p></li>
+<li><p>拆解</p>
+<ul>
+<li><p>数据来源：world</p>
+<ul>
+<li>from world</li>
+</ul></li>
+<li><p>查询条件：gdp高于200亿且人口数大于6000万或者gdp低于80亿且首都中含有三个a的国家；总人口数至少为3亿的大洲</p>
+<ul>
+<li><p>gdp高于200亿且人口数大于6000万或者gdp低于80亿且首都中含有三个a的国家</p>
+<ul>
+<li><p>world中记录了每个国家的信息，因此这部分使用where对原表进行筛选</p>
+<ul>
+<li>where (gdp &gt; 20000000000 and population &gt; 60000000) or (gdp
+&lt;8000000000 and capital like '%a%a%a%')</li>
+</ul></li>
+<li><p>总人口数至少为3亿的大洲</p>
+<ul>
+<li><p>原表没有大洲的人口数，需要依据大洲分组，聚合运算人口数，然后基于聚合后的数据使用having对数据进行筛选</p>
+<ul>
+<li><p>group by continent</p></li>
+<li><p>having sum(population) &gt;= 300000000</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>排序要求：按国家数从大到小排序</p>
+<ul>
+<li>order by count(name) desc</li>
+</ul></li>
+<li><p>显示限制：只显示第一行</p>
+<ul>
+<li>limit 1</li>
+</ul></li>
+<li><p>查询结果：大洲和大洲平均gdp</p>
+<ul>
+<li>select continent,avg(gdp) 平均gdp</li>
+</ul></li>
+</ul></li>
+<li><p>组合成完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>continent</p></li>
+<li><p>,avg(gdp) 平均gdp</p></li>
+<li><p>from world</p></li>
+<li><p>where (gdp &gt; 20000000000</p></li>
+<li><p>and population &gt; 60000000)</p></li>
+<li><p>or (gdp &lt;8000000000</p></li>
+<li><p>and capital like '%a%a%a%')</p></li>
+<li><p>group by continent</p></li>
+<li><p>having sum(population) &gt;= 300000000</p></li>
+<li><p>order by count(name) desc</p></li>
+<li><p>limit 1</p></li>
+</ul>
+<p><img src="/image/image_ByuflMO9HS.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_cLVlYh3Bj0.png" /></p></li>
+<li><p>【SQL运行原理】</p>
+<ul>
+<li><p>from--where--group by--having--order by--limit--select</p></li>
+<li><p>执行from语句从数据库中调取复制一份表格</p></li>
+<li><p>执行where语句在复制的表格中筛选出符合条件的数据行</p></li>
+<li><p>执行group
+by语句依据指定字段对筛选后的数据分区，将依据的字段去重分组，相当于Excel建立了一个数据透视表，添加了行标签</p>
+<p><img src="/image/image_KIpWVx8Yad.png" /></p></li>
+<li><p>执行having语句筛选满足条件的分组</p></li>
+<li><p>执行order by语句对筛选后的数据进行排序</p></li>
+<li><p>执行limit语句对排序后的数据限制显示的行</p></li>
+<li><p>执行select语句，提取最后要显示的字段</p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>标准语法</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名</p></li>
+<li><p>[where 表达式]</p></li>
+<li><p>[group by 字段名]</p></li>
+<li><p>[having 表达式]</p></li>
+<li><p>[order by 字段名 asc|desc]</p></li>
+<li><p>[limit [位置偏移量,]行数]</p></li>
+</ul></li>
+<li><p>运行原理</p>
+<ul>
+<li>from--where--group by--having--order by--limit--select</li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SUM_and_COUNT（链接中标号1）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询人均gdp大于3000的大洲及其人口数，仅gdp在200亿和300亿之间的国家计入计算</li>
+</ul></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_JF1brmsd2l.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select continent,sum(population) 人口数,sum(gdp)/sum(population)
+人均GDP</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp between 20000000000 and 30000000000</p></li>
+<li><p>group by continent</p></li>
+<li><p>having sum(gdp)/sum(population) &gt; 3000</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点七：部分常见函数</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【数学函数】</p>
+<ul>
+<li><p>round(x,y)——四舍五入函数</p>
+<ul>
+<li><p>round函数对x值进行四舍五入，精确到小数点后y位</p></li>
+<li><p>y为负值时，保留小数点左边相应的位数为0，不进行四舍五入</p></li>
+<li><p>例如：round(3.15,1)返回3.2，round(14.15,-1)返回10</p></li>
+</ul></li>
+</ul></li>
+<li><p>【字符串函数】</p>
+<ul>
+<li><p>concat(s1,s2,...)——连接字符串函数</p>
+<ul>
+<li><p>concat函数返回连接参数s1、s2等产生的字符串</p></li>
+<li><p>任一参数为null时，则返回null</p></li>
+<li><p>例如：concat('My',' ','SQL')返回My
+SQL，concat('My',null,'SQL')返回null</p></li>
+</ul></li>
+<li><p>replace(s,s1,s2)——替换函数</p>
+<ul>
+<li><p>replace函数使用字符串s2代替s中所有的s1</p></li>
+<li><p>例如：replace('MySQLMySQL','SQL','sql')返回MysqlMysql</p></li>
+</ul></li>
+<li><p>left(s,n)、right(s,n)&amp;substring(s,n,len)——截取字符串一部分的函数</p>
+<ul>
+<li><p>left函数返回字符串s最左边n个字符</p></li>
+<li><p>right函数返回字符串s最右边n个字符</p></li>
+<li><p>substring函数返回字符串s从第n个字符起取长度为len的子字符串，n也可以为负值，则从倒数第n个字符起取长度为len的子字符串，没有len值则取从第n个字符起到最后一位</p></li>
+<li><p>例如：left('abcdefg',3)返回abc，right('abcdefg',3)返回efg，substring('abcdefg',2,3)返回bcd，substring('abcdefg',-2,3)返回fg，substring('abcdefg',2)返回bcdefg</p></li>
+</ul></li>
+</ul></li>
+<li><p>【数据类型转换函数】</p>
+<ul>
+<li><p>cast(x as type)——转换数据类型的函数</p>
+<ul>
+<li><p>cast函数将一个类型的x值转换为另一个类型的值</p></li>
+<li><p>type参数可以填写char(n)、date、time、datetime、decimal等转换为对应的数据类型</p></li>
+</ul></li>
+</ul></li>
+<li><p>【日期时间函数】</p>
+<ul>
+<li><p>year(date)、month(date)&amp;day(date)——获取年月日的函数</p>
+<ul>
+<li><p>date可以是年月日组成的日期，也可以是年月日时分秒组成的日期时间</p></li>
+<li><p>year(date)返回日期格式中的年份</p></li>
+<li><p>month(date)返回日期格式中的月份</p></li>
+<li><p>day(date)返回年日期格式中的日份</p></li>
+<li><p>例如：year('2021-08-03')返回2021，month('2021-08-03')返回8，day('2021-08-03')返回3</p></li>
+</ul></li>
+<li><p>date_add(date,interval expr type)&amp;date_sub(date,interval expr
+type)——对指定起始时间进行加减操作</p>
+<ul>
+<li><p>date用来指定起始时间</p></li>
+<li><p>date可以是年月日组成的日期，也可以是年月日时分秒组成的日期时间</p></li>
+<li><p>expr用来指定从起始时间添加或减去的时间间隔</p></li>
+<li><p>type指示expr被解释的方式，type可以可以是以下值</p>
+<ul>
+<li>主要使用红框中的</li>
+</ul>
+<p><img src="/image/image_1sw8xxCK12.png" /></p></li>
+<li><p>date_add函数对起始时间进行加操作，date_sub函数对起始时间进行减操作</p></li>
+<li><p>例如：date_add('2021-08-03 23:59:59',interval 1
+second)返回2021-08-04 24:00:00，date_sub('2021-08-03 23:59:59',interval
+2 month)返回2021-06-03 23:59:59</p></li>
+</ul></li>
+<li><p>datediff(date1,date2)——计算两个日期之间间隔的天数</p>
+<ul>
+<li><p>datediff函数由date1-date2计算出间隔的时间，只有date的日期部分参与计算，时间不参与</p></li>
+<li><p>例如：datediff('2021-06-08','2021-06-01')返回7，datediff('2021-06-08
+23:59:59','2021-06-01
+21:00:00')返回7，datediff('2021-06-01','2021-06-08')返回-7</p></li>
+</ul></li>
+<li><p>date_format(date,format)——将日期和时间格式化</p>
+<ul>
+<li><p>date_format函数根据format指定的格式显示date值</p></li>
+<li><p>可以换使用的格式有</p>
+<p><img src="/image/image_zOTFDeJnBU.png" /></p></li>
+<li><p>例如：date_format('2018-06-01 16:23:12','%b %d %Y %h:%i
+%p')返回Jun 01 2018 04:23 PM，date_format('2018-06-01
+16:23:12','%Y/%d/%m')返回2018/01/06</p></li>
+</ul></li>
+</ul></li>
+<li><p>【条件判断函数】——根据满足不同条件，执行相应流程</p>
+<ul>
+<li><p>if(expr,v1,v2)</p>
+<ul>
+<li><p>如果表达式expr是true返回值v1，否则返回v2</p></li>
+<li><p>例如：if(1&lt;2,'Y','N')返回Y，if(1&gt;2,'Y','N')返回N</p></li>
+</ul></li>
+<li><p>case when</p>
+<ul>
+<li><p>case expr when v1 then r1 [when v2 then r2] ...[else rn] end</p>
+<ul>
+<li><p>例如：case 2 when 1 then 'one' when 2 then 'two' else 'more' end
+返回two</p></li>
+<li><p>case后面的值为2，与第二条分支语句when后面的值相等相等，因此返回two</p></li>
+</ul></li>
+<li><p>case when v1 then r1 [when v2 then r2]...[else rn] end</p>
+<ul>
+<li><p>例如：case when 1&lt;0 then 'T' else 'F' end返回F</p></li>
+<li><p>1&lt;0的结果为false，因此函数返回值为else后面的F</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号1）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/Window_LAG"
+title="https://sqlzoo.net/wiki/Window_LAG">https://sqlzoo.net/wiki/Window_LAG</a>
+涉及数据表：&lt;covid&gt;</p>
+<ul>
+<li><p>【例题28】尝试使用刚学习的函数</p>
+<ul>
+<li><p>首先阅读并理解covid数据表相关信息</p></li>
+<li><p>case when和if函数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>recovered 累计治愈人数</p></li>
+<li><p>,case when recovered = 1 then 'one' when recovered &gt; 1 then
+'more' else '0' end</p></li>
+<li><p>from covid</p></li>
+<li><p>where recovered &gt; 0</p></li>
+</ul>
+<p><img src="/image/image_A9xTWk9iM8.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_tBLIPCZhlb.png" /></p></li>
+</ul></li>
+<li><p>year、month、day函数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>whn 更新时间</p></li>
+<li><p>,year(whn) 年</p></li>
+<li><p>,month(whn) 月</p></li>
+<li><p>,day(whn) 日</p></li>
+<li><p>from covid</p></li>
+<li><p>where recovered &gt; 0</p></li>
+</ul>
+<p><img src="/image/image_F1HCVoYkZ0.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_oiAoQY46Xe.png" /></p></li>
+</ul></li>
+<li><p>date_add函数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>whn 更新时间</p></li>
+<li><p>,date_add(whn,interval 2 day) 加2天</p></li>
+<li><p>from covid</p></li>
+<li><p>where recovered &gt; 0</p></li>
+</ul>
+<p><img src="/image/image_CPu8Wm8n1o.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_Z-UYc76b-h.png" /></p></li>
+</ul></li>
+<li><p>round和concat嵌套得到百分比数据</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>confirmed</p></li>
+<li><p>,deaths</p></li>
+<li><p>,recovered</p></li>
+<li><p>,recovered/confirmed</p></li>
+<li><p>,concat(round((recovered/confirmed)*100,2),'%') 治愈率</p></li>
+<li><p>from covid</p></li>
+<li><p>where recovered/confirmed &gt; 0.3</p></li>
+</ul>
+<p><img src="/image/image_ya_DJ4LRKl.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_TJF-_dGvpF.png" /></p></li>
+</ul></li>
+<li><p>replace函数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select distinct</p></li>
+<li><p>name</p></li>
+<li><p>,replace(name,'a','替换') 替换</p></li>
+<li><p>from covid</p></li>
+</ul>
+<p><img src="/image/image_IHv_jAqlF-.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_BGzyqboJc-.png" /></p></li>
+</ul></li>
+<li><p>substring函数</p>
+<ul>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select distinct</p></li>
+<li><p>name</p></li>
+<li><p>,substring(name,2,3)</p></li>
+<li><p>,substring(name,2)</p></li>
+<li><p>from covid</p></li>
+<li><p>where recovered/confirmed &gt; 0.3</p></li>
+</ul>
+<p><img src="/image/image_7cP_TEDs74.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_Ef1t8oViza.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>【数学函数】</p>
+<ul>
+<li>round(x,y)——四舍五入函数</li>
+</ul></li>
+<li><p>【字符串函数】</p>
+<ul>
+<li><p>concat(s1,s2,...)——连接字符串函数</p></li>
+<li><p>replace(s,s1,s2)——替换函数</p></li>
+<li><p>left(s,n)——从左截取字符串一部分的函数</p></li>
+<li><p>right(s,n)——从右截取字符串一部分的函数</p></li>
+<li><p>substring(s,n,len)——从指定位置截取字符串一部分的函数</p></li>
+</ul></li>
+<li><p>【数据类型转换函数】</p>
+<ul>
+<li>cast(x as type)——转换数据类型的函数</li>
+</ul></li>
+<li><p>【日期时间函数】</p>
+<ul>
+<li><p>year(date)——获取年的函数</p></li>
+<li><p>month(date)——获取月的函数</p></li>
+<li><p>day(date)——获取日的函数</p></li>
+<li><p>date_add(date,interval expr
+type)——对指定起始时间进行加操作</p></li>
+<li><p>date_sub(date,interval expr
+type)——对指定起始时间进行减操作</p></li>
+<li><p>datediff(date1,date2)——计算两个日期之间间隔的天数</p></li>
+<li><p>date_format(date,format)——将日期和时间格式化</p></li>
+</ul></li>
+<li><p>【条件判断函数】——根据满足不同条件，执行相应流程</p>
+<ul>
+<li><p>if(expr,v1,v2)</p></li>
+<li><p>case when</p>
+<ul>
+<li><p>case expr when v1 then r1 [when v2 then r2] ...[else rn]
+end</p></li>
+<li><p>case when v1 then r1 [when v2 then r2]...[else rn] end</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SELECT_from_WORLD_Tutorial（链接中标号12）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询国家名称及其首都名称都以相同的字母开头的国家名及其首都，且不能包括国家名称和首都名称完全相同的情况</li>
+</ul>
+<p><img src="/image/image_-7nvB9HVYa.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_G66Rmbphuk.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,capital</p></li>
+<li><p>from world</p></li>
+<li><p>where left(name, 1) = left(capital, 1)</p></li>
+<li><p>and name != capital;</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/SELECT_names（链接中标号14）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询首都和名称，其中首都需是国家名称的扩展</p></li>
+<li><p>例如：答案中应该包括墨西哥城（Mexico
+City），因为它比墨西哥（Mexico）更长，而不应该将卢森堡（Luxembourg）包括在内，因为首都名与国家名相同</p></li>
+</ul>
+<p><img src="/image/image_yqCNlXLmKE.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_ZJCZjLUQLQ.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>capital</p></li>
+<li><p>,name</p></li>
+<li><p>from world</p></li>
+<li><p>where capital like concat('%',name,'%')</p></li>
+<li><p>and capital != name;</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【高级语句】</p>
+<ul>
+<li><p>主知识点八：窗口函数</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【标准语法】</p>
+<ul>
+<li>窗口函数over([partition by 字段名] [order by 字段名 asc|desc])</li>
+</ul></li>
+<li><p>【语法讲解】</p>
+<ul>
+<li>over()中两个子句为可选项，partition by指定分区依据，order
+by指定排序依据</li>
+</ul></li>
+<li><p>【排序窗口函数】</p>
+<ul>
+<li><p>rank()over()</p></li>
+<li><p>dense_rank()over()</p></li>
+<li><p>row_number()over()</p></li>
+</ul></li>
+<li><p>【偏移分析函数】</p>
+<ul>
+<li><p>lag(字段名,偏移量[,默认值])over()</p></li>
+<li><p>lead(字段名,偏移量[,默认值])over()</p></li>
+</ul></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>【排序窗口函数】</p>
+<ul>
+<li><p>例题链接：（链接中标号3）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/Window_functions"
+title="https://sqlzoo.net/wiki/Window_functions">https://sqlzoo.net/wiki/Window_functions</a>
+涉及数据表：&lt;ge&gt;</p>
+<ul>
+<li><p>【例题29】查询每一年S14000021选区中所有候选人所在的团体(party)和得票数(votes)，并对每一年中的所有候选人根据选票数的高低赋予名次，选票数最高则为1，第二名则为2，后续以此类推，最后根据团体(party)和年份(yr)排序</p>
+<ul>
+<li><p>通过已学的知识可以求出：每一年S14000021选区中所有候选人所在的团体(party)和得票数(votes)，根据团体(party)和年份(yr)排序</p>
+<ul>
+<li><p>select</p></li>
+<li><p>yr</p></li>
+<li><p>,party</p></li>
+<li><p>, votes</p></li>
+<li><p>from ge</p></li>
+<li><p>where constituency = 'S14000021'</p></li>
+<li><p>order by party,yr</p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_9QP-d6xuLY.png" /></p></li>
+<li><p>但是题目还要求对每年的票数从高到低赋予名次，此时就可以使用排序窗口函数，依据指定字段分区后，在分区内再依据指定字段排序</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>yr</p></li>
+<li><p>,party</p></li>
+<li><p>,votes</p></li>
+<li><p>,rank()over(partition by yr order by votes desc) as posn</p></li>
+<li><p>from ge</p></li>
+<li><p>where constituency = 'S14000021'</p></li>
+<li><p>order by party,yr</p></li>
+</ul>
+<p><img src="/image/image_CjCpzshHOs.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_e817n-BnAV.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【偏移分析函数】</p>
+<ul>
+<li><p>例题链接：（链接中标号2）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/Window_LAG"
+title="https://sqlzoo.net/wiki/Window_LAG">https://sqlzoo.net/wiki/Window_LAG</a>
+涉及数据表：&lt;covid&gt;</p>
+<ul>
+<li><p>【例题30】查询法国和德国1月每天新增确诊人数，最后显示国家名、标准日期（2020-01-27）、当天截至时间累计确诊人数、昨天截至时间累计确诊人数、每天新增确诊人数，按照截至时间排序</p>
+<ul>
+<li><p>查询结果：国家名、标准日期（2020-01-27）、当天截至时间累计确诊人数、昨天截至时间累计确诊人数、每天新增确诊人数</p></li>
+<li><p>数据来源：covid</p>
+<ul>
+<li>from covid</li>
+</ul></li>
+<li><p>查询条件：国家为法国和英国，月份为1月</p>
+<ul>
+<li>here name in ('France','Germany') and month(whn) = 1</li>
+</ul></li>
+<li><p>排序要求：按照截至时间排序</p>
+<ul>
+<li>order by whn</li>
+</ul></li>
+<li><p>标准日期通过date_format()函数来对whn字段进行处理</p></li>
+<li><p>每天新增人数怎么求？</p>
+<ul>
+<li><p>已知每天截至时间累计确诊人数，以2020年9月21日为例，截至2020年9月21日的累计确诊人数
+- 截至2020年9月20日的累计确诊人数 = 2020年9月21日新增确诊人数</p></li>
+<li><p>原表中已经有截至每天的累计确诊人数，用它减去昨天的累计确诊人数得到新增的确诊人数</p></li>
+<li><p>但是数据库语句只能对字段之间进行计算，行数据之间不能计算，因此就要使用到偏移分析窗口函数，对数据进行偏移，得到昨天的数据，然后进行字段计算</p>
+<ul>
+<li><p>昨天截至时间累计确诊人数：lag(confirmed,1)over(partition by name
+order by whn)</p></li>
+<li><p>当天截至时间累计确诊人数：confirmed</p></li>
+<li><p>当天新增确诊人数：confirmed - lag(confirmed,1)over(partition by
+name order by whn)</p></li>
+</ul></li>
+</ul></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,date_format(whn,'%Y-%m-%d') date</p></li>
+<li><p>,confirmed 当天截至时间累计确诊人数</p></li>
+<li><p>,lag(confirmed,1)over(partition by name order by whn)
+昨天截至时间累计确诊人数</p></li>
+<li><p>,(confirmed - lag(confirmed,1)over(partition by name order by
+whn)) 每天新增确诊人数</p></li>
+<li><p>from covid</p></li>
+<li><p>where name in ('France','Germany') and month(whn) = 1</p></li>
+<li><p>order by whn</p></li>
+</ul>
+<p><img src="/image/image_M7sJTs0mDY.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_LPaNEPkMsB.png" /></p></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>【排序窗口函数语法】</p>
+<ul>
+<li><p>rank()over([partition by 字段名] order by 字段名
+asc|desc)</p></li>
+<li><p>dense_rank()over([partition by 字段名] order by 字段名
+asc|desc)</p></li>
+<li><p>row_number()over([partition by 字段名] order by 字段名
+asc|desc)</p></li>
+</ul></li>
+<li><p>【偏移分析函数语法】</p>
+<ul>
+<li><p>lag(字段名,偏移量[,默认值])over([partition by 字段名] order by
+字段名 asc|desc)</p></li>
+<li><p>lead(字段名,偏移量[,默认值])over([partition by 字段名] order by
+字段名 asc|desc)</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/Window_functions（链接中标号2）涉及数据表：&lt;ge&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询2017年选区为 'S14000024'
+的所有候选人所在团体（party）和其选票数（votes）、还有候选人得票数在选区内对应的的排名</p></li>
+<li><p>结果按团队party排序</p></li>
+</ul>
+<p><img src="/image/image_2T1MyGeEkp.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_0l-2EbBqxV.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>party</p></li>
+<li><p>,votes</p></li>
+<li><p>,rank() over (order by votes desc) as posn</p></li>
+<li><p>from ge</p></li>
+<li><p>where constituency = 'S14000024'</p></li>
+<li><p>and yr = 2017</p></li>
+<li><p>order by party</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/Window_LAG（链接中标号6）涉及数据表：&lt;covid&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询截至时间为2020年4月20日的国家名，确诊人数，确诊人数排名，死亡人数，死亡人数排名</p></li>
+<li><p>按照确诊人数降序排名</p></li>
+</ul>
+<p><img src="/image/image_dk6gmIg7BP.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_-G-za2RRYK.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,confirmed</p></li>
+<li><p>,rank()over(order by confirmed desc) rk</p></li>
+<li><p>,deaths</p></li>
+<li><p>,rank()over(order by deaths desc) deathrk</p></li>
+<li><p>from covid</p></li>
+<li><p>where whn = '2020-04-20'</p></li>
+<li><p>order by confirmed desc</p></li>
+</ul></li>
+</ul></li>
+<li><p>【3】点击链接https://sqlzoo.net/wiki/Window_LAG（链接中标号4）涉及数据表：&lt;covid&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询意大利每周新增确诊数（显示每周一的数值 weekday(whn) =
+0）</p></li>
+<li><p>最后显示国家名，标准日期（2020-01-27），每周新增人数</p></li>
+<li><p>按照截至时间排序</p></li>
+</ul>
+<p><img src="/image/image_ZJKf4QHnR-.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_zbzQVqakaM.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>, date_format(whn,'%Y-%m-%d') date</p></li>
+<li><p>, (confirmed - lag(confirmed,1)over(partition by name order by
+whn)) New</p></li>
+<li><p>from covid</p></li>
+<li><p>where name = 'Italy'</p></li>
+<li><p>and weekday(whn) = 0</p></li>
+<li><p>order by whn</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点九：表连接</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>【基础语法】</p>
+<ul>
+<li><p>内连接</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 inner join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+<li><p>注意内连接inner可以省略，直接使用join默认为内连接</p></li>
+</ul></li>
+<li><p>左连接</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 left join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+</ul></li>
+<li><p>右连接</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 right join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+</ul></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>例题链接：（链接中标号4）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/The_JOIN_operation"
+title="https://sqlzoo.net/wiki/The_JOIN_operation">https://sqlzoo.net/wiki/The_JOIN_operation</a>
+涉及数据表：&lt;game、goal、eteam&gt;</p>
+<ul>
+<li><p>【例题31】查询有球员名叫Mario进球的队伍1（team1），队伍2（team2）及球员姓名</p>
+<ul>
+<li><p>首先阅读并理解game、goal、eteam三表相关信息</p></li>
+<li><p>球员名来自表goal，队伍1和队伍2来自表game</p></li>
+<li><p>来自不同的表但是要同时查询此时对两张表进行连接，连接键为赛事编号在game表中为id列，在goal表中为matchid列</p></li>
+<li><p>查询结果：队伍1（team1），队伍2（team2）及球员姓名</p>
+<ul>
+<li>select team1,team2,player</li>
+</ul></li>
+<li><p>数据来源：game，goal</p>
+<ul>
+<li><p>两表连接键分别为id列和matchid列，连接方式为内连接</p></li>
+<li><p>from game join goal on <a target="_blank" rel="noopener" href="http://game.id"
+title="game.id">game.id</a> = goal.matchid</p></li>
+</ul></li>
+<li><p>查询条件：球员名叫Mario</p>
+<ul>
+<li>where player like 'Mario%'</li>
+</ul></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>team1</p></li>
+<li><p>,team2</p></li>
+<li><p>,player</p></li>
+<li><p>from game</p></li>
+<li><p>join goal</p></li>
+<li><p>on <a target="_blank" rel="noopener" href="http://game.id" title="game.id">game.id</a> =
+goal.matchid</p></li>
+<li><p>where player like 'Mario%'</p></li>
+</ul>
+<p><img src="/image/image_68Dkyasefc.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_tAHR-3LKuu.png" /></p></li>
+</ul></li>
+<li><p>【例题32】查询队伍1（team1）的教练是“Fernando
+Santos”的球队名称（teamname）、比赛日期（mdate）和赛事编号（id）</p>
+<ul>
+<li><p>查询结果：球队名称（teamname）、比赛日期（mdate）和赛事编号（id）</p>
+<ul>
+<li>select mdate,teamname,id</li>
+</ul></li>
+<li><p>数据来源：eteam，game</p>
+<ul>
+<li><p>连接键分别是eteam.id和game.team1</p></li>
+<li><p>from game join eteam on <a target="_blank" rel="noopener" href="http://eteam.id"
+title="eteam.id">eteam.id</a> = game.team1</p></li>
+</ul></li>
+<li><p>查询条件：教练是“Fernando Santos”</p>
+<ul>
+<li>where coach = 'Fernando Santos'</li>
+</ul></li>
+<li><p>此时有个问题，赛事编号是来自game表的id列，但是game表和eteam表都有id列，直接写select
+id数据库无法分辨此id列来自于哪一个表，会出现报错</p>
+<p><img src="/image/image_OXN49mipIk.png" /></p>
+<ul>
+<li>报错翻译：字段列表中的列“id”不明确</li>
+</ul></li>
+<li><p>因此我们需要指定该id列来自于哪个表</p></li>
+<li><p>写出代码：select mdate,teamname,<a target="_blank" rel="noopener" href="http://game.id"
+title="game.id">game.id</a></p></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>mdate</p></li>
+<li><p>,teamname</p></li>
+<li><p>,<a target="_blank" rel="noopener" href="http://game.id" title="game.id">game.id</a></p></li>
+<li><p>from game</p></li>
+<li><p>join eteam</p></li>
+<li><p>on <a target="_blank" rel="noopener" href="http://eteam.id" title="eteam.id">eteam.id</a> =
+game.team1</p></li>
+<li><p>where coach = 'Fernando Santos'</p></li>
+</ul>
+<p><img src="/image/image_KYzBtIEvyt.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_IR03pOYru6.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+<li><p>例题链接：（链接中标号3）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/Using_Null"
+title="https://sqlzoo.net/wiki/Using_Null">https://sqlzoo.net/wiki/Using_Null</a>
+涉及数据表：&lt;teacher、dept&gt;</p>
+<ul>
+<li><p>【例题33】使用合适的连接显示所有教师及其所教授的科目名</p>
+<ul>
+<li><p>要将dept表连接至teacher表才能显示教师名和科目名，<a
+target="_blank" rel="noopener" href="http://xn--dept-uh5fl84igy8d54i.id"
+title="连接键为dept.id">连接键为dept.id</a> = teacher.dept</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p><a target="_blank" rel="noopener" href="http://t.name" title="t.name">t.name</a></p></li>
+<li><p>,<a target="_blank" rel="noopener" href="http://d.name" title="d.name">d.name</a></p></li>
+<li><p>from teacher t</p></li>
+<li><p>join dept d</p></li>
+<li><p>on t.dept = <a target="_blank" rel="noopener" href="http://d.id" title="d.id">d.id</a></p></li>
+</ul></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_1ytOeUp-5T.png" /></p></li>
+<li><p>发现缺了两名老师的信息，因为内连接会筛掉没有连上连接键为null的数据行</p></li>
+<li><p>将join修改为左连接left
+join，保留左边的教师表的所有数据行</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p><a target="_blank" rel="noopener" href="http://t.name" title="t.name">t.name</a></p></li>
+<li><p>,<a target="_blank" rel="noopener" href="http://d.name" title="d.name">d.name</a></p></li>
+<li><p>from teacher t</p></li>
+<li><p>left join dept d</p></li>
+<li><p>on t.dept = <a target="_blank" rel="noopener" href="http://d.id" title="d.id">d.id</a></p></li>
+</ul></li>
+<li><p>【运行结果】正确结果</p>
+<p><img src="/image/image_VuMMs59pLt.png" /></p></li>
+</ul></li>
+<li><p>【知识点讲解】</p>
+<ul>
+<li><p>1.左连接可以保留左边表的所有数据行，同理右连接保留右边表的所有数据行</p></li>
+<li><p>2.from teacher left join dept等同于from dept right join
+teacher</p></li>
+<li><p>3.对比以下连接运行结果，可以说表连接也有筛选数据的功能</p>
+<ul>
+<li><p>join内连接</p>
+<p><img src="/image/image_UeZd_lYwJN.png" /></p></li>
+<li><p>left join左连接</p>
+<p><img src="/image/image_CYAd3meLsJ.png" /></p></li>
+<li><p>right join右连接</p>
+<p><img src="/image/image_C2KVgv_kd4.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>【内连接inner join语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 inner join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+<li><p>注意内连接inner可以省略，直接使用join默认为内连接</p></li>
+</ul></li>
+<li><p>【左连接left join语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 left join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+</ul></li>
+<li><p>【右连接right join语法】</p>
+<ul>
+<li><p>select 字段名</p></li>
+<li><p>from 表名1 right join 表名2 on 表名1.字段名 =
+表名2.字段名</p></li>
+</ul></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/More_JOIN_operations（链接中标号13）涉及数据表：&lt;movie、casting、actor&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询至少出演过第1主角30次的演员名</li>
+</ul>
+<p><img src="/image/image_lBQGna4NaG.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_vNHe3qUD7j.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from casting c</p></li>
+<li><p>join actor a</p></li>
+<li><p>on c.actorid = <a target="_blank" rel="noopener" href="http://a.id"
+title="a.id">a.id</a></p></li>
+<li><p>where ord = 1</p></li>
+<li><p>group by name</p></li>
+<li><p>having count(movieid)&gt;=30</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/The_JOIN_operation（链接中标号5）涉及数据表：&lt;game、goal、eteam&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询在比赛前十分钟有进球记录的球员，他的队伍编号(teamid)，教练(coach),
+进球时间(gtime)</li>
+</ul>
+<p><img src="/image/image_ckS_bCFGsV.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_aNo-O5_XLD.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>player</p></li>
+<li><p>, teamid</p></li>
+<li><p>,coach</p></li>
+<li><p>,gtime</p></li>
+<li><p>from goal</p></li>
+<li><p>join eteam</p></li>
+<li><p>on goal.teamid = <a target="_blank" rel="noopener" href="http://eteam.id"
+title="eteam.id">eteam.id</a></p></li>
+<li><p>where goal.gtime &lt;= 10</p></li>
+</ul></li>
+</ul></li>
+<li><p>【3】点击链接https://sqlzoo.net/wiki/The_JOIN_operation（链接中标号13）涉及数据表：&lt;game、goal、eteam&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询每场比赛，每个球队的得分情况，按照以下格式显示</li>
+</ul>
+<p><img src="/image/image_2AEVrib6Yn.png" /></p>
+<ul>
+<li>最后按照举办时间（mdate）、赛事编号（matchid）、队伍1（team1）和队伍2（team2）排序</li>
+</ul>
+<p><img src="/image/image_5-P5agPiUU.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_NLW7Y5ZPx1.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>ga.mdate</p></li>
+<li><p>,ga.team1</p></li>
+<li><p>,sum(case when ga.team1=go.teamid then 1 else 0 end)
+score1</p></li>
+<li><p>,ga.team2</p></li>
+<li><p>,sum(case when ga.team2=go.teamid then 1 else 0 end)
+score2</p></li>
+<li><p>from game ga</p></li>
+<li><p>left join goal go</p></li>
+<li><p>on <a target="_blank" rel="noopener" href="http://ga.id" title="ga.id">ga.id</a> =
+go.matchid</p></li>
+<li><p>group by ga.mdate,ga.team1,ga.team2</p></li>
+<li><p>order by ga.mdate, go.matchid, ga.team1, ga.team2</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>主知识点十：子查询</p>
+<ul>
+<li><p>【知识点引入】</p>
+<ul>
+<li><p>子查询本身就是一段完整的查询语句，然后用括号英文括号()包裹嵌套在主查询语句中，子查询可以多层嵌套</p></li>
+<li><p>最常用的子查询运用在from和where子句中</p></li>
+</ul></li>
+<li><p>【例题讲解】</p>
+<ul>
+<li><p>【where基于子查询条件筛选（比较运算符&amp;in关键字）】</p>
+<ul>
+<li><p>例题链接：（链接中标号6）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial"
+title="https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial">https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial</a>
+涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【例题34】查询出gdp高于欧洲每个国家的所有国家名，有一些国家gdp值可能为NULL，请排除这些国家</p>
+<ul>
+<li><p>查询结果：国家名</p>
+<ul>
+<li>select name</li>
+</ul></li>
+<li><p>数据来源：world</p>
+<ul>
+<li>from world</li>
+</ul></li>
+<li><p>查询条件：gdp高于欧洲每个国家；排除gdp值为null的国家</p></li>
+<li><p>查询条件中排除gdp值为null的国家，写出代码：where gdp is not
+null</p></li>
+<li><p>那gdp高于欧洲每个国家怎么写？此时我们并不知道欧洲每个国家的gdp</p></li>
+<li><p>有人说不知道写个查询代码找！运行代码：select gdp from world where
+continent = 'Europe'</p>
+<ul>
+<li><p>运行结果：查询出有44条数据的结果</p>
+<p><img src="/image/image_KQxFLQLoLr.png" /></p></li>
+<li><p>然后写代码</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp is not null</p></li>
+<li><p>and gdp &gt; 13039000000</p></li>
+<li><p>and gdp &gt; 3278000000</p></li>
+<li><p>and gdp &gt; 416835000000</p></li>
+<li><p>......</p></li>
+<li><p>显然这么写有点憨，有没有更省力的办法呢？</p></li>
+<li><p>逻辑是：先写一段代码来查询欧洲所有国家的gdp，然后基于这个查询结果再来写一段查询代码得到我们想要的结果</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp is not null</p></li>
+<li><p>and gdp &gt; 查询结果</p></li>
+<li><p>此时就需要子查询出场了，子查询就是为此设计的</p></li>
+<li><p>修改上面的代码为</p></li>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp is not null</p></li>
+<li><p>and gdp &gt; (select gdp from world where continent =
+'Europe')</p></li>
+</ul></li>
+</ul></li>
+<li><p>运行代码</p>
+<ul>
+<li><p>发现报错，报错翻译：子查询返回超过1行</p></li>
+<li><p>回想我们的where子句中where gdp &gt;
+13039000000，这个“13039000000”相当于是一条行数据，现在的子查询查询结果是多条行数据，所以返回报错：子查询返回超过1行</p></li>
+</ul></li>
+<li><p>题目中要求：gdp高于欧洲每个国家</p></li>
+<li><p>如果gdp高于欧洲gdp最高的国家，就等同于“gdp高于欧洲每个国家”，将子查询修改为select
+max(gdp) from world where continent = 'Europe'</p>
+<ul>
+<li>运行代码得到一条行数据</li>
+</ul>
+<p><img src="/image/image_YG2VEtcUQb.png" /></p></li>
+</ul></li>
+<li><p>修改整段代码</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp is not null</p></li>
+<li><p>and gdp &gt; (</p>
+<ul>
+<li><p>select max(gdp)</p></li>
+<li><p>from world</p></li>
+<li><p>where continent = 'Europe'</p></li>
+<li><p>)</p></li>
+</ul></li>
+</ul>
+<p><img src="/image/image_SbNbll4umn.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_UOZmmki0f2.png" /></p></li>
+</ul></li>
+<li><p>【例题35】查询跟阿尔及尼亚（Argentina）和澳大利亚（Australia）在同一大洲的所有国家名及其所属大洲，
+并按照国家名进行排序</p>
+<ul>
+<li><p>查询结果：国家名和大洲</p>
+<ul>
+<li>select name,continent</li>
+</ul></li>
+<li><p>数据来源：world</p>
+<ul>
+<li>from world</li>
+</ul></li>
+<li><p>查询条件：阿尔及尼亚（Argentina）和澳大利亚（Australia）在同一大洲的国家</p>
+<ul>
+<li><p>首先要知道阿尔及尼亚和澳大利亚在哪个大洲</p></li>
+<li><p>select continent from world where name in
+('Argentina','Australia')</p></li>
+</ul></li>
+<li><p>排序要求：按照国家名进行排序</p>
+<ul>
+<li>order by name</li>
+</ul></li>
+<li><p>通过子查询查询阿尔及尼亚和澳大利亚所属的大洲，但是查询结果是两行，continent的字段值只要满足查询结果中的一个即可</p></li>
+<li><p>除了上题使用的比较运算符，还可以使用in关键字</p></li>
+<li><p>转换为完整的查询语句</p></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,continent</p></li>
+<li><p>from world</p></li>
+<li><p>where continent in (</p>
+<ul>
+<li><p>select continent</p></li>
+<li><p>from world</p></li>
+<li><p>where name in ('Argentina','Australia')</p></li>
+<li><p>)</p></li>
+</ul></li>
+<li><p>order by name</p></li>
+</ul>
+<p><img src="/image/image_Wr0tX62wo8.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_oFnLw112LJ.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+<li><p>【from基于子查询作为数据表】</p>
+<ul>
+<li><p>例题链接：（链接中标号5）<a
+target="_blank" rel="noopener" href="https://sqlzoo.net/wiki/Window_functions"
+title="https://sqlzoo.net/wiki/Window_functions">https://sqlzoo.net/wiki/Window_functions</a>
+涉及数据表：&lt;ge&gt;</p>
+<ul>
+<li><p>【例题36】查询2017年所有在爱丁堡的选区当选议员所在选区（constituency）及其团队（party），已知爱丁堡选区编号为S14000021至S14000026，当选议员即各选区得票数最高的候选人</p>
+<ul>
+<li><p>查询结果：所在选区及其团队</p>
+<ul>
+<li>select constituency,party</li>
+</ul></li>
+<li><p>数据来源</p>
+<ul>
+<li>from ge</li>
+</ul></li>
+<li><p>查询条件：2017年；选区编号为S14000021至S14000026；选区当选议员</p>
+<ul>
+<li>where yr = 2017 and constituency between 'S14000021' and
+'S14000026'</li>
+</ul></li>
+<li><p>选区当选议员是各选区得票数最高的候选人</p></li>
+<li><p>使用limit只能在对数据筛选后，限制整个表的显示行数</p></li>
+<li><p>此时使用排序窗口函数，依据选区字段对数据分区，在分区内对票数排序，最后筛选分区内票数最高的数据</p></li>
+<li><p>写出代码</p>
+<ul>
+<li><p>select</p></li>
+<li><p>constituency</p></li>
+<li><p>,party</p></li>
+<li><p>,votes</p></li>
+<li><p>,rank()over(partition by constituency order by votes desc) as
+posn</p></li>
+<li><p>from ge</p></li>
+<li><p>where constituency between 'S14000021' and 'S14000026'</p></li>
+<li><p>and yr = 2017</p></li>
+<li><p>运行结果</p>
+<p><img src="/image/image_epiOuJ0nGO.png" /></p></li>
+<li><p>得到一张在分区排序，赋予名次的多行多列的数据表</p></li>
+<li><p>基于这个查询结果使用where条件筛选posn =
+1的数据行，得到当选人的数据</p></li>
+</ul></li>
+<li><p>【运行代码】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>constituency</p></li>
+<li><p>,party</p></li>
+<li><p>from</p></li>
+<li><p>(</p>
+<ul>
+<li><p>select</p></li>
+<li><p>constituency</p></li>
+<li><p>,party</p></li>
+<li><p>,votes</p></li>
+<li><p>,rank()over(partition by constituency order by votes desc) as
+posn</p></li>
+<li><p>from ge</p></li>
+<li><p>where constituency between 'S14000021' and 'S14000026'</p></li>
+<li><p>and yr = 2017</p></li>
+</ul></li>
+<li><p>) as rk</p></li>
+<li><p>where rk.posn = 1</p></li>
+</ul>
+<p><img src="/image/image_9jbEUvJ0Py.png" /></p></li>
+<li><p>【运行结果】</p>
+<p><img src="/image/image_fIuz05mDyK.png" /></p></li>
+</ul></li>
+<li><p>【写下你自己的学习笔记】</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【总结】</p>
+<ul>
+<li><p>子查询本身是一个完整的查询，由括号包裹嵌套在主查询中</p></li>
+<li><p>子查询最后返回查询出的结果给主查询</p></li>
+<li><p>子查询可以在select，from，where，having子句（同where）中使用，但要注意不同子句能接受的子查询种类有差别</p></li>
+<li><p>子查询可以多重嵌套（子查询可以作为主查询再嵌套子查询）</p></li>
+</ul></li>
+<li><p>【练习题】</p>
+<ul>
+<li><p>【1】点击链接https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial（链接中标号2）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li><p>查询在欧洲(Europe)人均gdp大于英国 (United
+Kingdom)的国家名</p></li>
+<li><p>人均国内生产总值（人均GDP）=国内生产总值（GDP）/人口（populaiton）</p></li>
+</ul>
+<p><img src="/image/image_SfSLM0sAeC.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_i8L-K3TZrr.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select name</p></li>
+<li><p>from world</p></li>
+<li><p>where gdp/population &gt; (</p>
+<ul>
+<li><p>select gdp/population</p></li>
+<li><p>from world</p></li>
+<li><p>where name='united kingdom'</p></li>
+<li><p>)</p></li>
+</ul></li>
+<li><p>and continent='europe'</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】点击链接https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial（链接中标号4）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询人口数（population）超过加拿大（Canada）但是少于波兰（Poland）的国家，结果显示这些国家名（name）和人口数（population）</li>
+</ul>
+<p><img src="/image/image_CVoZuEDJPQ.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_1v5iQ-AcFE.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,population</p></li>
+<li><p>from world</p></li>
+<li><p>where population &gt; (</p>
+<ul>
+<li><p>select population</p></li>
+<li><p>from world</p></li>
+<li><p>where name= 'Canada'</p></li>
+<li><p>)</p></li>
+</ul></li>
+<li><p>and population &lt; (</p>
+<ul>
+<li><p>select population</p></li>
+<li><p>from world</p></li>
+<li><p>where name = 'Poland'</p></li>
+<li><p>)</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【3】点击链接https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial（链接中标号9）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询所有国家人口均≤25000000的大洲，及其国家名（name）和人口（population）</li>
+</ul>
+<p><img src="/image/image_SGylMnI7Ju.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_erDD9n7Pwj.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,continent</p></li>
+<li><p>,population</p></li>
+<li><p>from world</p></li>
+<li><p>where continent not in (</p>
+<ul>
+<li><p>select distinct continent</p></li>
+<li><p>from world</p></li>
+<li><p>where population &gt;25000000</p></li>
+<li><p>)</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【4】点击链接https://sqlzoo.net/wiki/SELECT_within_SELECT_Tutorial（链接中标号7）涉及数据表：&lt;world&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查找每个大陆（continent）中最大的国家（按区域area），显示该大洲（continent），国家名（name）和面积（area）</li>
+</ul>
+<p><img src="/image/image_zQOuh5ihsR.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_6jdHh7rlh9.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>continent</p></li>
+<li><p>,name</p></li>
+<li><p>,area</p></li>
+<li><p>from world</p></li>
+<li><p>where (continent,area) in (</p>
+<ul>
+<li><p>select</p></li>
+<li><p>continent</p></li>
+<li><p>,max(area)</p></li>
+<li><p>from world</p></li>
+<li><p>group by continent</p></li>
+<li><p>)</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【5】点击链接https://sqlzoo.net/wiki/Window_LAG（链接中标号2）涉及数据表：&lt;covid&gt;</p>
+<ul>
+<li><p>【题目】</p>
+<ul>
+<li>查询德国和意大利每天新增治愈人数并从高到低排名，查询结果按国家名，截至日期（输出格式为'xxxx年xx月xx日'），新增治愈人数，按排名排序</li>
+</ul>
+<p><img src="/image/image_2QxbP-BRgm.png" /></p></li>
+<li><p>【正确结果】</p>
+<p><img src="/image/image_J31zZqFmwL.png" /></p></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,日期</p></li>
+<li><p>,每天新增治愈人数</p></li>
+<li><p>,rank()over(partition by name order by 每天新增治愈人数 desc)
+排名</p></li>
+<li><p>from</p></li>
+<li><p>(</p>
+<ul>
+<li><p>select</p></li>
+<li><p>name</p></li>
+<li><p>,date_format(whn,'%Y年%m月%d日') 日期</p></li>
+<li><p>,(recovered - lag(recovered,1)over(partition by name order by
+whn)) 每天新增治愈人数</p></li>
+<li><p>from covid</p></li>
+<li><p>where name in ('France','Italy')</p></li>
+</ul></li>
+<li><p>) re</p></li>
+<li><p>order by 排名</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【云端数据库配置】</p>
+<ul>
+<li><p>为什么要配置云端数据库？</p>
+<ul>
+<li><p>一、简单方便</p>
+<ul>
+<li><p>数据库直接搭建在云端，不会在安装过程中出现任何因系统和环境导致的Bug</p></li>
+<li><p>整个安装过程只需要点点点，没有任何技术要求，大家都能实现</p></li>
+</ul></li>
+<li><p>二、性能更佳</p>
+<ul>
+<li><p>小伙伴们电脑的配置不一，本地数据库极其消耗电脑的运算资源</p></li>
+<li><p>放在云端，不占用大家的电脑性能，数据库和电脑都运行更快</p></li>
+</ul></li>
+<li><p>三、随时使用</p>
+<ul>
+<li>云端数据库可以支持你在任何设备上连接运行，随时随地联系SQL</li>
+</ul></li>
+<li><p>四、真实还原</p>
+<ul>
+<li><p>大多数的公司的数据库都搭建在云端，云端数据库能还原真实业务场景的数据环境</p></li>
+<li><p>连接云端数据库是每一位数据分析师的必修课</p></li>
+<li><p>最后还会教大家用Excel和Tableau连接数据库</p></li>
+</ul></li>
+<li><p>五、拓展性强</p>
+<ul>
+<li>后续的课程会教大家用Tableau和Python直接连接云端数据库进行分析</li>
+</ul></li>
+</ul></li>
+<li><p>安装过程中，一定要看到哪，就暂停操作到哪，有不清楚的直接看文档，这样最为高效~</p></li>
+<li><p>从百度网盘下载Mysql文件夹</p>
+<ul>
+<li><p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1-jOwaXWArtv8h21B0-uWGg"
+title="https://pan.baidu.com/s/1-jOwaXWArtv8h21B0-uWGg">https://pan.baidu.com/s/1-jOwaXWArtv8h21B0-uWGg</a></p></li>
+<li><p>提取码：wsra</p></li>
+</ul>
+<p><img src="/image/image_mXQKuSzyTG.png" /></p>
+<ul>
+<li><p>云端数据库配置所需文件在【MySQL云端数据库配置】文件夹下</p></li>
+<li><p>需要导入云端数据库进行练习的数据在【数据库导入数据】文件夹下</p></li>
+<li><p>后续Excel和Tableau连接数据库所需的驱动在【Excel&amp;Tableau数据库连接驱动】文件夹下</p></li>
+</ul></li>
+<li><p>云端数据库配置文档</p>
+<ul>
+<li><p>第一步：购买云数据库</p>
+<ul>
+<li><p>1、在搜索框中输入阿里云</p>
+<p><img src="/image/image_YA5ztRKFC2.png" /></p></li>
+<li><p>2、进入阿里云官网，点击产品，数据库</p>
+<p><img src="/image/image_ay_PdXiqgR.png" /></p></li>
+<li><p>3、下拉页面在关系数据库中，选择云数据库RDS MySQL 版：<a
+target="_blank" rel="noopener" href="https://www.aliyun.com/product/rds/mysql?spm=5176.161322.J_9503524160.1.38d8592cjhnYkO"
+title="https://www.aliyun.com/product/rds/mysql?spm=5176.161322.J_9503524160.1.38d8592cjhnYkO">https://www.aliyun.com/product/rds/mysql?spm=5176.161322.J_9503524160.1.38d8592cjhnYkO</a></p>
+<p><img src="/image/image__KKyS8SkZ_.png" /></p></li>
+<li><p>4、下滑至产品规格，选择MySQL8.0基础版，立即购买</p>
+<ul>
+<li>（阿里云有的时候会搞活动，可以优惠价购买，只要是RDS MySQL 基础版 1核
+1G版都可以）</li>
+</ul>
+<p><img src="/image/image_6O1DgNeVNe.png" /></p>
+<p> </p>
+<p><img src="/image/image_5oWL6ocfQ-.png" /></p></li>
+<li><p>5、如果没有登录，此时会跳出请求登录的界面，点击登录，并扫码登录</p>
+<p><img src="/image/image_RQwXg-JJVS.png" /></p>
+<p><img src="/image/image_ENwNwt2tXc.png" /></p></li>
+<li><p>6、进入购买页面，地域选择离自己最近的，SQL版本必选8.0，存储类型选推荐的ESSD，最低存储20g完全足够，点击立即购买</p>
+<p><img src="/image/image_UenXF5KXo3.png" /></p></li>
+<li><p>7、在订单支付界面，确认购买时，如果以前从来没有使用过阿里云产品会弹出您还未通过实名认证的弹窗，此时需要进行实名认证</p>
+<ul>
+<li><p>点击确定</p>
+<p><img src="/image/image_URvMPP_9jp.png" /></p></li>
+<li><p>转至右上角的登录名，点击立即认证</p>
+<p><img src="/image/image_K6CUiSW_d5.png" /></p></li>
+<li><p>选择个人实名认证</p>
+<p><img src="/image/image_Ul5kgvip0a.png" /></p></li>
+<li><p>选择个人支付宝授权认证，同意身份认证扫码</p>
+<p><img src="/image/image_8Vs6BkLGIQ.png" /></p>
+<p><img src="/image/image_D_UbHSc-gt.png" /></p></li>
+<li><p>填写地址并确认，认证成功</p>
+<p><img src="/image/image_zRgkfqT6iJ.png" /></p>
+<p><img src="/image/image_nuu0w_tz8S.png" /></p></li>
+</ul></li>
+<li><p>8、再次购买云数据库，点击立即购买</p>
+<p><img src="/image/image__Y8eIBE1ms.png" /></p>
+<ul>
+<li><p>创建订单，勾选协议，点击确认购买</p>
+<p><img src="/image/image_M0E-KRhpqJ.png" /></p></li>
+<li><p>进行支付</p>
+<p><img src="/image/image_jaw9673-CB.png" /></p></li>
+</ul></li>
+<li><p>9、支付成功，跳转至阿里云主界面</p>
+<p><img src="/image/image_4CfR-ma53B.png" /></p></li>
+</ul></li>
+<li><p>第二步：配置云数据库账号、数据库、白名单</p>
+<ul>
+<li><p>1、点击右上角的控制台</p>
+<p><img src="/image/image_r3cVscyXqF.png" /></p></li>
+<li><p>2、进入控制台</p>
+<p><img src="/image/image_E93gkeEVUu.png" /></p></li>
+<li><p>3、触碰左上角的列表图标，点击云数据库RDS版</p>
+<p><img src="/image/image_CVz-7Ij8uJ.png" /></p></li>
+<li><p>4、点击实例列表，选择自己购买实例所属的地域，出现已经购买成功的实例，并点击实例名</p>
+<p><img src="/image/image_RrvM8IaY03.png" /></p>
+<ul>
+<li><p>如果是在刚购买完成后进行操作会出现示例创建中，此时需要5分钟左右等待实例创建完毕</p>
+<p><img src="/image/image_YoHtHRVlzJ.png" /></p></li>
+<li><p>刷新界面，出现运行中字样，即创建实例成功，此时再点击实例名进行下一步操作</p>
+<p><img src="/image/image_5Ivwvgp_Jk.png" /></p></li>
+</ul></li>
+<li><p>5、进入实例的基本信息页面，对实例进行设置</p>
+<p><img src="/image/image_-ofrWHlHB5.png" /></p></li>
+<li><p>6、点击账号管理，创建一个高权限账号，数据库账号为sa，账号类型为高权限账号，设置一个密码，例如：Ex123456</p>
+<p><img src="/image/image_GJyk37Hssq.png" /></p>
+<ul>
+<li><p>稍等片刻后，刷新界面，账号处于已激活状态即成功创建账号</p>
+<p><img src="/image/image_OEvnVhPXtz.png" /></p></li>
+</ul></li>
+<li><p>7、再设置数据库，点击数据库管理，创建数据库</p>
+<p><img src="/image/image_Dgc4eW6jLF.png" /></p></li>
+<li><p>8、然后分别创建ods,ddm,edw,edw_s 四个数据库</p>
+<p><img src="/image/image_HWAJZX06T3.png" /></p></li>
+<li><p>9、点击数据库连接，设置白名单</p>
+<p><img src="/image/image_0nQCf1CExu.png" /></p>
+<ul>
+<li><p>进入白名单设置界面，点击修改</p>
+<p><img src="/image/image_Ox02K-sFE-.png" /></p></li>
+<li><p>将组内白名单修改为0.0.0.0/0</p>
+<p><img src="/image/image_L8N5KjUgFt.png" /></p>
+<p><img src="/image/image_LMNtjD5wBO.png" /></p>
+<ul>
+<li><p>如果需要手机验证，填入收到的验证码即可</p>
+<p><img src="/image/image_KYEWfHjuCk.png" /></p></li>
+</ul></li>
+<li><p>稍等片刻刷新数据库连接的页面，出现内网地址</p>
+<p><img src="/image/image_p08En9qeTA.png" /></p></li>
+<li><p>点击申请外网地址</p>
+<p><img src="/image/image_Av28EVkvRj.png" /></p></li>
+<li><p>稍等片刻后，刷新界面，出现外网地址</p>
+<p><img src="/image/image_Zb8v6x1rpS.png" /></p></li>
+<li><p>复制外网地址，可以记录在记事本或者其他地方，接下来使用datagrip连接云数据库</p>
+<p><img src="/image/image_eNQcq-pciO.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>第三步：安装datagrip连接数据库</p>
+<ul>
+<li><p>1、安装datagrip</p>
+<ul>
+<li><p>在百度网盘下载安装文件后，点击文件夹MySQL云数据库配置中的datagrip.exe文件进行安装</p>
+<p><img src="/image/image_kN9pjdLvkH.png" /></p>
+<ul>
+<li>点击next</li>
+</ul>
+<p><img src="/image/image_zEZIuFbyxL.png" /></p>
+<ul>
+<li>建议直接选择默认路径安装，避免环境变量错误</li>
+</ul>
+<p><img src="/image/image_4ZYNKfXSAI.png" /></p>
+<ul>
+<li>勾选下列选项，记得一定要勾选添加环境变量，完成安装</li>
+</ul>
+<p><img src="/image/image_VaVvOfpGui.png" /></p>
+<p><img src="/image/image_sCzedB8_Ss.png" /></p>
+<ul>
+<li>选择第二个稍后重启</li>
+</ul>
+<p><img src="/image/image_P8bpZiEJrv.png" /></p></li>
+<li><p>如果出现环境变量相关错误，可以看一下 电脑 &gt;&gt;&gt; 属性
+&gt;&gt;&gt; 高级 &gt;&gt;&gt;
+环境变量，是否成功添加了datagrip的环境变量。如果没有，点击新建环境变量，变量名输入datagrip，值输入datagrip
+bin所在的目录例如C:Files.2; 注意最后要添加分号</p>
+<p><img src="/image/image_cuh45rneDn.png" /></p>
+<p><img src="/image/image_K4vlCivUK2.png" /></p></li>
+<li><p>双击运行软件，进行设置</p>
+<ul>
+<li><p>点击Don't Send，Do not import settings</p>
+<p><img src="/image/image_JtWm7yuL1q.png" /></p>
+<p><img src="/image/image_K77tJBgMP8.png" /></p></li>
+<li><p>选择Evaluate for free（试用30天）,可以不填写邮箱</p>
+<p><img src="/image/image_di7GlsjTaM.png" /></p></li>
+</ul></li>
+<li><p>点击加号创建new project，输入一个项目名，点击ok</p>
+<p><img src="/image/image_4O6n4HhZQQ.png" /></p>
+<p><img src="/image/image_t6zsYnLEAV.png" /></p>
+<ul>
+<li><p>进入界面后出来的弹窗可以点击close进行关闭</p>
+<p><img src="/image/image_r-ZdZYjCYx.png" /></p></li>
+</ul></li>
+<li><p>接下来进行汉化。在File &gt;&gt;&gt; Settings &gt;&gt;&gt;
+Plugins的搜索框中搜索chinese，选择chinese(simplified)插件，点击install进行下载</p>
+<p><img src="/image/image_aqfgsAVE6s.png" /></p>
+<ul>
+<li><p>点击Restart IDE重启软件</p>
+<p><img src="/image/image_Ey9lXBUAoe.png" /></p></li>
+</ul></li>
+<li><p>等待软件重启，接下来连接mysql数据库。点击右上角的加号，数据源，找到MySQL，提示需要下载驱动。</p>
+<p><img src="/image/image_pkjef9IJdo.png" /></p>
+<ul>
+<li><p>关掉界面，点击文件 &gt;&gt;&gt; 数据源</p>
+<p><img src="/image/image_MdyW9jrwlR.png" /></p></li>
+<li><p>点击驱动程序，选择MySQL</p>
+<p><img src="/image/image_mrDxk4F62Y.png" /></p></li>
+<li><p>点击加号，自定义jar</p>
+<p><img src="/image/image_8kkrTauDL0.png" /></p></li>
+<li><p>选择下载下的文件夹MySQL云数据库配置中的mysql-connector-java-8.0.22.jar</p>
+<p><img src="/image/image_nHHlv7KbX6.png" /></p></li>
+<li><p>并点击原来的MySQL
+connector，再点击减号进行删除，点击确定，就加载好驱动了</p>
+<p><img src="/image/image_RD6-6PZjja.png" /></p></li>
+</ul></li>
+</ul></li>
+<li><p>2、在安装完datagrip后，连接云数据库，点击加号，数据源，找到mysql</p>
+<p><img src="/image/image_rSrpX1bhyL.png" /></p></li>
+<li><p>3、填写数据库参数</p>
+<ul>
+<li><p>填写名称（个人练习数据库），主机（粘贴云数据库外网地址），用户（云数据库账号），密码（云数据库账号对应密码）</p>
+<p><img src="/image/image_Ln6r5WC3dT.png" /></p></li>
+</ul></li>
+<li><p>4、点击测试连接，如果测试成功，点击确定连接云数据库</p>
+<p><img src="/image/image_1YTbX7AycX.png" /></p></li>
+<li><p>5、成功连接数据库后，勾选要用的构架ddm/ods/edw/edw_s</p>
+<p><img src="/image/image_IAVTc8uOEM.png" /></p>
+<p><img src="/image/image_YgG-9WNR8q.png" /></p></li>
+<li><p>6、上传文件中的拌客数据（三张表cpc、shop、orders）至数据库中</p>
+<ul>
+<li><p>右键ddm，点击从文件导入数据</p>
+<p><img src="/image/image_oDglwZOnJF.png" /></p></li>
+<li><p>选择【数据库导入数据】文件夹下的cpc.csv</p>
+<p><img src="/image/image_hDO-sRBadD.png" /></p></li>
+<li><p>进入设置界面</p>
+<p><img src="/image/image_Ore71PonUd.png" /></p>
+<ul>
+<li><p>由于出现乱码，修改编码为合适的编码，这里选择GBK，再勾选
+第一行是头</p>
+<p><img src="/image/image_BQK57WQ-Nj.png" /></p></li>
+<li><p>双击cpc的日期字段从text修改为date格式</p>
+<p><img src="/image/image_za2UM-rH2O.png" /></p></li>
+<li><p>点击导入</p>
+<p><img src="/image/image_7Dez-12Hfe.png" /></p>
+<ul>
+<li>ddm下出现cpc表格和字段，即为成功</li>
+</ul>
+<p><img src="/image/image_Q25Ajuf69o.png" /></p></li>
+<li><p>确保cpc表导入的格式与以下格式相同</p>
+<p><img src="/image/image_j7y35YILwY.png" /></p></li>
+<li><p>在ddm中导入shop.csv</p>
+<ul>
+<li>编码选择GBK，勾选
+第一行是头，日期字段格式改为date、GMV改为double，下单人数改为int，点击导入</li>
+</ul>
+<p><img src="/image/image_9PYu0kkH6I.png" /></p></li>
+<li><p>确保shop表导入的格式与以下格式相同</p></li>
+</ul>
+<p><img src="/image/image_QBuKKX-kDa.png" /></p>
+<ul>
+<li><p>在ods中导入orders.csv</p>
+<ul>
+<li>右键ods，从文件导入orders.csv</li>
+</ul>
+<p><img src="/image/image_SQL0zayiHC.png" /></p>
+<ul>
+<li>编码为GBK，勾选第一行是头，修改下单日期为date，下单日期时间为datetime，订单id为int（text也可以，尽量与用户id格式相同）</li>
+</ul>
+<p><img src="/image/image_xocoQS1oVM.png" /></p></li>
+<li><p>确保orders表导入的格式与以下格式相同</p>
+<p><img src="/image/image_AU_Q5iczTN.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>第四步：安装sublime存储和打开sql文件</p>
+<ul>
+<li><p>1、安装sublime</p>
+<ul>
+<li><p>点击文件夹sublime.exe文件，安装在默认路径</p>
+<p><img src="/image/image_XWh1uCappa.png" /></p>
+<ul>
+<li><p>勾选Add to explorer context menu，点击next，完成安装</p>
+<p><img src="/image/image_2EpvHGnGY0.png" /></p></li>
+</ul></li>
+<li><p>从win程序菜单拖拽快捷方式至桌面，双击软件打开</p>
+<p><img src="/image/image_FFTPPb_L2F.png" /></p></li>
+<li><p>接下来进行汉化。在sublime界面中点击preferences&gt;browse
+packages弹出文件夹目录，点击上一级目录，进入installed
+packages目录，将文件夹MySQL云端数据库配置中的package
+control.sublime-package包放在该目录下即可</p>
+<p><img src="/image/image_OYAhbczSmh.png" /></p>
+<p><img src="/image/image_LhRpTJeE1v.png" /></p></li>
+<li><p>打开sublime，点击菜单栏preferences&gt;browse
+packages，跳转到文件packages路径</p>
+<p><img src="/image/image_UPr_KwPD_3.png" /></p>
+<p><img src="/image/image_5HOqQfvZTm.png" /></p></li>
+<li><p>在文件夹MySQL云端数据库配置中找到文件夹Chinese-Localization-master，将Chinese-Localization-master整个文件夹复制至该路径，直接汉化成功</p>
+<p><img src="/image/image_nkphNm3EPc.png" /></p></li>
+</ul></li>
+<li><p>2、用sublime存储sql文件</p>
+<ul>
+<li><p>点击视图，选择侧边栏，点击显示打开的文件</p>
+<p><img src="/image/image_TjYmArXXCt.png" /></p>
+<p><img src="/image/image_3wknup2p6Z.png" /></p></li>
+<li><p>写一段sql代码：select * from shop</p>
+<p><img src="/image/image_C2VdkM0SNM.png" /></p></li>
+<li><p>sublime新建的文件默认为text格式，可以右下角修改文件为sql，同时发现写下的代码颜色发生改变</p>
+<p><img src="/image/image_bT6opf3Ip_.png" /></p>
+<p><img src="/image/image_B9MF3c3PPM.png" /></p></li>
+<li><p>或者将文件存储为sql格式也能达到同样的效果，记得务必命名文件时加上后缀.sql该格式才能生效</p>
+<p><img src="/image/image_Ikv-UQpouG.png" /></p></li>
+</ul></li>
+<li><p>3、修改默认打开方式为sublime</p>
+<ul>
+<li><p>右键打开方式，选择其他应用</p>
+<p><img src="/image/image_CaALjpJ1P4.png" /></p></li>
+<li><p>如果在打开的页面找不到sublime，点击在这台电脑上查找其他应用</p>
+<p><img src="/image/image_S1dgw0-jRA.png" /></p></li>
+<li><p>在C盘Program Files路径下找到Sublime
+Text文件夹中的sublime_text.exe，点击打开</p></li>
+</ul></li>
+<li><p>3、用sublime打开文件夹 数据库导入数据 中的sql文件</p>
+<p><img src="/image/image_eFM6I42IHa.png" /></p>
+<p><img src="/image/image_KMk_T-3PAP.png" /></p></li>
+<li><p>4、复制sublime中的代码至datagrip中运行，验证导入的数据是否正确</p>
+<ul>
+<li><p>复制sql代码至datagrip中运行</p>
+<p><img src="/image/image_qAxzG2_FGb.png" /></p></li>
+<li><p>输出的数据和下面的图片一样，恭喜安装成功！</p>
+<p><img src="/image/image_f_CYrewbhm.png" /></p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>【小试牛刀】</p>
+<ul>
+<li><p>【0】场景介绍&amp;数据介绍——<a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a>、ddm.cpc、ods.orders</p>
+<ul>
+<li><p>在Datagrip内直接查看数据字典</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>双击表格查看详细数据</p>
+<ul>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>【1】场景：刚来公司的第一天，想康一下门店营业表有哪些字段</p>
+<ul>
+<li><p>【运行结果】</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>describe <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+<li></li>
+</ul></li>
+<li><p>在sqlzoo中使用describe查看各数据表的字段和数据格式，可以点击下载按钮后导出数据</p></li>
+<li><p>如果Mysql导出csv格式数据乱码，是csv文件本身的文本编码问题导致的</p>
+<ul>
+<li><p>1. 鼠标右键点击选中的 csv
+文件，在弹出的菜单中选择“编辑”，则系统会用文本方式（记事本）打开该 csv
+文件</p></li>
+<li><p>2. 打开 csv
+文件后，进行“另存为”操作，在弹出的界面底部位置有“编码”，修改编码方式即可：
+从UTF-8改成 ANSI，然后保存</p></li>
+<li><p>3. 再用 Excel 打开后，显示汉字正常</p></li>
+</ul></li>
+</ul></li>
+<li><p>【2】场景：运营需要查看旗下所有品牌和门店在2019年12月1日至7日在美团上的GMV和下单人数</p>
+<ul>
+<li><p>【正确结果】</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>品牌名称</p></li>
+<li><p>,门店名称</p></li>
+<li><p>,日期</p></li>
+<li><p>,GMV</p></li>
+<li><p>,下单人数</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+<li><p>where 日期 between '2019-12-01' and'2019-12-07'</p></li>
+<li><p>and 平台 = 'meituan'</p></li>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>【3】场景：查询所有门店每天的GMV和CPC消耗</p>
+<ul>
+<li><p>【正确结果】</p>
+<ul>
+<li><p>部分运行结果</p></li>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>门店名称</p></li>
+<li><p>,shop.日期</p></li>
+<li><p>,GMV</p></li>
+<li><p>,cpc总费用</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop" title="ddm.shop">ddm.shop</a>
+shop</p></li>
+<li><p>join ddm.cpc cpc</p></li>
+<li><p>on shop.门店ID = cpc.门店ID</p></li>
+<li><p>and shop.日期 = cpc.日期</p></li>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>【4】场景：业务提新需求了，要看旗下所有品牌各门店12月1日至7日期间在所有平台上的总GMV和总下单人数</p>
+<ul>
+<li><p>【正确结果】</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>品牌名称</p></li>
+<li><p>,门店名称</p></li>
+<li><p>,sum(GMV)</p></li>
+<li><p>,sum(下单人数)</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+<li><p>where 日期 between '2019-12-01' and'2019-12-07'</p></li>
+<li><p>group by 品牌名称,门店名称</p></li>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>【5】业务看了眼刚才的数据，表示只想看累计GMV在3万以上，并且下单人数在200人以上的门店</p>
+<ul>
+<li><p>【正确结果】</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>品牌名称</p></li>
+<li><p>,门店名称</p></li>
+<li><p>,sum(GMV)</p></li>
+<li><p>,sum(下单人数)</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+<li><p>where 日期 between '2019-12-01' and'2019-12-07'</p></li>
+<li><p>group by 品牌名称,门店名称</p></li>
+<li><p>having sum(GMV) &gt; 30000</p></li>
+<li><p>and sum(下单人数) &gt; 200</p></li>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>【6】场景：查询2020年饿了么平台上每个门店GMV最高那天的日期和GMV【窗口函数】</p>
+<ul>
+<li><p>【正确结果】</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>【参考答案】</p>
+<ul>
+<li><p>select</p></li>
+<li><p>门店名称</p></li>
+<li><p>,日期</p></li>
+<li><p>,GMV</p></li>
+<li><p>from</p></li>
+<li><p>(</p>
+<ul>
+<li><p>select</p></li>
+<li><p>门店名称</p></li>
+<li><p>,日期</p></li>
+<li><p>,row_number()over(partition by 门店名称 order by GMV desc)
+r</p></li>
+<li><p>,GMV</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+<li><p>where substring(日期,1,4) = '2020'</p></li>
+<li><p>and 平台 = 'eleme'</p></li>
+</ul></li>
+<li><p>) a</p></li>
+<li><p>where a.r = 1</p></li>
+<li></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>--</p>
+<h1 id="如何继续提升">【如何继续提升】</h1>
+<ul>
+<li><p>在题库里夯实基础</p>
+<ul>
+<li><p>牛客网SQL真题：<a target="_blank" rel="noopener" href="https://www.nowcoder.com/ta/sql"
+title="https://www.nowcoder.com/ta/sql">https://www.nowcoder.com/ta/sql</a></p></li>
+<li><p>按照顺序把题库里的题全部刷一遍，要做到看到题目就能有思路，还能准确无误地写出代码</p></li>
+<li><p>这样基本上能搞定80%以上的实际数据需求和SQL笔试题</p></li>
+<li><p>剩下的20%需要更加复杂的业务场景、数据和需求才能继续提升</p></li>
+<li><p>不过不用担心，你自学的SQL技能已经可以超过大多数小伙伴</p></li>
+<li><p>入职后，你的SQL会在实战场景中突飞猛进！</p></li>
+</ul></li>
+<li><p>在笔试中不断积累</p>
+<ul>
+<li><p>认真对待每一道你遇到的SQL题</p></li>
+<li><p>每一道都要搞懂，做出来</p></li>
+</ul></li>
+<li><p>在实战中不断提升</p>
+<ul>
+<li><p>梳理自己的数据字典</p></li>
+<li><p>把同事已有的代码全部学习一遍</p></li>
+<li><p>掌握更多复杂的真实场景用法</p></li>
+</ul></li>
+</ul>
+<p>--</p>
+<h1 id="excel连接数据库">【Excel连接数据库】</h1>
+<ul>
+<li><p>安装Mysql驱动</p>
+<ul>
+<li><p>依次安装课程【Excel&amp;Tableau数据库连接驱动下】文件夹下的驱动文件</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>先安装VC_redist.x64.exe</p></li>
+<li><p>再安装mysql-connector-odbc-8.0.26-winx64.msi</p></li>
+<li><p>最后安装mysql-connector-odbc-8.0.26-winx32.msi</p></li>
+</ul></li>
+<li><p>查看Excel是32位还是64位</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>配置ODBC</p>
+<ul>
+<li><p>控制面板&gt;&gt;&gt;系统和安全&gt;&gt;&gt;管理工具&gt;&gt;&gt;ODBC数据源64位（如果Excel是32位，则配置ODBC数据源32位）</p></li>
+<li><p>用户DSN&gt;&gt;&gt;添加&gt;&gt;&gt;选择"MySQL ODBC 8.0 Unicode
+Driver"</p></li>
+<li><p>填写参数，database可以不写</p></li>
+<li><p>点击test进行测试</p></li>
+</ul></li>
+<li><p>Excel使用ODBC从MySQL获取数据</p>
+<ul>
+<li><p>打开Excel</p></li>
+<li><p>数据选项卡&gt;&gt;&gt;获取数据&gt;&gt;&gt;自其他源&gt;&gt;&gt;从ODBC</p></li>
+<li><p>数据源名称选择配置ODBC时写的名称（这里为mysqldata）</p></li>
+<li><p>点击高级选项，输入SQL代码来指定读取的数据</p></li>
+<li><p>这里输入代码，获取整个数据表中的数据（不输入SQL代码会报错）</p>
+<ul>
+<li><p>select *</p></li>
+<li><p>from <a target="_blank" rel="noopener" href="http://ddm.shop"
+title="ddm.shop">ddm.shop</a></p></li>
+</ul></li>
+<li><p>可能需要再次输入数据库账号密码，输入后点击连接</p></li>
+<li><p>点击加载，从MySQL数据库中获取数据到Excel</p>
+<ul>
+<li></li>
+</ul></li>
+</ul></li>
+<li><p>基于数据库获取的数据制作图表</p>
+<ul>
+<li><p>日期GMV折线图</p></li>
+<li><p>sum等函数引用整列后，可以基于刷新后的数据进行计算</p></li>
+<li><p>真实业务场景下，基于连接数据库的原表制作自动化报表，只需要刷新数据就可以完成报表的更新</p></li>
+</ul></li>
+</ul>
+<p>--</p>
+<h1 id="tableau连接数据库">【Tableau连接数据库】</h1>
+<ul>
+<li><p>Mysql驱动已经在Excel部分安装完毕</p></li>
+<li><p>我们直接选择连接到服务器，选择Mysql，填写数据库参数</p>
+<ul>
+<li></li>
+</ul></li>
+<li><p>可以拖拽数据库，也可以写自定义SQL</p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SQL/" rel="tag"># SQL</a>
+              <a href="/tags/Tableau/" rel="tag"># Tableau</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%B8%89%E8%AF%BE-Tableau/" rel="prev" title="数据分析自学课程（第三课：Tableau）">
+      <i class="fa fa-chevron-left"></i> 数据分析自学课程（第三课：Tableau）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%B8%80%E8%AF%BE-%E7%B3%BB%E7%BB%9F%E8%AE%A4%E8%AF%86/" rel="next" title="数据分析自学课程（第一课：系统认识）">
+      数据分析自学课程（第一课：系统认识） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B%E9%A3%9F%E7%94%A8%E8%AF%B4%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">【课程食用说明】</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sqlzoo%E6%95%B0%E6%8D%AE%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">【sqlzoo数据介绍】</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95%E5%92%8C%E8%BF%90%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">【基础语法和运行原理】</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BB%A7%E7%BB%AD%E6%8F%90%E5%8D%87"><span class="nav-number">4.</span> <span class="nav-text">【如何继续提升】</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#excel%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">5.</span> <span class="nav-text">【Excel连接数据库】</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tableau%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">6.</span> <span class="nav-text">【Tableau连接数据库】</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

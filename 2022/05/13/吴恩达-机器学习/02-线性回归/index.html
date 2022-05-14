@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="吴恩达-机器学习第二章：线性回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴恩达-机器学习（二：线性回归）">
+<meta property="og:url" content="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="吴恩达-机器学习第二章：线性回归">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_CpVMigJomr.png">
+<meta property="og:image" content="http://example.com/image/image_QiX2N8b5sa.png">
+<meta property="og:image" content="http://example.com/image/image_RPcVHIVT6S.png">
+<meta property="og:image" content="http://example.com/image/image_8nMK6ky0W_.png">
+<meta property="og:image" content="http://example.com/image/image_TcKkOBixnV.png">
+<meta property="og:image" content="http://example.com/image/image_Lh5V0dshtb.png">
+<meta property="og:image" content="http://example.com/image/image__TWeHJ7zCo.png">
+<meta property="og:image" content="http://example.com/image/image_sSAEAPPwLr.png">
+<meta property="og:image" content="http://example.com/image/image_ijxioQEH-X.png">
+<meta property="og:image" content="http://example.com/image/image_tLU6Yw84LS.png">
+<meta property="og:image" content="http://example.com/image/image_Xh_90uh92D.png">
+<meta property="og:image" content="http://example.com/image/image_Li6FgCGlRE.png">
+<meta property="og:image" content="http://example.com/image/image_pyysKtcMCg.png">
+<meta property="og:image" content="http://example.com/image/image_9YeWQfYpgE.png">
+<meta property="og:image" content="http://example.com/image/image-20200926203154027_dcq73k2Utb.gif">
+<meta property="og:image" content="http://example.com/image/image_9vTh8RByKF.png">
+<meta property="og:image" content="http://example.com/image/image_x48JlFafVk.png">
+<meta property="og:image" content="http://example.com/image/image_y4eu22FN4m.png">
+<meta property="og:image" content="http://example.com/image/%60HUBR@DUH9~DN%5BJ(0DY441C_afYbn67wyE.png">
+<meta property="og:image" content="http://example.com/image/image_sOgyy31L6s.png">
+<meta property="og:image" content="http://example.com/image/image_Tmrp4M_o83.png">
+<meta property="article:published_time" content="2022-05-13T14:15:15.998Z">
+<meta property="article:modified_time" content="2022-05-13T14:49:07.276Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_CpVMigJomr.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>吴恩达-机器学习（二：线性回归） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          吴恩达-机器学习（二：线性回归）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 22:15:15 / 修改时间：22:49:07" itemprop="dateCreated datePublished" datetime="2022-05-13T22:15:15+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%90%B4%E6%81%A9%E8%BE%BE/" itemprop="url" rel="index"><span itemprop="name">机器学习-吴恩达</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>吴恩达-机器学习第二章：线性回归</p>
+<span id="more"></span>
+<h1 id="代价函数">代价函数</h1>
+<p>cost function，一般使用最小均方差来评估参数的好坏。</p>
+<p><img src="/image/image_CpVMigJomr.png" /></p>
+<p><img src="/image/image_QiX2N8b5sa.png" /></p>
+<p><img src="/image/image_RPcVHIVT6S.png" /></p>
+<p><img src="/image/image_8nMK6ky0W_.png" /></p>
+<h1 id="梯度下降">梯度下降</h1>
+<p>梯度下降，首先为每个参数赋一个初值，通过代价函数的梯度，然后不断地调整参数，最终得到一个局部最优解。初值的不同可能会得到两个不同的结果，即梯度下降不一定得到全局最优解。</p>
+<p><img src="/image/image_TcKkOBixnV.png" /></p>
+<p>梯度下降在具体的执行时，每一次更新需要同时更新所有的参数。</p>
+<p><img src="/image/image_Lh5V0dshtb.png" /></p>
+<p>梯度下降公式中有两个部分，学习率和偏导数。</p>
+<p>偏导数，用来计算当前参数对应代价函数的斜率，导数为正则<span
+class="math inline">\(\theta\)</span>减小，导数为负则<span
+class="math inline">\(\theta\)</span>增大，通过这样的方式可以使整体向$
+$收敛。</p>
+<p><img src="/image/image__TWeHJ7zCo.png" /></p>
+<p>α用来描述学习率，即每次参数更新的步长。<span
+class="math inline">\(\alpha\)</span>的大小不好确定，如果太小则需要很多步才能收敛，如果太大最后可能不会收敛甚至可能发散。</p>
+<p><img src="/image/image_sSAEAPPwLr.png" /></p>
+<p>当<span class="math inline">\(\theta\)</span>处于局部最优解时，$
+$的值将不再更新，因为偏导为0。</p>
+<p><img src="/image/image_ijxioQEH-X.png" /></p>
+<p>这也说明了如果学习率<span
+class="math inline">\(\alpha\)</span>不改变，参数也可能收敛，假设偏导&gt;
+0，因为偏导一直在向在减小，所以每次的步长也会慢慢减小，所以<span
+class="math inline">\(\alpha\)</span>不需要额外的减小。</p>
+<p><img src="/image/image_tLU6Yw84LS.png" /></p>
+<h2 id="单元梯度下降">单元梯度下降</h2>
+<p>梯度下降每次更新的都需要进行偏导计算，这个偏导对应线性回归的代价函数。</p>
+<p><img src="/image/image_Xh_90uh92D.png" /></p>
+<p>对代价函数求导的结果为：</p>
+<p><img src="/image/image_Li6FgCGlRE.png" /></p>
+<p>梯度下降的过程容易出现局部最优解：</p>
+<p><img src="/image/image_pyysKtcMCg.png" /></p>
+<p>但是线性回归的代价函数，往往是一个凸函数。它总能收敛到全局最优。</p>
+<p><img src="/image/image_9YeWQfYpgE.png" /></p>
+<p>梯度下降过程的动图展示：</p>
+<p><img src="/image/image-20200926203154027_dcq73k2Utb.gif" /></p>
+<h2 id="多元梯度下降">多元梯度下降</h2>
+<p>通常问题都会涉及到多个变量，例如房屋价格预测就包括，面积、房间个数、楼层、价格等</p>
+<p><img src="/image/image_9vTh8RByKF.png" /></p>
+<p>因此代价函数就不在只包含一个变量，为了统一可以对常量引入变量<span
+class="math inline">\(x_0=1\)</span>。</p>
+<p><img src="/image/image_x48JlFafVk.png" /></p>
+<p>虽然参数的个数增多，但是对每个参数求偏导时和单个参数类似。</p>
+<p><img src="/image/image_y4eu22FN4m.png" /></p>
+<h1 id="特征缩放">特征缩放</h1>
+<p>多个变量的度量不同，数字之间相差的大小也不同，如果可以将所有的特征变量缩放到大致相同范围，这样会减少梯度算法的迭代。</p>
+<p>特征缩放不一定非要落到[-1，1]之间，只要数据足够接近就可以。</p>
+<p><span class="math inline">\(X_i =
+\frac{X_i-\mu}{\sigma}\)</span>，<span
+class="math inline">\(\mu\)</span>表示平均值，<span
+class="math inline">\(\sigma\)</span>表示标准差。</p>
+<p><img
+src="https://img.sanzo.top/img/default/ml/image-20200927122159371.png" /></p>
+<p><img
+src="https://img.sanzo.top/img/default/ml/image-20200927122356465.png" /></p>
+<p><img
+src="https://img.sanzo.top/img/default/ml/image-20200927122645246.png" /></p>
+<p><strong>缩放后的还原</strong></p>
+<p><img src="/image/%60HUBR@DUH9~DN%5BJ(0DY441C_afYbn67wyE.png" /></p>
+<h1 id="学习率">学习率</h1>
+<p>学习率<span
+class="math inline">\(\alpha\)</span>的大小会影响梯度算法的执行，太大可能会导致算法不收敛，太小会增加迭代的次数。</p>
+<p>可以画出每次迭代的<span
+class="math inline">\(J(\theta)\)</span>的变化，来判断当前算法执行的情况，然后选择合适的学习率。（调参开始…）</p>
+<p><img src="/image/image_sOgyy31L6s.png" /></p>
+<p><img src="/image/image_Tmrp4M_o83.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%A6%82%E8%BF%B0/" rel="prev" title="吴恩达-机器学习（一：概述）">
+      <i class="fa fa-chevron-left"></i> 吴恩达-机器学习（一：概述）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E7%9F%A9%E9%98%B5%E5%92%8C%E5%90%91%E9%87%8F/" rel="next" title="吴恩达-机器学习（三：矩阵和向量）">
+      吴恩达-机器学习（三：矩阵和向量） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">2.</span> <span class="nav-text">梯度下降</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">2.1.</span> <span class="nav-text">单元梯度下降</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">2.2.</span> <span class="nav-text">多元梯度下降</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E7%BC%A9%E6%94%BE"><span class="nav-number">3.</span> <span class="nav-text">特征缩放</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E7%8E%87"><span class="nav-number">4.</span> <span class="nav-text">学习率</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

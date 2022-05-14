@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="车万翔教授自然语言处理-预训练模型一书第六章：动态预训练模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自然语言处理-预训练模型（六：动态预训练模型）">
+<meta property="og:url" content="http://example.com/2022/05/13/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/06-%E5%8A%A8%E6%80%81%E8%AF%8D%E5%90%91%E9%87%8F%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="车万翔教授自然语言处理-预训练模型一书第六章：动态预训练模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_CpithZGutF.png">
+<meta property="og:image" content="http://example.com/image/image_RTJZVnqy0Z.png">
+<meta property="og:image" content="http://example.com/image/image_wcW7nqqt5t.png">
+<meta property="og:image" content="http://example.com/image/image_TOYfxO7GSR.png">
+<meta property="og:image" content="http://example.com/image/image_wG5jeYFs8j.png">
+<meta property="og:image" content="http://example.com/image/image_-ULY0DmtcA.png">
+<meta property="article:published_time" content="2022-05-13T13:44:55.083Z">
+<meta property="article:modified_time" content="2022-05-13T13:46:21.117Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="Pytorch">
+<meta property="article:tag" content="自然语言处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_CpithZGutF.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/06-%E5%8A%A8%E6%80%81%E8%AF%8D%E5%90%91%E9%87%8F%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>自然语言处理-预训练模型（六：动态预训练模型） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/06-%E5%8A%A8%E6%80%81%E8%AF%8D%E5%90%91%E9%87%8F%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          自然语言处理-预训练模型（六：动态预训练模型）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 21:44:55 / 修改时间：21:46:21" itemprop="dateCreated datePublished" datetime="2022-05-13T21:44:55+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" itemprop="url" rel="index"><span itemprop="name">自然语言处理-预训练模型</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>车万翔教授自然语言处理-预训练模型一书第六章：动态预训练模型</p>
+<span id="more"></span>
+<h1 id="词向量-从静态到动态">词向量-从静态到动态</h1>
+<ul>
+<li><p>静态词向量都基于分布式语义假设，本质是将一个词在整个语料库中的共现上下文信息聚合到该词的向量表示中，因此，一旦训练完成，词向量的表示是恒定的，不随上下文的变化而变化。然而，一词多义告诉我们，上下文不同，词义也不同。</p></li>
+<li><p>因此提出<strong>上下文相关的词向量</strong> (Contextualized Word
+Embedding) ，也称为动态词向量。</p></li>
+<li><p>动态词向量仍然严格满足分布式语义假设。</p></li>
+<li><p>循环神经网络每个隐含层的表示正好可以作为该时刻词在当前上下文条件下的向量表示，即动态词向量。</p></li>
+<li><p>因此提出了 TagLM (序列标注模型)、ELMo
+(深度上下文相关词向量)、CoVe (双语平行语料)</p></li>
+<li><p>称为：<strong>基于语言模型的动态词向量预训练</strong></p></li>
+</ul>
+<h1
+id="基于语言模型的动态词向量预训练">基于语言模型的动态词向量预训练</h1>
+<h2 id="双向语言模型">双向语言模型</h2>
+<p>（1）输入表示层</p>
+<p><img src="/image/image_CpithZGutF.png" /></p>
+<p>1.<strong>基于字符组合的神经网络表示</strong>，以减小 OOV 的影响</p>
+<blockquote>
+<p>即词 token 用字符 t, o, k, e, n 来表示</p>
+</blockquote>
+<p><img src="/image/image_RTJZVnqy0Z.png" /></p>
+<p><img src="/image/image_wcW7nqqt5t.png" /></p>
+<p><img src="/image/image_TOYfxO7GSR.png" /></p>
+<h2 id="elmo词向量">ELMo词向量</h2>
+<p><img src="/image/image_wG5jeYFs8j.png" /></p>
+<p>模型的编码部分(含输入表示层与多层堆叠 LSTM) (一般用 LSTM
+最后一层隐含层)
+便可以作为动态词向量表示。然而，不同层次的隐含层向量蕴含了不同层次或粒度的文本信息。顶层编码了更多的语义信息，底层编码了更多的词法、句法信息。因此，ELMo
+对不同层次隐含层采取了加权平均，为不同的下游任务提供了更多的组合自由度。</p>
+<p><img src="/image/image_-ULY0DmtcA.png" /></p>
+<h2 id="模型实现">模型实现</h2>
+<h3 id="数据准备">数据准备</h3>
+<h4
+id="同时构建词级别与字级别的训练语料和相应词表">同时构建词级别与字级别的训练语料和相应词表</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">load_corpus</span>(<span class="params">path, max_tok_len=<span class="literal">None</span>, max_seq_len=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="comment"># Read raw text file</span></span><br><span class="line">    <span class="comment"># and build vocabulary for both words and chars</span></span><br><span class="line">    text = []</span><br><span class="line">    charset = &#123;BOS_TOKEN, EOS_TOKEN, PAD_TOKEN, BOW_TOKEN, EOW_TOKEN&#125;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Loading corpus from <span class="subst">&#123;path&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">with</span> codecs.<span class="built_in">open</span>(path, <span class="string">&quot;r&quot;</span>, encoding=<span class="string">&quot;utf-8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> tqdm(f):</span><br><span class="line">            tokens = line.rstrip().split(<span class="string">&quot; &quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> max_seq_len <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="built_in">len</span>(tokens) + <span class="number">2</span> &gt; max_seq_len:</span><br><span class="line">                tokens = line[:max_seq_len-<span class="number">2</span>]</span><br><span class="line">            sent = [BOS_TOKEN]</span><br><span class="line">            <span class="keyword">for</span> token <span class="keyword">in</span> tokens:</span><br><span class="line">                <span class="keyword">if</span> max_tok_len <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="built_in">len</span>(token) + <span class="number">2</span> &gt; max_tok_len:</span><br><span class="line">                    token = token[:max_tok_len-<span class="number">2</span>]</span><br><span class="line">                sent.append(token)</span><br><span class="line">                <span class="keyword">for</span> ch <span class="keyword">in</span> token:</span><br><span class="line">                    charset.add(ch)</span><br><span class="line">            sent.append(EOS_TOKEN)</span><br><span class="line">            text.append(sent)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Build word and character vocabulary</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Building word-level vocabulary&quot;</span>)</span><br><span class="line">    vocab_w = Vocab.build(</span><br><span class="line">        text,</span><br><span class="line">        min_freq=<span class="number">2</span>,</span><br><span class="line">        reserved_tokens=[PAD_TOKEN, BOS_TOKEN, EOS_TOKEN]</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Building char-level vocabulary&quot;</span>)</span><br><span class="line">    vocab_c = Vocab(tokens=<span class="built_in">list</span>(charset))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Construct corpus using word_voab and char_vocab</span></span><br><span class="line">    corpus_w = [vocab_w.convert_tokens_to_ids(sent) <span class="keyword">for</span> sent <span class="keyword">in</span> text]</span><br><span class="line">    corpus_c = []</span><br><span class="line">    bow = vocab_c[BOW_TOKEN]</span><br><span class="line">    eow = vocab_c[EOW_TOKEN]</span><br><span class="line">    <span class="keyword">for</span> i, sent <span class="keyword">in</span> <span class="built_in">enumerate</span>(text):</span><br><span class="line">        sent_c = []</span><br><span class="line">        <span class="keyword">for</span> token <span class="keyword">in</span> sent:</span><br><span class="line">            <span class="keyword">if</span> token == BOS_TOKEN <span class="keyword">or</span> token == EOS_TOKEN:</span><br><span class="line">                token_c = [bow, vocab_c[token], eow]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                token_c = [bow] + vocab_c.convert_tokens_to_ids(token) + [eow]</span><br><span class="line">            sent_c.append(token_c)</span><br><span class="line">        <span class="keyword">assert</span> <span class="built_in">len</span>(sent_c) == <span class="built_in">len</span>(corpus_w[i])</span><br><span class="line">        corpus_c.append(sent_c)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">assert</span> <span class="built_in">len</span>(corpus_w) == <span class="built_in">len</span>(corpus_c)</span><br><span class="line">    <span class="keyword">return</span> corpus_w, corpus_c, vocab_w, vocab_c</span><br></pre></td></tr></table></figure>
+<h4
+id="构建用于双向语言模型的数据类bilmdataset">构建用于双向语言模型的数据类BiLMDataset</h4>
+<ol type="1">
+<li><p>补齐功能</p></li>
+<li><p>获取双向语言模型的输入、输出</p></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Dataset</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BiLMDataset</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, corpus_w, corpus_c, vocab_w, vocab_c</span>):</span><br><span class="line">        <span class="built_in">super</span>(BiLMDataset, self).__init__()</span><br><span class="line">        self.pad_w = vocab_w[PAD_TOKEN]</span><br><span class="line">        self.pad_c = vocab_c[PAD_TOKEN]</span><br><span class="line"></span><br><span class="line">        self.data = []</span><br><span class="line">        <span class="keyword">for</span> sent_w, sent_c <span class="keyword">in</span> tqdm(<span class="built_in">zip</span>(corpus_w, corpus_c)):</span><br><span class="line">            self.data.append((sent_w, sent_c))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.data)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, i</span>):</span><br><span class="line">        <span class="keyword">return</span> self.data[i]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">collate_fn</span>(<span class="params">self, examples</span>):</span><br><span class="line">        <span class="comment"># lengths: batch_size</span></span><br><span class="line">        seq_lens = torch.LongTensor([<span class="built_in">len</span>(ex[<span class="number">0</span>]) <span class="keyword">for</span> ex <span class="keyword">in</span> examples])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># inputs_w</span></span><br><span class="line">        inputs_w = [torch.tensor(ex[<span class="number">0</span>]) <span class="keyword">for</span> ex <span class="keyword">in</span> examples]</span><br><span class="line">        inputs_w = pad_sequence(inputs_w, batch_first=<span class="literal">True</span>, padding_value=self.pad_w)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># inputs_c: batch_size * max_seq_len * max_tok_len</span></span><br><span class="line">        batch_size, max_seq_len = inputs_w.shape</span><br><span class="line">        max_tok_len = <span class="built_in">max</span>([<span class="built_in">max</span>([<span class="built_in">len</span>(tok) <span class="keyword">for</span> tok <span class="keyword">in</span> ex[<span class="number">1</span>]]) <span class="keyword">for</span> ex <span class="keyword">in</span> examples])</span><br><span class="line"></span><br><span class="line">        inputs_c = torch.LongTensor(batch_size, max_seq_len, max_tok_len).fill_(self.pad_c)</span><br><span class="line">        <span class="keyword">for</span> i, (sent_w, sent_c) <span class="keyword">in</span> <span class="built_in">enumerate</span>(examples):</span><br><span class="line">            <span class="keyword">for</span> j, tok <span class="keyword">in</span> <span class="built_in">enumerate</span>(sent_c):</span><br><span class="line">                inputs_c[i][j][:<span class="built_in">len</span>(tok)] = torch.LongTensor(tok)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># fw_input_indexes, bw_input_indexes = [], []</span></span><br><span class="line">        targets_fw = torch.LongTensor(inputs_w.shape).fill_(self.pad_w)</span><br><span class="line">        targets_bw = torch.LongTensor(inputs_w.shape).fill_(self.pad_w)</span><br><span class="line">        <span class="keyword">for</span> i, (sent_w, sent_c) <span class="keyword">in</span> <span class="built_in">enumerate</span>(examples):</span><br><span class="line">            targets_fw[i][:<span class="built_in">len</span>(sent_w)-<span class="number">1</span>] = torch.LongTensor(sent_w[<span class="number">1</span>:])</span><br><span class="line">            targets_bw[i][<span class="number">1</span>:<span class="built_in">len</span>(sent_w)] = torch.LongTensor(sent_w[:<span class="built_in">len</span>(sent_w)-<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> inputs_w, inputs_c, seq_lens, targets_fw, targets_bw</span><br></pre></td></tr></table></figure>
+<h3 id="双向语言模型-1">双向语言模型</h3>
+<h4 id="highway网络">Highway网络</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Highway</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_dim, num_layers, activation=F.relu</span>):</span><br><span class="line">        <span class="built_in">super</span>(Highway, self).__init__()</span><br><span class="line">        self.input_dim = input_dim</span><br><span class="line">        self.layers = torch.nn.ModuleList(</span><br><span class="line">            [nn.Linear(input_dim, input_dim * <span class="number">2</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers)]</span><br><span class="line">        )</span><br><span class="line">        self.activation = activation</span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> self.layers:</span><br><span class="line">            <span class="comment"># set bias in the gates to be positive</span></span><br><span class="line">            <span class="comment"># such that the highway layer will be biased towards the input part</span></span><br><span class="line">            layer.bias[input_dim:].data.fill_(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, inputs</span>):</span><br><span class="line">        curr_inputs = inputs</span><br><span class="line">        <span class="keyword">for</span> layer <span class="keyword">in</span> self.layers:</span><br><span class="line">            projected_inputs = layer(curr_inputs)</span><br><span class="line">            hidden = self.activation(projected_inputs[:, <span class="number">0</span>:self.input_dim])</span><br><span class="line">            gate = torch.sigmoid(projected_inputs[:, self.input_dim:])</span><br><span class="line">            curr_inputs = gate * curr_inputs + (<span class="number">1</span> - gate) * hidden</span><br><span class="line">        <span class="keyword">return</span> curr_inputs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4
+id="基于字符卷积的词表示层convtokenembedder">基于字符卷积的词表示层ConvTokenEmbedder</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ConvTokenEmbedder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        vocab_c,</span></span><br><span class="line"><span class="params">        char_embedding_dim,</span></span><br><span class="line"><span class="params">        char_conv_filters,</span></span><br><span class="line"><span class="params">        num_highways,</span></span><br><span class="line"><span class="params">        output_dim,</span></span><br><span class="line"><span class="params">        pad=<span class="string">&quot;&lt;pad&gt;&quot;</span></span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        <span class="built_in">super</span>(ConvTokenEmbedder, self).__init__()</span><br><span class="line">        self.vocab_c = vocab_c</span><br><span class="line"></span><br><span class="line">        self.char_embeddings = nn.Embedding(</span><br><span class="line">            <span class="built_in">len</span>(vocab_c),</span><br><span class="line">            char_embedding_dim,</span><br><span class="line">            padding_idx=vocab_c[pad]</span><br><span class="line">        )</span><br><span class="line">        self.char_embeddings.weight.data.uniform_(-<span class="number">0.25</span>, <span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">        self.convolutions = nn.ModuleList()</span><br><span class="line">        <span class="keyword">for</span> kernel_size, out_channels <span class="keyword">in</span> char_conv_filters:</span><br><span class="line">            conv = torch.nn.Conv1d(</span><br><span class="line">                in_channels=char_embedding_dim,</span><br><span class="line">                out_channels=out_channels,</span><br><span class="line">                kernel_size=kernel_size,</span><br><span class="line">                bias=<span class="literal">True</span></span><br><span class="line">            )</span><br><span class="line">            self.convolutions.append(conv)</span><br><span class="line"></span><br><span class="line">        self.num_filters = <span class="built_in">sum</span>(f[<span class="number">1</span>] <span class="keyword">for</span> f <span class="keyword">in</span> char_conv_filters)</span><br><span class="line">        self.num_highways = num_highways</span><br><span class="line">        self.highways = Highway(self.num_filters, self.num_highways, activation=F.relu)</span><br><span class="line"></span><br><span class="line">        self.projection = nn.Linear(self.num_filters, output_dim, bias=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, inputs</span>):</span><br><span class="line">        batch_size, seq_len, token_len = inputs.shape</span><br><span class="line">        inputs = inputs.view(batch_size * seq_len, -<span class="number">1</span>)</span><br><span class="line">        char_embeds = self.char_embeddings(inputs)</span><br><span class="line">        char_embeds = char_embeds.transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        conv_hiddens = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(self.convolutions)):</span><br><span class="line">            conv_hidden = self.convolutions[i](char_embeds)</span><br><span class="line">            conv_hidden, _ = torch.<span class="built_in">max</span>(conv_hidden, dim=-<span class="number">1</span>)</span><br><span class="line">            conv_hidden = F.relu(conv_hidden)</span><br><span class="line">            conv_hiddens.append(conv_hidden)</span><br><span class="line"></span><br><span class="line">        token_embeds = torch.cat(conv_hiddens, dim=-<span class="number">1</span>)</span><br><span class="line">        token_embeds = self.highways(token_embeds)</span><br><span class="line">        token_embeds = self.projection(token_embeds)</span><br><span class="line">        token_embeds = token_embeds.view(batch_size, seq_len, -<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> token_embeds</span><br></pre></td></tr></table></figure>
+<h4 id="双向lstm编码器">双向LSTM编码器</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ELMoLstmEncoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        input_dim,</span></span><br><span class="line"><span class="params">        hidden_dim,</span></span><br><span class="line"><span class="params">        num_layers,</span></span><br><span class="line"><span class="params">        dropout_prob=<span class="number">0.0</span></span></span><br><span class="line"><span class="params">    </span>):</span><br><span class="line">        <span class="built_in">super</span>(ELMoLstmEncoder, self).__init__()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># set projection_dim==input_dim for ELMo usage</span></span><br><span class="line">        self.projection_dim = input_dim</span><br><span class="line">        self.num_layers = num_layers</span><br><span class="line"></span><br><span class="line">        self.forward_layers = nn.ModuleList()</span><br><span class="line">        self.backward_layers = nn.ModuleList()</span><br><span class="line">        self.forward_projections = nn.ModuleList()</span><br><span class="line">        self.backward_projections = nn.ModuleList()</span><br><span class="line"></span><br><span class="line">        lstm_input_dim = input_dim</span><br><span class="line">        <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers):</span><br><span class="line">            forward_layer = nn.LSTM(</span><br><span class="line">                lstm_input_dim,</span><br><span class="line">                hidden_dim,</span><br><span class="line">                num_layers=<span class="number">1</span>,</span><br><span class="line">                batch_first=<span class="literal">True</span></span><br><span class="line">            )</span><br><span class="line">            forward_projection = nn.Linear(hidden_dim, self.projection_dim, bias=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">            backward_layer = nn.LSTM(</span><br><span class="line">                lstm_input_dim,</span><br><span class="line">                hidden_dim,</span><br><span class="line">                num_layers=<span class="number">1</span>,</span><br><span class="line">                batch_first=<span class="literal">True</span></span><br><span class="line">            )</span><br><span class="line">            backward_projection = nn.Linear(hidden_dim, self.projection_dim, bias=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">            lstm_input_dim = self.projection_dim</span><br><span class="line"></span><br><span class="line">            self.forward_layers.append(forward_layer)</span><br><span class="line">            self.forward_projections.append(forward_projection)</span><br><span class="line">            self.backward_layers.append(backward_layer)</span><br><span class="line">            self.backward_projections.append(backward_projection)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, inputs, lengths</span>):</span><br><span class="line">        batch_size, seq_len, input_dim = inputs.shape</span><br><span class="line">        rev_idx = torch.arange(seq_len).unsqueeze(<span class="number">0</span>).repeat(batch_size, <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(lengths.shape[<span class="number">0</span>]):</span><br><span class="line">            rev_idx[i,:lengths[i]] = torch.arange(lengths[i]-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>)</span><br><span class="line">        rev_idx = rev_idx.unsqueeze(<span class="number">2</span>).expand_as(inputs)</span><br><span class="line">        rev_idx = rev_idx.to(inputs.device)</span><br><span class="line">        rev_inputs = inputs.gather(<span class="number">1</span>, rev_idx)</span><br><span class="line"></span><br><span class="line">        forward_inputs, backward_inputs = inputs, rev_inputs</span><br><span class="line">        stacked_forward_states, stacked_backward_states = [], []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> layer_index <span class="keyword">in</span> <span class="built_in">range</span>(self.num_layers):</span><br><span class="line">            <span class="comment"># Transfer `lengths` to CPU to be compatible with latest PyTorch versions.</span></span><br><span class="line">            packed_forward_inputs = pack_padded_sequence(</span><br><span class="line">                forward_inputs, lengths.cpu(), batch_first=<span class="literal">True</span>, enforce_sorted=<span class="literal">False</span>)</span><br><span class="line">            packed_backward_inputs = pack_padded_sequence(</span><br><span class="line">                backward_inputs, lengths.cpu(), batch_first=<span class="literal">True</span>, enforce_sorted=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># forward</span></span><br><span class="line">            forward_layer = self.forward_layers[layer_index]</span><br><span class="line">            packed_forward, _ = forward_layer(packed_forward_inputs)</span><br><span class="line">            forward = pad_packed_sequence(packed_forward, batch_first=<span class="literal">True</span>)[<span class="number">0</span>]</span><br><span class="line">            forward = self.forward_projections[layer_index](forward)</span><br><span class="line">            stacked_forward_states.append(forward)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># backward</span></span><br><span class="line">            backward_layer = self.backward_layers[layer_index]</span><br><span class="line">            packed_backward, _ = backward_layer(packed_backward_inputs)</span><br><span class="line">            backward = pad_packed_sequence(packed_backward, batch_first=<span class="literal">True</span>)[<span class="number">0</span>]</span><br><span class="line">            backward = self.backward_projections[layer_index](backward)</span><br><span class="line">            <span class="comment"># convert back to original sequence order using rev_idx</span></span><br><span class="line">            stacked_backward_states.append(backward.gather(<span class="number">1</span>, rev_idx))</span><br><span class="line"></span><br><span class="line">            forward_inputs, backward_inputs = forward, backward</span><br><span class="line"></span><br><span class="line">        <span class="comment"># stacked_forward_states: [batch_size, seq_len, projection_dim] * num_layers</span></span><br><span class="line">        <span class="comment"># stacked_backward_states: [batch_size, seq_len, projection_dim] * num_layers</span></span><br><span class="line">        <span class="keyword">return</span> stacked_forward_states, stacked_backward_states</span><br></pre></td></tr></table></figure>
+<h4 id="超参数">超参数</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">configs = &#123;</span><br><span class="line">    <span class="string">&#x27;max_tok_len&#x27;</span>: <span class="number">50</span>,</span><br><span class="line">    <span class="string">&#x27;train_file&#x27;</span>: <span class="string">&#x27;./train.txt&#x27;</span>, <span class="comment"># path to your training file, line-by-line and tokenized</span></span><br><span class="line">    <span class="string">&#x27;model_path&#x27;</span>: <span class="string">&#x27;./elmo_bilm&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;char_embedding_dim&#x27;</span>: <span class="number">50</span>,</span><br><span class="line">    <span class="string">&#x27;char_conv_filters&#x27;</span>: [[<span class="number">1</span>, <span class="number">32</span>], [<span class="number">2</span>, <span class="number">32</span>], [<span class="number">3</span>, <span class="number">64</span>], [<span class="number">4</span>, <span class="number">128</span>], [<span class="number">5</span>, <span class="number">256</span>], [<span class="number">6</span>, <span class="number">512</span>], [<span class="number">7</span>, <span class="number">1024</span>]],</span><br><span class="line">    <span class="string">&#x27;num_highways&#x27;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&#x27;projection_dim&#x27;</span>: <span class="number">512</span>,</span><br><span class="line">    <span class="string">&#x27;hidden_dim&#x27;</span>: <span class="number">4096</span>,</span><br><span class="line">    <span class="string">&#x27;num_layers&#x27;</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">&#x27;batch_size&#x27;</span>: <span class="number">32</span>,</span><br><span class="line">    <span class="string">&#x27;dropout_prob&#x27;</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="string">&#x27;learning_rate&#x27;</span>: <span class="number">0.0004</span>,</span><br><span class="line">    <span class="string">&#x27;clip_grad&#x27;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">&#x27;num_epoch&#x27;</span>: <span class="number">10</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="训练">训练</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">corpus_w, corpus_c, vocab_w, vocab_c = load_corpus(configs[<span class="string">&#x27;train_file&#x27;</span>])</span><br><span class="line">train_data = BiLMDataset(corpus_w, corpus_c, vocab_w, vocab_c)</span><br><span class="line">train_loader = get_loader(train_data, configs[<span class="string">&#x27;batch_size&#x27;</span>])</span><br><span class="line"></span><br><span class="line">criterion = nn.CrossEntropyLoss(</span><br><span class="line">    ignore_index=vocab_w[PAD_TOKEN],</span><br><span class="line">    reduction=<span class="string">&quot;sum&quot;</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Building BiLM model&quot;</span>)</span><br><span class="line">device = torch.device(<span class="string">&#x27;cuda&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line">model = BiLM(configs, vocab_w, vocab_c)</span><br><span class="line"><span class="built_in">print</span>(model)</span><br><span class="line">model.to(device)</span><br><span class="line"></span><br><span class="line">optimizer = optim.Adam(</span><br><span class="line">    <span class="built_in">filter</span>(<span class="keyword">lambda</span> x: x.requires_grad, model.parameters()),</span><br><span class="line">    lr=configs[<span class="string">&#x27;learning_rate&#x27;</span>]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">model.train()</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(configs[<span class="string">&#x27;num_epoch&#x27;</span>]):</span><br><span class="line">    total_loss = <span class="number">0</span></span><br><span class="line">    total_tags = <span class="number">0</span> <span class="comment"># number of valid predictions</span></span><br><span class="line">    <span class="keyword">for</span> batch <span class="keyword">in</span> tqdm(train_loader, desc=<span class="string">f&quot;Training Epoch <span class="subst">&#123;epoch&#125;</span>&quot;</span>):</span><br><span class="line">        batch = [x.to(device) <span class="keyword">for</span> x <span class="keyword">in</span> batch]</span><br><span class="line">        inputs_w, inputs_c, seq_lens, targets_fw, targets_bw = batch</span><br><span class="line"></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        outputs_fw, outputs_bw = model(inputs_c, seq_lens)</span><br><span class="line">        loss_fw = criterion(</span><br><span class="line">            outputs_fw.view(-<span class="number">1</span>, outputs_fw.shape[-<span class="number">1</span>]),</span><br><span class="line">            targets_fw.view(-<span class="number">1</span>)</span><br><span class="line">        )</span><br><span class="line">        loss_bw = criterion(</span><br><span class="line">            outputs_bw.view(-<span class="number">1</span>, outputs_bw.shape[-<span class="number">1</span>]),</span><br><span class="line">            targets_bw.view(-<span class="number">1</span>)</span><br><span class="line">        )</span><br><span class="line">        loss = (loss_fw + loss_bw) / <span class="number">2.0</span></span><br><span class="line">        loss.backward()</span><br><span class="line"></span><br><span class="line">        torch.nn.utils.clip_grad_norm_(model.parameters(), configs[<span class="string">&#x27;clip_grad&#x27;</span>])</span><br><span class="line">        optimizer.step()</span><br><span class="line"></span><br><span class="line">        total_loss += loss_fw.item()</span><br><span class="line">        total_tags += seq_lens.<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    train_ppl = np.exp(total_loss / total_tags)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Train PPL: <span class="subst">&#123;train_ppl:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># save BiLM encoders</span></span><br><span class="line">model.save_pretrained(configs[<span class="string">&#x27;model_path&#x27;</span>])</span><br><span class="line"><span class="comment"># save configs</span></span><br><span class="line">json.dump(configs, <span class="built_in">open</span>(os.path.join(configs[<span class="string">&#x27;model_path&#x27;</span>], <span class="string">&#x27;configs.json&#x27;</span>), <span class="string">&quot;w&quot;</span>))</span><br><span class="line"><span class="comment"># save vocabularies</span></span><br><span class="line">save_vocab(vocab_w, os.path.join(configs[<span class="string">&#x27;model_path&#x27;</span>], <span class="string">&#x27;word.dic&#x27;</span>))</span><br><span class="line">save_vocab(vocab_c, os.path.join(configs[<span class="string">&#x27;model_path&#x27;</span>], <span class="string">&#x27;char.dic&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag"># 自然语言处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/05-%E9%9D%99%E6%80%81%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/" rel="prev" title="自然语言处理-预训练模型（五：静态预训练模型）">
+      <i class="fa fa-chevron-left"></i> 自然语言处理-预训练模型（五：静态预训练模型）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/03-%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="next" title="Pytroch深度学习（三：深入了解神经网络）">
+      Pytroch深度学习（三：深入了解神经网络） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%8D%E5%90%91%E9%87%8F-%E4%BB%8E%E9%9D%99%E6%80%81%E5%88%B0%E5%8A%A8%E6%80%81"><span class="nav-number">1.</span> <span class="nav-text">词向量-从静态到动态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8A%A8%E6%80%81%E8%AF%8D%E5%90%91%E9%87%8F%E9%A2%84%E8%AE%AD%E7%BB%83"><span class="nav-number">2.</span> <span class="nav-text">基于语言模型的动态词向量预训练</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">双向语言模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#elmo%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">ELMo词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">模型实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87"><span class="nav-number">2.3.1.</span> <span class="nav-text">数据准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E6%9E%84%E5%BB%BA%E8%AF%8D%E7%BA%A7%E5%88%AB%E4%B8%8E%E5%AD%97%E7%BA%A7%E5%88%AB%E7%9A%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E6%96%99%E5%92%8C%E7%9B%B8%E5%BA%94%E8%AF%8D%E8%A1%A8"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">同时构建词级别与字级别的训练语料和相应词表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E7%94%A8%E4%BA%8E%E5%8F%8C%E5%90%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BBbilmdataset"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">构建用于双向语言模型的数据类BiLMDataset</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">2.3.2.</span> <span class="nav-text">双向语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#highway%E7%BD%91%E7%BB%9C"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">Highway网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AD%97%E7%AC%A6%E5%8D%B7%E7%A7%AF%E7%9A%84%E8%AF%8D%E8%A1%A8%E7%A4%BA%E5%B1%82convtokenembedder"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">基于字符卷积的词表示层ConvTokenEmbedder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E5%90%91lstm%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">双向LSTM编码器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B6%85%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.2.4.</span> <span class="nav-text">超参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83"><span class="nav-number">2.3.3.</span> <span class="nav-text">训练</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

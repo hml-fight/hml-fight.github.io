@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JS编程基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-JQuery（三、JQuery事件）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/03-jQuery%20%E4%BA%8B%E4%BB%B6/03-jQuery%20%E4%BA%8B%E4%BB%B6/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="JS编程基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-14T07:33:28.819Z">
+<meta property="article:modified_time" content="2022-05-14T08:28:20.364Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/03-jQuery%20%E4%BA%8B%E4%BB%B6/03-jQuery%20%E4%BA%8B%E4%BB%B6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-JQuery（三、JQuery事件） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/03-jQuery%20%E4%BA%8B%E4%BB%B6/03-jQuery%20%E4%BA%8B%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-JQuery（三、JQuery事件）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：16:28:20" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/JQuery/" itemprop="url" rel="index"><span itemprop="name">JQuery</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JS编程基础</p>
+<span id="more"></span>
+<h1 id="jquery-事件">jQuery 事件</h1>
+<h1 id="jquery事件注册">jQuery事件注册</h1>
+<p><strong>单个事件注册</strong></p>
+<p><strong>语法：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">element.事件(<span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;)       </span><br><span class="line">$(“div”).<span class="title function_">click</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;  事件处理程序 &#125;)       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其他事件和原生基本一致。</p>
+<p>比如mouseover、mouseout、blur、focus、change、keydown、keyup、resize、scroll
+等</p>
+<h1 id="jquery事件处理">jQuery事件处理</h1>
+<h2 id="事件处理-on-绑定事件">事件处理 on() 绑定事件</h2>
+<p>on() 方法在匹配元素上绑定一个或多个事件的事件处理函数</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">element.<span class="title function_">on</span>(events,[selector],fn)       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>\1. events:一个或多个用空格分隔的事件类型，如"click"或"keydown"
+。</p>
+<p>\2. selector: 元素的子元素选择器 。</p>
+<p>\3. fn:回调函数 即绑定在元素身上的侦听函数。</p>
+<p><strong>on() 方法优势1：</strong></p>
+<p>可以绑定多个事件，多个处理事件处理程序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(“div”).<span class="title function_">on</span>(&#123;</span><br><span class="line">  <span class="attr">mouseover</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;, </span><br><span class="line">  <span class="attr">mouseout</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;,</span><br><span class="line">  <span class="attr">click</span>: <span class="keyword">function</span>(<span class="params"></span>)&#123;&#125;  </span><br><span class="line">&#125;);       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果事件处理程序相同</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(“div”).<span class="title function_">on</span>(“mouseover mouseout”, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">   $(<span class="variable language_">this</span>).<span class="title function_">toggleClass</span>(“current”);</span><br><span class="line">  &#125;);       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>on() 方法优势2：</strong></p>
+<p>可以事件委派操作
+。事件委派的定义就是，把原来加给子元素身上的事件绑定在父元素身上，就是把事件委派给父元素。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(<span class="string">&#x27;ul&#x27;</span>).<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;li&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;hello world!&#x27;</span>);</span><br><span class="line">&#125;);       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在此之前有bind(), live()
+delegate()等方法来处理事件绑定或者事件委派，最新版本的请用on替代他们。</p>
+<p><strong>on() 方法优势3：</strong></p>
+<p>动态创建的元素，click() 没有办法绑定事件， on()
+可以给动态生成的元素绑定事件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(“div<span class="string">&quot;).on(&quot;</span>click<span class="string">&quot;,”p”, function()&#123;</span></span><br><span class="line"><span class="string">     alert(&quot;</span>俺可以给动态生成的元素绑定事件<span class="string">&quot;)</span></span><br><span class="line"><span class="string"> &#125;);       </span></span><br><span class="line"><span class="string"></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(<span class="string">&quot;div&quot;</span>).<span class="title function_">append</span>($(<span class="string">&quot;&lt;p&gt;我是动态创建的p&lt;/p&gt;&quot;</span>));</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        .current &#123;</span><br><span class="line">            background-color: purple;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;ol&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/ol&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            // 1. 单个事件注册</span><br><span class="line">            // $(&quot;div&quot;).click(function() &#123;</span><br><span class="line">            //     $(this).css(&quot;background&quot;, &quot;purple&quot;);</span><br><span class="line">            // &#125;);</span><br><span class="line">            // $(&quot;div&quot;).mouseenter(function() &#123;</span><br><span class="line">            //     $(this).css(&quot;background&quot;, &quot;skyblue&quot;);</span><br><span class="line">            // &#125;);</span><br><span class="line"></span><br><span class="line">            // 2. 事件处理on</span><br><span class="line">            // (1) on可以绑定1个或者多个事件处理程序</span><br><span class="line">            // $(&quot;div&quot;).on(&#123;</span><br><span class="line">            //     mouseenter: function() &#123;</span><br><span class="line">            //         $(this).css(&quot;background&quot;, &quot;skyblue&quot;);</span><br><span class="line">            //     &#125;,</span><br><span class="line">            //     click: function() &#123;</span><br><span class="line">            //         $(this).css(&quot;background&quot;, &quot;purple&quot;);</span><br><span class="line">            //     &#125;,</span><br><span class="line">            //     mouseleave: function() &#123;</span><br><span class="line">            //         $(this).css(&quot;background&quot;, &quot;blue&quot;);</span><br><span class="line">            //     &#125;</span><br><span class="line">            // &#125;);</span><br><span class="line">            $(&quot;div&quot;).on(&quot;mouseenter mouseleave&quot;, function() &#123;</span><br><span class="line">                $(this).toggleClass(&quot;current&quot;);</span><br><span class="line">            &#125;);</span><br><span class="line">            // (2) on可以实现事件委托（委派）</span><br><span class="line">            // $(&quot;ul li&quot;).click();</span><br><span class="line">            $(&quot;ul&quot;).on(&quot;click&quot;, &quot;li&quot;, function() &#123;</span><br><span class="line">                alert(11);</span><br><span class="line">            &#125;);</span><br><span class="line">            // click 是绑定在ul 身上的，但是 触发的对象是 ul 里面的小li</span><br><span class="line">            // (3) on可以给未来动态创建的元素绑定事件</span><br><span class="line">            // $(&quot;ol li&quot;).click(function() &#123;</span><br><span class="line">            //     alert(11);</span><br><span class="line">            // &#125;)</span><br><span class="line">            $(&quot;ol&quot;).on(&quot;click&quot;, &quot;li&quot;, function() &#123;</span><br><span class="line">                alert(11);</span><br><span class="line">            &#125;)</span><br><span class="line">            var li = $(&quot;&lt;li&gt;我是后来创建的&lt;/li&gt;&quot;);</span><br><span class="line">            $(&quot;ol&quot;).append(li);</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="案例发布微博案例">案例：发布微博案例</h2>
+<p>①点击发布按钮， 动态创建一个小li，放入文本框的内容和删除按钮，
+并且添加到ul 中。</p>
+<p>②点击的删除按钮，可以删除当前的微博留言。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">head</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">title</span>&gt;</span><span class="tag">&lt;/<span class="name">title</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        * &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">margin</span>: <span class="number">0</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">padding</span>: <span class="number">0</span></span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">ul</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">list-style</span>: none</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-class">.box</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">width</span>: <span class="number">600px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">margin</span>: <span class="number">100px</span> auto;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#000</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">padding</span>: <span class="number">20px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">textarea</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">width</span>: <span class="number">450px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">height</span>: <span class="number">160px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">outline</span>: none;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">resize</span>: none;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">ul</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">width</span>: <span class="number">450px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">padding-left</span>: <span class="number">80px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">ul</span> <span class="selector-tag">li</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">line-height</span>: <span class="number">25px</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">border-bottom</span>: <span class="number">1px</span> dashed <span class="number">#cccccc</span>;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">display</span>: none;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">input</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">float</span>: right;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        </span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        <span class="selector-tag">ul</span> <span class="selector-tag">li</span> <span class="selector-tag">a</span> &#123;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">            <span class="attribute">float</span>: right;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">        &#125;</span></span></span><br><span class="line"><span class="language-css"><span class="language-xml">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        $(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">// 1.点击发布按钮， 动态创建一个小li，放入文本框的内容和删除按钮， 并且添加到ul 中</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            $(<span class="string">&quot;.btn&quot;</span>).<span class="title function_">on</span>(<span class="string">&quot;click&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                <span class="keyword">var</span> li = $(<span class="string">&quot;&lt;li&gt;&lt;/li&gt;&quot;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                li.<span class="title function_">html</span>($(<span class="string">&quot;.txt&quot;</span>).<span class="title function_">val</span>() + <span class="string">&quot;&lt;a href=&#x27;javascript:;&#x27;&gt; 删除&lt;/a&gt;&quot;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                $(<span class="string">&quot;ul&quot;</span>).<span class="title function_">prepend</span>(li);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                li.<span class="title function_">slideDown</span>();</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                $(<span class="string">&quot;.txt&quot;</span>).<span class="title function_">val</span>(<span class="string">&quot;&quot;</span>);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            &#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">// 2.点击的删除按钮，可以删除当前的微博留言li</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">// $(&quot;ul a&quot;).click(function() &#123;  // 此时的click不能给动态创建的a添加事件</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">//     alert(11);</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">// &#125;)</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            <span class="comment">// on可以给动态创建的元素绑定事件</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            $(<span class="string">&quot;ul&quot;</span>).<span class="title function_">on</span>(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                $(<span class="variable language_">this</span>).<span class="title function_">parent</span>().<span class="title function_">slideUp</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                    $(<span class="variable language_">this</span>).<span class="title function_">remove</span>();</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">                &#125;);</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">            &#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">        &#125;)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;box&quot;</span> <span class="attr">id</span>=<span class="string">&quot;weibo&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">span</span>&gt;</span>微博发布<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">name</span>=<span class="string">&quot;&quot;</span> <span class="attr">class</span>=<span class="string">&quot;txt&quot;</span> <span class="attr">cols</span>=<span class="string">&quot;30&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;10&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;btn&quot;</span>&gt;</span>发布<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="事件处理-off-解绑事件">事件处理 off() 解绑事件</h2>
+<p>off() 方法可以移除通过 on() 方法添加的事件处理程序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$(<span class="string">&quot;p&quot;</span>).<span class="title function_">off</span>() <span class="comment">// 解绑p元素所有事件处理程序</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">&quot;p&quot;</span>).<span class="title function_">off</span>( <span class="string">&quot;click&quot;</span>)  <span class="comment">// 解绑p元素上面的点击事件 后面的 foo 是侦听函数名</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">&quot;ul&quot;</span>).<span class="title function_">off</span>(<span class="string">&quot;click&quot;</span>, <span class="string">&quot;li&quot;</span>);   <span class="comment">// 解绑事件委托</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果有的事件只想触发一次， 可以使用 one() 来绑定事件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            $(&quot;div&quot;).on(&#123;</span><br><span class="line">                click: function() &#123;</span><br><span class="line">                    console.log(&quot;我点击了&quot;);</span><br><span class="line">                &#125;,</span><br><span class="line">                mouseover: function() &#123;</span><br><span class="line">                    console.log(&#x27;我鼠标经过了&#x27;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            $(&quot;ul&quot;).on(&quot;click&quot;, &quot;li&quot;, function() &#123;</span><br><span class="line">                alert(11);</span><br><span class="line">            &#125;);</span><br><span class="line">            // 1. 事件解绑 off </span><br><span class="line">            // $(&quot;div&quot;).off();  // 这个是解除了div身上的所有事件</span><br><span class="line">            $(&quot;div&quot;).off(&quot;click&quot;); // 这个是解除了div身上的点击事件</span><br><span class="line">            $(&quot;ul&quot;).off(&quot;click&quot;, &quot;li&quot;);</span><br><span class="line">            // 2. one() 但是它只能触发事件一次</span><br><span class="line">            $(&quot;p&quot;).one(&quot;click&quot;, function() &#123;</span><br><span class="line">                alert(11);</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">        &lt;li&gt;我们都是好孩子&lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;p&gt;我是屁&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="自动触发事件-trigger">自动触发事件 trigger()</h2>
+<p>有些事件希望自动触发,
+比如轮播图自动播放功能跟点击右侧按钮一致。可以利用定时器自动触发右侧按钮点击事件，不必鼠标点击触发。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">element.<span class="title function_">click</span>()  <span class="comment">// 第一种简写形式</span></span><br><span class="line"></span><br><span class="line">element.<span class="title function_">trigger</span>(<span class="string">&quot;type&quot;</span>) <span class="comment">// 第二种自动触发模式</span></span><br><span class="line"></span><br><span class="line">$(<span class="string">&quot;p&quot;</span>).<span class="title function_">on</span>(<span class="string">&quot;click&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">alert</span>(<span class="string">&quot;hi~&quot;</span>);</span><br><span class="line">&#125;); </span><br><span class="line"></span><br><span class="line">$(<span class="string">&quot;p&quot;</span>).<span class="title function_">trigger</span>(<span class="string">&quot;click&quot;</span>); <span class="comment">// 此时自动触发点击事件，不需要鼠标点击</span></span><br><span class="line"></span><br><span class="line">element.<span class="title function_">triggerHandler</span>(type)  <span class="comment">// 第三种自动触发模式</span></span><br><span class="line">triggerHandler模式不会触发元素的默认行为，这是和前面两种的区别。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            $(&quot;div&quot;).on(&quot;click&quot;, function() &#123;</span><br><span class="line">                alert(11);</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            // 自动触发事件</span><br><span class="line">            // 1. 元素.事件()</span><br><span class="line">            // $(&quot;div&quot;).click();会触发元素的默认行为</span><br><span class="line">            // 2. 元素.trigger(&quot;事件&quot;)</span><br><span class="line">            // $(&quot;div&quot;).trigger(&quot;click&quot;);会触发元素的默认行为</span><br><span class="line">            $(&quot;input&quot;).trigger(&quot;focus&quot;);</span><br><span class="line">            // 3. 元素.triggerHandler(&quot;事件&quot;) 就是不会触发元素的默认行为</span><br><span class="line">            $(&quot;div&quot;).triggerHandler(&quot;click&quot;);</span><br><span class="line">            $(&quot;input&quot;).on(&quot;focus&quot;, function() &#123;</span><br><span class="line">                $(this).val(&quot;你好吗&quot;);</span><br><span class="line">            &#125;);</span><br><span class="line">            // $(&quot;input&quot;).triggerHandler(&quot;focus&quot;);</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;input type=&quot;text&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="jquery事件对象">jQuery事件对象</h1>
+<p>事件被触发，就会有事件对象的产生。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">element.<span class="title function_">on</span>(events,[selector],<span class="keyword">function</span>(<span class="params">event</span>) &#123;&#125;)       </span><br><span class="line">阻止默认行为：event.<span class="title function_">preventDefault</span>()   或者 <span class="keyword">return</span>  <span class="literal">false</span> </span><br><span class="line">阻止冒泡： event.<span class="title function_">stopPropagation</span>()      </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            $(document).on(&quot;click&quot;, function() &#123;</span><br><span class="line">                console.log(&quot;点击了document&quot;);</span><br><span class="line"></span><br><span class="line">            &#125;)</span><br><span class="line">            $(&quot;div&quot;).on(&quot;click&quot;, function(event) &#123;</span><br><span class="line">                // console.log(event);</span><br><span class="line">                console.log(&quot;点击了div&quot;);</span><br><span class="line">                event.stopPropagation();</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/02-jQuery%20%E5%B8%B8%E7%94%A8API/02-jQuery%20%E5%B8%B8%E7%94%A8API/" rel="prev" title="web相关-JQuery（二、JQuery常用API）">
+      <i class="fa fa-chevron-left"></i> web相关-JQuery（二、JQuery常用API）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/" rel="next" title="web相关-JQuery（四、JQuery其他方法）">
+      web相关-JQuery（四、JQuery其他方法） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">jQuery 事件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery%E4%BA%8B%E4%BB%B6%E6%B3%A8%E5%86%8C"><span class="nav-number">2.</span> <span class="nav-text">jQuery事件注册</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">jQuery事件处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86-on-%E7%BB%91%E5%AE%9A%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">事件处理 on() 绑定事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%8F%91%E5%B8%83%E5%BE%AE%E5%8D%9A%E6%A1%88%E4%BE%8B"><span class="nav-number">3.2.</span> <span class="nav-text">案例：发布微博案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86-off-%E8%A7%A3%E7%BB%91%E4%BA%8B%E4%BB%B6"><span class="nav-number">3.3.</span> <span class="nav-text">事件处理 off() 解绑事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A7%A6%E5%8F%91%E4%BA%8B%E4%BB%B6-trigger"><span class="nav-number">3.4.</span> <span class="nav-text">自动触发事件 trigger()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery%E4%BA%8B%E4%BB%B6%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.</span> <span class="nav-text">jQuery事件对象</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

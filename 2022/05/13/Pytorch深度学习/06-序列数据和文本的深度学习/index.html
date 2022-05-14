@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Pytorch深度学习一书第六章：序列数据和文本的深度学习）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytroch深度学习（六：序列数据和文本的深度学习）">
+<meta property="og:url" content="http://example.com/2022/05/13/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/06-%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E5%92%8C%E6%96%87%E6%9C%AC%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="Pytorch深度学习一书第六章：序列数据和文本的深度学习）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_bdVes06Jny.png">
+<meta property="og:image" content="http://example.com/image/image_YlVJc7PMt3.png">
+<meta property="og:image" content="http://example.com/image/image_-B2zTE7qY5.png">
+<meta property="og:image" content="http://example.com/image/image_uEOB3hdep6.png">
+<meta property="og:image" content="http://example.com/image/image_U58JWRGN9D.png">
+<meta property="og:image" content="http://example.com/image/image_dQ0uuXKIL_.png">
+<meta property="og:image" content="http://example.com/image/image_8bEjxhvXj3.png">
+<meta property="og:image" content="http://example.com/image/image_Be3GFzGUV4.png">
+<meta property="og:image" content="http://example.com/image/image_Je-gs33ivz.png">
+<meta property="og:image" content="http://example.com/image/image_Lv_5vuUxiX.png">
+<meta property="article:published_time" content="2022-05-13T13:51:37.811Z">
+<meta property="article:modified_time" content="2022-05-13T13:53:56.591Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="Pytorch">
+<meta property="article:tag" content="自然语言处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_bdVes06Jny.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/06-%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E5%92%8C%E6%96%87%E6%9C%AC%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pytroch深度学习（六：序列数据和文本的深度学习） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/06-%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E5%92%8C%E6%96%87%E6%9C%AC%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pytroch深度学习（六：序列数据和文本的深度学习）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 21:51:37 / 修改时间：21:53:56" itemprop="dateCreated datePublished" datetime="2022-05-13T21:51:37+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Pytorch深度学习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Pytorch深度学习一书第六章：序列数据和文本的深度学习）</p>
+<span id="more"></span>
+<h1 id="使用文本数据">使用文本数据</h1>
+<h2 id="分词">分词</h2>
+<h3 id="将文本转换为字符">将文本转换为字符</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">list</span>(<span class="built_in">str</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="将文本转换为词">将文本转换为词</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">str</span>.split()</span><br></pre></td></tr></table></figure>
+<h3 id="n-gram表示法">n-gram表示法</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nltk.ngrams()</span><br></pre></td></tr></table></figure>
+<h2 id="向量化">向量化</h2>
+<h3 id="独热编码">独热编码</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dictionary</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.word2idx = &#123;&#125;</span><br><span class="line">        self.idx2word = []</span><br><span class="line">        self.length = <span class="number">0</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">add_word</span>(<span class="params">self, word</span>):</span><br><span class="line">        <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> self.idx2word:</span><br><span class="line">            self.idx2word.append(word)</span><br><span class="line">            self.word2idx[word] = self.length + <span class="number">1</span></span><br><span class="line">            self.length += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> self.word2idx[word]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.idx2word)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">onehot_encoded</span>(<span class="params">self, word</span>):</span><br><span class="line">        vec = np.zero(self.length)</span><br><span class="line">        vec[self.word2idx[word]] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> vec</span><br></pre></td></tr></table></figure>
+<h3 id="词向量">词向量</h3>
+<h1 id="通过构建情感分类器训练词向量">通过构建情感分类器训练词向量</h1>
+<h2 id="下载imdb数据并对文本分词">下载IMDB数据并对文本分词</h2>
+<h3 id="torchtext.data">torchtext.data</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torchtext</span><br><span class="line"><span class="keyword">from</span> torchtext <span class="keyword">import</span> data,datasets</span><br><span class="line"><span class="keyword">from</span> torchtext.vocab <span class="keyword">import</span> GloVe,FastText,CharNGram</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> torch.autograd <span class="keyword">import</span> Variable</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> torchtext.legacy.data <span class="keyword">import</span> Field </span><br><span class="line"></span><br><span class="line">TEXT = Field(lower=<span class="literal">True</span>, batch_first=<span class="literal">True</span>,fix_length=<span class="number">40</span>)</span><br><span class="line">LABEL = Field(sequential=<span class="literal">False</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="torchtext.datasets">torchtext.datasets</h3>
+<p><img src="/image/image_bdVes06Jny.png" /></p>
+<h2 id="构建词表">构建词表</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TEXT.build_vocab(train, vectors=GloVe(name=<span class="string">&#x27;6B&#x27;</span>, dim=<span class="number">300</span>),max_size=<span class="number">10000</span>,min_freq=<span class="number">10</span>)</span><br><span class="line">LABEL.build_vocab(train,)</span><br></pre></td></tr></table></figure>
+<p>词频：</p>
+<p><img src="/image/image_YlVJc7PMt3.png" /></p>
+<p>向量：</p>
+<p><img src="/image/image_-B2zTE7qY5.png" /></p>
+<p>索引：</p>
+<p><img src="/image/image_uEOB3hdep6.png" /></p>
+<h2 id="生成向量的批数据">生成向量的批数据</h2>
+<p><img src="/image/image_U58JWRGN9D.png" /></p>
+<h2 id="使用词向量创建网络模型">使用词向量创建网络模型</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">EmbNet</span>(nn.Module):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, emb_size, hidden_size1, hidden_siez2=<span class="number">400</span></span>):</span><br><span class="line">        <span class="built_in">super</span>.__init__()</span><br><span class="line">        self.embedding = nn.Embedding(emb_size, hidden_size1)</span><br><span class="line">        self.fc = nn.Linear(hidden_siez2, <span class="number">3</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        embeds = self.embedding(x).view(x.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        out = self.fc(embeds)</span><br><span class="line">        <span class="keyword">return</span> F.log_softmax(out, dim=-<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="训练模型">训练模型</h2>
+<p>定义模型：</p>
+<p><img src="/image/image_dQ0uuXKIL_.png" /></p>
+<p>训练函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">epoch,model,data_loader,phase=<span class="string">&#x27;training&#x27;</span>,volatile=<span class="literal">False</span></span>):</span><br><span class="line">    <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">        model.train()</span><br><span class="line">    <span class="keyword">if</span> phase == <span class="string">&#x27;validation&#x27;</span>:</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        volatile=<span class="literal">True</span></span><br><span class="line">    running_loss = <span class="number">0.0</span></span><br><span class="line">    running_correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> batch_idx , batch <span class="keyword">in</span> <span class="built_in">enumerate</span>(data_loader):</span><br><span class="line">        text , target = batch.text , batch.label</span><br><span class="line">        <span class="keyword">if</span> is_cuda:</span><br><span class="line">            text,target = text.cuda(),target.cuda()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">        output = model(text)</span><br><span class="line">        loss = F.nll_loss(output,target)</span><br><span class="line">        </span><br><span class="line">        running_loss += F.nll_loss(output,target,size_average=<span class="literal">False</span>).data[<span class="number">0</span>]</span><br><span class="line">        preds = output.data.<span class="built_in">max</span>(dim=<span class="number">1</span>,keepdim=<span class="literal">True</span>)[<span class="number">1</span>]</span><br><span class="line">        running_correct += preds.eq(target.data.view_as(preds)).cpu().<span class="built_in">sum</span>()</span><br><span class="line">        <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line">    </span><br><span class="line">    loss = running_loss/<span class="built_in">len</span>(data_loader.dataset)</span><br><span class="line">    accuracy = <span class="number">100.</span> * running_correct/<span class="built_in">len</span>(data_loader.dataset)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;phase&#125;</span> loss is <span class="subst">&#123;loss:&#123;<span class="number">5</span>&#125;</span>.<span class="subst">&#123;<span class="number">2</span>&#125;</span>&#125; and <span class="subst">&#123;phase&#125;</span> accuracy is <span class="subst">&#123;running_correct&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(data_loader.dataset)&#125;</span><span class="subst">&#123;accuracy:&#123;<span class="number">10</span>&#125;</span>.<span class="subst">&#123;<span class="number">4</span>&#125;</span>&#125;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> loss,accuracy</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_8bEjxhvXj3.png" /></p>
+<p><img src="/image/image_Be3GFzGUV4.png" /></p>
+<blockquote>
+<p>注意：BucketIterator对象的repeat必须设置为False</p>
+</blockquote>
+<h1 id="使用预训练的词向量">使用预训练的词向量</h1>
+<h2 id="下载词向量">下载词向量</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">TEXT = data.Field(lower=<span class="literal">True</span>, batch_first=<span class="literal">True</span>,fix_length=<span class="number">40</span>,)</span><br><span class="line">LABEL = data.Field(sequential=<span class="literal">False</span>,)</span><br><span class="line"></span><br><span class="line">train, test = IMDB.splits(TEXT, LABEL)</span><br><span class="line"></span><br><span class="line">TEXT.build_vocab(train,test, vectors=GloVe(name=<span class="string">&#x27;6B&#x27;</span>, dim=<span class="number">300</span>),max_size=<span class="number">10000</span>,min_freq=<span class="number">10</span>)</span><br><span class="line">LABEL.build_vocab(train,)</span><br></pre></td></tr></table></figure>
+<h2 id="在模型中加载词向量">在模型中加载词向量</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">model1 = EmbNet(<span class="built_in">len</span>(TEXT.vocab.stoi),<span class="number">300</span>,<span class="number">12000</span>)</span><br><span class="line">model1 = model.cuda()</span><br><span class="line"></span><br><span class="line">model1.embedding.weight.data = TEXT.vocab.vectors</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="冻结embedding层权重">冻结embedding层权重</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model1.embedding.weight.requires_grad = <span class="literal">False</span></span><br><span class="line">optimizer = optim.SGD([param <span class="keyword">for</span> param <span class="keyword">in</span> model1.parameters() <span class="keyword">if</span> param.requires_grad == <span class="literal">True</span>], lr=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="递归神经网络rnn">递归神经网络（RNN）</h1>
+<h2 id="通过示例了解rnn如何使用">通过示例了解RNN如何使用</h2>
+<h1 id="lstm">LSTM</h1>
+<h2 id="长期依赖">长期依赖</h2>
+<h2 id="lstm网络">LSTM网络</h2>
+<h3 id="准备数据">准备数据</h3>
+<h3 id="创建批次">创建批次</h3>
+<p><img src="/image/image_Je-gs33ivz.png" /></p>
+<h3 id="创建网络">创建网络</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IMDBRnn</span>(nn.Module):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,vocab,hidden_size,n_cat,bs=<span class="number">1</span>,nl=<span class="number">2</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.bs = bs</span><br><span class="line">        self.nl = nl</span><br><span class="line">        self.e = nn.Embedding(n_vocab,hidden_size)</span><br><span class="line">        self.rnn = nn.LSTM(hidden_size,hidden_size,nl)</span><br><span class="line">        self.fc2 = nn.Linear(hidden_size,n_cat)</span><br><span class="line">        self.softmax = nn.LogSoftmax(dim=-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self,inp</span>):</span><br><span class="line">        bs = inp.size()[<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> bs != self.bs:</span><br><span class="line">            self.bs = bs</span><br><span class="line">        e_out = self.e(inp)</span><br><span class="line">        h0 = c0 = Variable(e_out.data.new(*(self.nl,self.bs,self.hidden_size)).zero_())</span><br><span class="line">        rnn_o,_ = self.rnn(e_out,(h0,c0)) </span><br><span class="line">        rnn_o = rnn_o[-<span class="number">1</span>]</span><br><span class="line">        fc = F.dropout(self.fc2(rnn_o),p=<span class="number">0.8</span>)</span><br><span class="line">        <span class="keyword">return</span> self.softmax(fc)</span><br></pre></td></tr></table></figure>
+<h3 id="训练模型-1">训练模型</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">n_vocab = <span class="built_in">len</span>(TEXT.vocab)</span><br><span class="line">n_hidden = <span class="number">300</span></span><br><span class="line"></span><br><span class="line">model = IMDBRnn(n_vocab,n_hidden,<span class="number">3</span>,bs=<span class="number">32</span>)</span><br><span class="line">model = model.cuda()</span><br><span class="line">model</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">model = IMDBRnn(n_vocab,n_hidden,<span class="number">3</span>,bs=<span class="number">32</span>)</span><br><span class="line">model = model.cuda()</span><br><span class="line"></span><br><span class="line">optimizer = optim.Adam(model.parameters(),lr=<span class="number">1e-3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fit</span>(<span class="params">epoch,model,data_loader,phase=<span class="string">&#x27;training&#x27;</span>,volatile=<span class="literal">False</span></span>):</span><br><span class="line">    <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">        model.train()</span><br><span class="line">    <span class="keyword">if</span> phase == <span class="string">&#x27;validation&#x27;</span>:</span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        volatile=<span class="literal">True</span></span><br><span class="line">    running_loss = <span class="number">0.0</span></span><br><span class="line">    running_correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> batch_idx , batch <span class="keyword">in</span> <span class="built_in">enumerate</span>(data_loader):</span><br><span class="line">        text , target = batch.text , batch.label</span><br><span class="line">        <span class="keyword">if</span> is_cuda:</span><br><span class="line">            text,target = text.cuda(),target.cuda()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">            optimizer.zero_grad()</span><br><span class="line">        output = model(text)</span><br><span class="line">        loss = F.nll_loss(output,target)</span><br><span class="line">        </span><br><span class="line">        running_loss += F.nll_loss(output,target,size_average=<span class="literal">False</span>).item()</span><br><span class="line">        preds = output.data.<span class="built_in">max</span>(dim=<span class="number">1</span>,keepdim=<span class="literal">True</span>)[<span class="number">1</span>]</span><br><span class="line">        running_correct += preds.eq(target.data.view_as(preds)).cpu().<span class="built_in">sum</span>()</span><br><span class="line">        <span class="keyword">if</span> phase == <span class="string">&#x27;training&#x27;</span>:</span><br><span class="line">            loss.backward()</span><br><span class="line">            optimizer.step()</span><br><span class="line">    </span><br><span class="line">    loss = running_loss/<span class="built_in">len</span>(data_loader.dataset)</span><br><span class="line">    accuracy = <span class="number">100.</span> * running_correct/<span class="built_in">len</span>(data_loader.dataset)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&#x27;<span class="subst">&#123;phase&#125;</span> loss is <span class="subst">&#123;loss:&#123;<span class="number">5</span>&#125;</span>.<span class="subst">&#123;<span class="number">2</span>&#125;</span>&#125; and <span class="subst">&#123;phase&#125;</span> accuracy is <span class="subst">&#123;running_correct&#125;</span>/<span class="subst">&#123;<span class="built_in">len</span>(data_loader.dataset)&#125;</span><span class="subst">&#123;accuracy:&#123;<span class="number">10</span>&#125;</span>.<span class="subst">&#123;<span class="number">4</span>&#125;</span>&#125;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> loss,accuracy</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">train_losses , train_accuracy = [],[]</span><br><span class="line">val_losses , val_accuracy = [],[]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">5</span>):</span><br><span class="line"></span><br><span class="line">    epoch_loss, epoch_accuracy = fit(epoch,model,train_iter,phase=<span class="string">&#x27;training&#x27;</span>)</span><br><span class="line">    val_epoch_loss , val_epoch_accuracy = fit(epoch,model,test_iter,phase=<span class="string">&#x27;validation&#x27;</span>)</span><br><span class="line">    train_losses.append(epoch_loss)</span><br><span class="line">    train_accuracy.append(epoch_accuracy)</span><br><span class="line">    val_losses.append(val_epoch_loss)</span><br><span class="line">    val_accuracy.append(val_epoch_accuracy)</span><br></pre></td></tr></table></figure>
+<h1 id="基于序列数据的卷积网络">基于序列数据的卷积网络</h1>
+<h2 id="理解序列化数据的一维卷积">理解序列化数据的一维卷积</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IMDBCnn</span>(nn.Module):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, vocab, hidden_size, n_cat, bs=<span class="number">1</span>, kernel_size=<span class="number">3</span>, max_len=<span class="number">200</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.bs = bs</span><br><span class="line">        self.e = nn.Embedding(vocab, hidden_size)</span><br><span class="line">        self.cnn = nn.Conv1d(max_len, hidden_size, kernel_size)</span><br><span class="line">        self.avg = nn.AdaptiveAvgPool1d(<span class="number">10</span>)</span><br><span class="line">        self.fc = nn.Linear(<span class="number">1000</span>, n_cat)</span><br><span class="line">        self.softmax = nn.LogSoftmax(dim=-<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, inp</span>):</span><br><span class="line">        bs = inp.size()[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> bs != self.bs:</span><br><span class="line">            self.bs = bs</span><br><span class="line">        e_out = self.e(inp)</span><br><span class="line">        cnn_o = self.cnn(e_out)</span><br><span class="line">        cnn_avg = self.avg(cnn_o)</span><br><span class="line">        cnn_avg = cnn_avg.view(self.bs, -<span class="number">1</span>)</span><br><span class="line">        fc = F.dropout(self.fc(cnn_avg), p=<span class="number">0.5</span>)</span><br><span class="line">        <span class="keyword">return</span> self.softmax(fc)</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_Lv_5vuUxiX.png" /></p>
+<h1 id="小结">小结</h1>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+              <a href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/" rel="tag"># 自然语言处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Pytorch%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/03-%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="prev" title="Pytroch深度学习（三：深入了解神经网络）">
+      <i class="fa fa-chevron-left"></i> Pytroch深度学习（三：深入了解神经网络）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Python%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%96%87%E4%BB%B6%E6%A8%A1%E5%9D%97/" rel="next" title="Python常用模块-文件">
+      Python常用模块-文件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%87%E6%9C%AC%E6%95%B0%E6%8D%AE"><span class="nav-number">1.</span> <span class="nav-text">使用文本数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E8%AF%8D"><span class="nav-number">1.1.</span> <span class="nav-text">分词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6"><span class="nav-number">1.1.1.</span> <span class="nav-text">将文本转换为字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%86%E6%96%87%E6%9C%AC%E8%BD%AC%E6%8D%A2%E4%B8%BA%E8%AF%8D"><span class="nav-number">1.1.2.</span> <span class="nav-text">将文本转换为词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#n-gram%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.3.</span> <span class="nav-text">n-gram表示法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">向量化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8B%AC%E7%83%AD%E7%BC%96%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">独热编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">词向量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%9E%84%E5%BB%BA%E6%83%85%E6%84%9F%E5%88%86%E7%B1%BB%E5%99%A8%E8%AE%AD%E7%BB%83%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">通过构建情感分类器训练词向量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDimdb%E6%95%B0%E6%8D%AE%E5%B9%B6%E5%AF%B9%E6%96%87%E6%9C%AC%E5%88%86%E8%AF%8D"><span class="nav-number">2.1.</span> <span class="nav-text">下载IMDB数据并对文本分词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#torchtext.data"><span class="nav-number">2.1.1.</span> <span class="nav-text">torchtext.data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#torchtext.datasets"><span class="nav-number">2.1.2.</span> <span class="nav-text">torchtext.datasets</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%AF%8D%E8%A1%A8"><span class="nav-number">2.2.</span> <span class="nav-text">构建词表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%90%91%E9%87%8F%E7%9A%84%E6%89%B9%E6%95%B0%E6%8D%AE"><span class="nav-number">2.3.</span> <span class="nav-text">生成向量的批数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AF%8D%E5%90%91%E9%87%8F%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">使用词向量创建网络模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.5.</span> <span class="nav-text">训练模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%AD%E7%BB%83%E7%9A%84%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">使用预训练的词向量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">3.1.</span> <span class="nav-text">下载词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%8A%A0%E8%BD%BD%E8%AF%8D%E5%90%91%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">在模型中加载词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%BB%E7%BB%93embedding%E5%B1%82%E6%9D%83%E9%87%8D"><span class="nav-number">3.3.</span> <span class="nav-text">冻结embedding层权重</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9Crnn"><span class="nav-number">4.</span> <span class="nav-text">递归神经网络（RNN）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%A4%BA%E4%BE%8B%E4%BA%86%E8%A7%A3rnn%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">通过示例了解RNN如何使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lstm"><span class="nav-number">5.</span> <span class="nav-text">LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%95%BF%E6%9C%9F%E4%BE%9D%E8%B5%96"><span class="nav-number">5.1.</span> <span class="nav-text">长期依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lstm%E7%BD%91%E7%BB%9C"><span class="nav-number">5.2.</span> <span class="nav-text">LSTM网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE"><span class="nav-number">5.2.1.</span> <span class="nav-text">准备数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%89%B9%E6%AC%A1"><span class="nav-number">5.2.2.</span> <span class="nav-text">创建批次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C"><span class="nav-number">5.2.3.</span> <span class="nav-text">创建网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">5.2.4.</span> <span class="nav-text">训练模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%BA%8F%E5%88%97%E6%95%B0%E6%8D%AE%E7%9A%84%E5%8D%B7%E7%A7%AF%E7%BD%91%E7%BB%9C"><span class="nav-number">6.</span> <span class="nav-text">基于序列数据的卷积网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%A7%A3%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B0%E6%8D%AE%E7%9A%84%E4%B8%80%E7%BB%B4%E5%8D%B7%E7%A7%AF"><span class="nav-number">6.1.</span> <span class="nav-text">理解序列化数据的一维卷积</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

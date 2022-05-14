@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ubuntn使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntn使用教程（四：远程管理）">
+<meta property="og:url" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="ubuntn使用教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/image/image_SHX-ag3ie2.png">
+<meta property="og:image" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/image/image_juhNKS2htB.png">
+<meta property="og:image" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/image/image_yqS50LL8jc.png">
+<meta property="article:published_time" content="2022-05-14T07:22:15.920Z">
+<meta property="article:modified_time" content="2022-05-14T07:28:12.236Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="虚拟机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/image/image_SHX-ag3ie2.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ubuntn使用教程（四：远程管理） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ubuntn使用教程（四：远程管理）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:22:15 / 修改时间：15:28:12" itemprop="dateCreated datePublished" datetime="2022-05-14T15:22:15+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/ubuntn/" itemprop="url" rel="index"><span itemprop="name">ubuntn</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ubuntn使用教程</p>
+<span id="more"></span>
+<h1 id="远程管理">04-远程管理</h1>
+<h2 id="关机与重启">4.1关机与重启</h2>
+<p>shutdown命令</p>
+<table>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令格式</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>shutdown 选项 时间</td>
+<td>shutdown</td>
+<td>关机／重新启动</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>shutdown</code> 命令可以 <strong>安全</strong>
+<strong>关闭</strong> 或者 <strong>重新启动系统</strong></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-r</td>
+<td>重新启动</td>
+</tr>
+</tbody>
+</table>
+<p><strong>提示</strong>：</p>
+<ul>
+<li><p><strong>不指定选项和参数</strong>，默认表示 <strong>1
+分钟</strong>之后 <strong>关闭电脑</strong></p></li>
+<li><p>远程维护服务器时，最好不要关闭系统，而应该重新启动系统</p></li>
+<li><p>常用命令示例</p></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 重新启动操作系统，其中 now 表示现在</span><br><span class="line">$ shutdown -r now</span><br><span class="line"></span><br><span class="line"># 立刻关机，其中 now 表示现在</span><br><span class="line">$ shutdown now</span><br><span class="line"></span><br><span class="line"># 系统在今天的 <span class="number">20</span>:<span class="number">25</span> 会关机</span><br><span class="line">$ shutdown <span class="number">20</span>:<span class="number">25</span></span><br><span class="line"></span><br><span class="line"># 系统再过十分钟后自动关机</span><br><span class="line">$ shutdown +<span class="number">10</span></span><br><span class="line"></span><br><span class="line"># 取消之前指定的关机计划</span><br><span class="line">$ shutdown -c</span><br></pre></td></tr></table></figure>
+<h2 id="查看或配置网卡信息">4.2 查看或配置网卡信息</h2>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 15%" />
+<col style="width: 50%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>ifconfig</td>
+<td>configure a network interface</td>
+<td>查看/配置计算机当前的网卡配置信息</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>ping ip地址</td>
+<td>ping</td>
+<td>检测到目标 ip地址 的连接是否正常</td>
+</tr>
+</tbody>
+</table>
+<h3 id="网卡和ip地址">4.2.1 网卡和IP地址</h3>
+<p>1.网卡</p>
+<ul>
+<li><p>网卡是一个专门负责网络通讯的硬件设备</p></li>
+<li><p><strong>IP 地址</strong>是设置在网卡上的地址信息</p></li>
+</ul>
+<p>我们可以把 <strong>电脑</strong> 比作
+<strong>电话</strong>，<strong>网卡</strong> 相当于 <strong>SIM
+卡</strong>，<strong>IP 地址</strong> 相当于
+<strong>电话号码</strong></p>
+<p>2.IP 地址</p>
+<ul>
+<li><strong>每台联网的电脑上</strong>都有 <strong>IP
+地址</strong>，<strong>是保证电脑之间正常通讯的重要设置</strong></li>
+</ul>
+<p>注意：每台电脑的 IP 地址不能相同，否则会出现 IP
+地址冲突，并且没有办法正常通讯</p>
+<p>提示：有关 <strong>IP 地址</strong>的详细内容，后续会详细讲解！</p>
+<h3 id="ifconfig">4.2.2 ifconfig</h3>
+<ul>
+<li><code>ifconfig</code> 可以查看／配置计算机当前的网卡配置信息</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 查看网卡配置信息</span><br><span class="line">$ ifconfig</span><br><span class="line"></span><br><span class="line"># 查看网卡对应的 IP 地址</span><br><span class="line">$ ifconfig | grep inet</span><br></pre></td></tr></table></figure>
+<p>提示：一台计算机中有可能会有一个 <strong>物理网卡</strong> 和
+<strong>多个虚拟网卡</strong>，在 Linux 中物理网卡的名字通常以
+<code>ensXX</code> 表示</p>
+<ul>
+<li><code>127.0.0.1</code> 被称为
+<strong>本地回环/环回地址</strong>，一般用来测试本机网卡是否正常</li>
+</ul>
+<h3 id="ping">4.2.3 Ping</h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 检测到目标主机是否连接正常</span><br><span class="line">$ ping IP地址</span><br><span class="line"></span><br><span class="line"># 检测本地网卡工作正常</span><br><span class="line">$ ping <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>ping</code> 一般用于检测当前计算机到目标计算机之间的网络
+<strong>是否通畅</strong>，<strong>数值越大，速度越慢</strong></p></li>
+<li><p><code>ping</code> 的工作原理与潜水艇的声纳相似，<code>ping</code>
+这个命令就是取自 <strong>声纳的声音</strong></p></li>
+<li><p>网络管理员之间也常将 <code>ping</code> 用作动词 —— <strong>ping
+一下计算机X，看他是否开着</strong></p></li>
+</ul>
+<p>原理：网络上的机器都有 <strong>唯一确定的 IP
+地址</strong>，我们给<strong>目标 IP
+地址</strong>发送一个数据包，对方就要返回一个数据包，根据返回的数据包以及时间，我们可以确定目标主机的存在</p>
+<p>提示：在 Linux 中，想要终止一个终端程序的执行，绝大多数都可以使用
+CTRL + C</p>
+<h2 id="远程登录和复制文件">4.3 远程登录和复制文件</h2>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>ssh 用户名@ip</td>
+<td>secure shell</td>
+<td>关机／重新启动</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>scp 用户名@ip:文件名或路径 用户名@ip:文件名或路径</td>
+<td>secure copy</td>
+<td>远程复制文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ssh基础">4.3.1 SSH基础</h3>
+<p>在 Linux 中 SSH 是 <strong>非常常用</strong> 的工具，通过 <strong>SSH
+客户端</strong> 我们可以连接到运行了 <strong>SSH 服务器</strong>
+的远程机器上</p>
+<p><img src="image/image_SHX-ag3ie2.png" /></p>
+<ul>
+<li><p><strong>SSH 客户端</strong>是一种使用
+<code>Secure Shell（SSH）</code>
+协议连接到远程计算机的软件程序SSH是目前较可靠，专为远程登录会话和其他网络服务提供安全性的协议</p>
+<ul>
+<li><p>利用 <code>SSH 协议</code>
+可以有效<strong>防止远程管理过程中的信息泄露</strong></p></li>
+<li><p>通过 <code>SSH 协议</code>
+可以对所有传输的数据进行加密，也能够防止 DNS 欺骗和 IP 欺骗</p></li>
+</ul></li>
+<li><p><code>SSH</code>
+的另一项优点是传输的数据可以是经过压缩的，所以可以加快传输的速度</p></li>
+</ul>
+<h4 id="域名和端口号">1）域名和端口号</h4>
+<p><strong>a.域名</strong></p>
+<ul>
+<li><p>由一串 <strong>用点分隔</strong>
+的名字组成，例如：<code>www.itcast.cn</code></p></li>
+<li><p>是 <strong>IP 地址</strong> 的别名，方便用户记忆</p></li>
+</ul>
+<p><strong>b.端口号</strong></p>
+<ul>
+<li><p><strong>IP 地址</strong>：通过 <strong>IP 地址</strong>
+找到网络上的 <strong>计算机</strong></p></li>
+<li><p><strong>端口号</strong>：通过 <strong>端口号</strong> 可以找到
+<strong>计算机上运行的应用程序</strong></p>
+<ul>
+<li><strong>SSH 服务器</strong> 的默认端口号是
+<code>22</code>，如果是默认端口号，在连接的时候，可以省略</li>
+</ul></li>
+<li><p>常见服务端口号列表：</p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>服务</th>
+<th>端口号</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>SSH 服务器</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>Web 服务器</td>
+<td>80</td>
+</tr>
+<tr class="odd">
+<td>03</td>
+<td>HTTPS</td>
+<td>443</td>
+</tr>
+<tr class="even">
+<td>04</td>
+<td>FTP 服务器</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ssh-客户端的简单使用">2) SSH 客户端的简单使用</h4>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh [-p port] <span class="symbol">user@</span>remote</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>user</code>
+是在远程机器上的用户名，如果不指定的话默认为当前用户</p></li>
+<li><p><code>remote</code> 是远程机器的地址，可以是
+<strong>IP</strong>／<strong>域名</strong>，或者是
+<strong>后面会提到的别名</strong></p></li>
+<li><p><code>port</code> 是 <strong>SSH Server
+监听的端口</strong>，如果不指定，就为默认值 <code>22</code></p></li>
+</ul>
+<p>提示：</p>
+<ul>
+<li>使用 <code>exit</code> 退出当前用户的登录</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li><p><code>ssh</code> 这个终端命令只能在 <code>Linux</code> 或者
+<code>UNIX</code> 系统下使用</p></li>
+<li><p>如果在 <code>Windows</code> 系统中，可以安装 <code>PuTTY</code>
+或者 <code>XShell</code> 客户端软件即可</p></li>
+</ul>
+<p>提示：</p>
+<ul>
+<li>在工作中，SSH 服务器的端口号很有可能<strong>不是
+22</strong>，如果遇到这种情况就需要使用 <code>-p</code>
+选项，指定正确的端口号，否则无法正常连接到服务器</li>
+</ul>
+<h4 id="windows-下-ssh-客户端的安装">3) Windows 下 SSH 客户端的安装</h4>
+<ul>
+<li><p><code>Putty</code> <a
+target="_blank" rel="noopener" href="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html"
+title="http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a></p></li>
+<li><p><code>XShell</code> <a target="_blank" rel="noopener" href="http://xshellcn.com"
+title="http://xshellcn.com">http://xshellcn.com</a></p></li>
+<li><p><code>FinalShell</code><a target="_blank" rel="noopener" href="http://www.hostbuf.com"
+title="http://www.hostbuf.com">http://www.hostbuf.com</a></p></li>
+</ul>
+<h3 id="scp">4.3.2 scp</h3>
+<ul>
+<li><p>scp 就是 <code>secure copy</code>，是一个在 Linux 下用来进行
+<strong>远程拷贝文件</strong> 的命令</p></li>
+<li><p>它的<strong>地址格式与 ssh
+基本相同</strong>，<strong>需要注意的是</strong>，在指定端口时用的是大写的
+<code>-P</code> 而不是小写的</p></li>
+</ul>
+<p><img src="image/image_juhNKS2htB.png" /></p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 把本地当前目录下的 <span class="number">01.</span>py 文件 复制到 远程 家目录下的 Desktop/<span class="number">01.</span>py</span><br><span class="line"># 注意：`:` 后面的路径如果不是绝对路径，则以用户的家目录作为参照路径</span><br><span class="line">scp -P port <span class="number">01.</span>py <span class="symbol">user@</span>remote:Desktop/<span class="number">01.</span>py</span><br><span class="line"></span><br><span class="line"># 把远程 家目录下的 Desktop/<span class="number">01.</span>py 文件 复制到 本地当前目录下的 <span class="number">01.</span>py</span><br><span class="line">scp -P port <span class="symbol">user@</span>remote:Desktop/<span class="number">01.</span>py <span class="number">01.</span>py</span><br><span class="line"></span><br><span class="line"># 加上 -r 选项可以传送文件夹</span><br><span class="line"># 把当前目录下的 demo 文件夹 复制到 远程 家目录下的 Desktop</span><br><span class="line">scp -r demo <span class="symbol">user@</span>remote:Desktop</span><br><span class="line"> </span><br><span class="line"># 把远程 家目录下的 Desktop 复制到 当前目录下的 demo 文件夹</span><br><span class="line">scp -r <span class="symbol">user@</span>remote:Desktop demo</span><br></pre></td></tr></table></figure>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 96%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-r</td>
+<td>若给出的源文件是目录文件，则 scp
+将递归复制该目录下的所有子目录和文件，目标文件必须为一个目录名</td>
+</tr>
+<tr class="even">
+<td>-P</td>
+<td>若远程 SSH 服务器的端口不是 22，需要使用大写字母 -P
+选项指定端口</td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ul>
+<li><p><code>scp</code> 这个终端命令只能在 <code>Linux</code> 或者
+<code>UNIX</code> 系统下使用</p></li>
+<li><p>如果在 <code>Windows</code> 系统中，可以安装
+<code>PuTTY</code>，使用 <code>pscp</code> 命令行工具或者安装
+<code>FileZilla</code> 使用 <code>FTP</code> 进行文件传输</p></li>
+</ul>
+<p><code>FileZilla</code></p>
+<ul>
+<li><p>官方网站：<a target="_blank" rel="noopener" href="https://www.filezilla.cn/download/client"
+title="https://www.filezilla.cn/download/client">https://www.filezilla.cn/download/client</a></p></li>
+<li><p><code>FileZilla</code> 在传输文件时，使用的是
+<code>FTP 服务</code> 而不是 <code>SSH 服务</code>，因此端口号应该设置为
+<code>21</code></p></li>
+</ul>
+<h3 id="ssh-高级知道">4.3.3 SSH 高级（知道）</h3>
+<ul>
+<li><p>免密码登录</p></li>
+<li><p>配置别名</p></li>
+</ul>
+<p>提示：有关 SSH 配置信息都保存在用户家目录下的 <code>.ssh</code>
+目录下</p>
+<h4 id="免密码登录">1) 免密码登录</h4>
+<p><strong>步骤</strong></p>
+<ul>
+<li><p>配置公钥</p>
+<ul>
+<li>执行 <code>ssh-keygen</code> 即可生成 SSH 钥匙，一路回车即可</li>
+</ul></li>
+<li><p>上传公钥到服务器</p>
+<ul>
+<li>执行
+<code>ssh-copy-id -p port user@remote</code>，可以让远程服务器记住我们的公钥</li>
+</ul></li>
+</ul>
+<p>示意图</p>
+<p><img src="image/image_yqS50LL8jc.png" /></p>
+<h4 id="配置别名">2) 配置别名</h4>
+<p>每次都输入
+<code>ssh -p port user@remote</code>，时间久了会觉得很麻烦，特别是当
+<code>user</code>, <code>remote</code> 和 <code>port</code>
+都得输入，而且还不好记忆</p>
+<p>而 <strong>配置别名</strong>
+可以让我们进一步偷懒，譬如用：<code>ssh mac</code>
+来替代上面这么一长串，那么就在 <code>~/.ssh/config</code>
+里面追加以下内容：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host mac</span><br><span class="line">    HostName ip地址</span><br><span class="line">    User itheima</span><br><span class="line">    Port <span class="number">22</span></span><br></pre></td></tr></table></figure>
+<p><strong>保存之后，即可用 ssh mac 实现远程登录了，scp
+同样可以使用</strong></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag"># 虚拟机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="prev" title="ubuntn使用教程（三：文本和目录常用命令）">
+      <i class="fa fa-chevron-left"></i> ubuntn使用教程（三：文本和目录常用命令）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/05-%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90/05-%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90/" rel="next" title="ubuntn使用教程（五：用户权限）">
+      ubuntn使用教程（五：用户权限） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">04-远程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E6%9C%BA%E4%B8%8E%E9%87%8D%E5%90%AF"><span class="nav-number">1.1.</span> <span class="nav-text">4.1关机与重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%88%96%E9%85%8D%E7%BD%AE%E7%BD%91%E5%8D%A1%E4%BF%A1%E6%81%AF"><span class="nav-number">1.2.</span> <span class="nav-text">4.2 查看或配置网卡信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E5%8D%A1%E5%92%8Cip%E5%9C%B0%E5%9D%80"><span class="nav-number">1.2.1.</span> <span class="nav-text">4.2.1 网卡和IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ifconfig"><span class="nav-number">1.2.2.</span> <span class="nav-text">4.2.2 ifconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ping"><span class="nav-number">1.2.3.</span> <span class="nav-text">4.2.3 Ping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95%E5%92%8C%E5%A4%8D%E5%88%B6%E6%96%87%E4%BB%B6"><span class="nav-number">1.3.</span> <span class="nav-text">4.3 远程登录和复制文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh%E5%9F%BA%E7%A1%80"><span class="nav-number">1.3.1.</span> <span class="nav-text">4.3.1 SSH基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%9F%E5%90%8D%E5%92%8C%E7%AB%AF%E5%8F%A3%E5%8F%B7"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">1）域名和端口号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh-%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">2) SSH 客户端的简单使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#windows-%E4%B8%8B-ssh-%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3) Windows 下 SSH 客户端的安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scp"><span class="nav-number">1.3.2.</span> <span class="nav-text">4.3.2 scp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-%E9%AB%98%E7%BA%A7%E7%9F%A5%E9%81%93"><span class="nav-number">1.3.3.</span> <span class="nav-text">4.3.3 SSH 高级（知道）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%8D%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">1) 免密码登录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%88%AB%E5%90%8D"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">2) 配置别名</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

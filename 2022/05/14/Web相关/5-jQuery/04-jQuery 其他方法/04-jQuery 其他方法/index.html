@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JQuery">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-JQuery（四、JQuery其他方法）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="JQuery">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-14T07:33:28.824Z">
+<meta property="article:modified_time" content="2022-05-14T08:30:00.110Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-JQuery（四、JQuery其他方法） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/04-jQuery%20%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-JQuery（四、JQuery其他方法）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：16:30:00" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/JQuery/" itemprop="url" rel="index"><span itemprop="name">JQuery</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JQuery</p>
+<span id="more"></span>
+<h1 id="jquery-其他方法">jQuery 其他方法</h1>
+<h1 id="jquery-对象拷贝">jQuery 对象拷贝</h1>
+<p>如果想要把某个对象拷贝（合并） 给另外一个对象使用，此时可以使用
+$.extend() 方法</p>
+<p><strong>语法：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$.<span class="title function_">extend</span>([deep], target, object1, [objectN])    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>\1. deep: 如果设为true 为深拷贝， 默认为false 浅拷贝</p>
+<p>\2. target: 要拷贝的目标对象</p>
+<p>\3. object1:待拷贝到第一个对象的对象。</p>
+<p>\4. objectN:待拷贝到第N个对象的对象。</p>
+<p>\5.
+浅拷贝是把被拷贝的对象复杂数据类型中的地址拷贝给目标对象，修改目标对象会影响被拷贝对象。</p>
+<p>\6. 深拷贝，前面加true，
+完全克隆(拷贝的对象,而不是地址)，修改目标对象不会影响被拷贝对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            // var targetObj = &#123;&#125;;</span><br><span class="line">            // var obj = &#123;</span><br><span class="line">            //     id: 1,</span><br><span class="line">            //     name: &quot;andy&quot;</span><br><span class="line">            // &#125;;</span><br><span class="line">            // // $.extend(target, obj);</span><br><span class="line">            // $.extend(targetObj, obj);</span><br><span class="line">            // console.log(targetObj);</span><br><span class="line">            // var targetObj = &#123;</span><br><span class="line">            //     id: 0</span><br><span class="line">            // &#125;;</span><br><span class="line">            // var obj = &#123;</span><br><span class="line">            //     id: 1,</span><br><span class="line">            //     name: &quot;andy&quot;</span><br><span class="line">            // &#125;;</span><br><span class="line">            // // $.extend(target, obj);</span><br><span class="line">            // $.extend(targetObj, obj);</span><br><span class="line">            // console.log(targetObj); // 会覆盖targetObj 里面原来的数据</span><br><span class="line">            var targetObj = &#123;</span><br><span class="line">                id: 0,</span><br><span class="line">                msg: &#123;</span><br><span class="line">                    sex: &#x27;男&#x27;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            var obj = &#123;</span><br><span class="line">                id: 1,</span><br><span class="line">                name: &quot;andy&quot;,</span><br><span class="line">                msg: &#123;</span><br><span class="line">                    age: 18</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            // // $.extend(target, obj);</span><br><span class="line">            // $.extend(targetObj, obj);</span><br><span class="line">            // console.log(targetObj); // 会覆盖targetObj 里面原来的数据</span><br><span class="line">            // // 1. 浅拷贝把原来对象里面的复杂数据类型地址拷贝给目标对象</span><br><span class="line">            // targetObj.msg.age = 20;</span><br><span class="line">            // console.log(targetObj);</span><br><span class="line">            // console.log(obj);</span><br><span class="line">            // 2. 深拷贝把里面的数据完全复制一份给目标对象 如果里面有不冲突的属性,会合并到一起 </span><br><span class="line">            $.extend(true, targetObj, obj);</span><br><span class="line">            // console.log(targetObj); // 会覆盖targetObj 里面原来的数据</span><br><span class="line">            targetObj.msg.age = 20;</span><br><span class="line">            console.log(targetObj); // msg :&#123;sex: &quot;男&quot;, age: 20&#125;</span><br><span class="line">            console.log(obj);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="jquery-多库共存">jQuery 多库共存</h1>
+<p><strong>问题概述：</strong></p>
+<p>jQuery使用<span
+class="math inline">\(作为标示符，随着jQuery的流行,其他 js
+库也会用这\)</span>作为标识符， 这样一起使用会引起冲突。</p>
+<p><strong>客观需求：</strong></p>
+<p>需要一个解决方案，让jQuery
+和其他的js库不存在冲突，可以同时存在，这就叫做多库共存。</p>
+<p>jQuery 解决方案：</p>
+<p>\1. 把里面的 $ 符号 统一改为 jQuery。 比如 jQuery(''div'')</p>
+<p>\2. jQuery 变量规定新的名称：$ .noConflict() var xx =
+$.noConflict();</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            function $(ele) &#123;</span><br><span class="line">                return document.querySelector(ele);</span><br><span class="line">            &#125;</span><br><span class="line">            console.log($(&quot;div&quot;));</span><br><span class="line">            // 1. 如果$ 符号冲突 我们就使用 jQuery</span><br><span class="line">            jQuery.each();</span><br><span class="line">            // 2. 让jquery 释放对$ 控制权 让用自己决定</span><br><span class="line">            var suibian = jQuery.noConflict();</span><br><span class="line">            console.log(suibian(&quot;span&quot;));</span><br><span class="line">            suibian.each();</span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;span&gt;&lt;/span&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="jquery-插件">jQuery 插件</h1>
+<p>jQuery 功能比较有限，想要更复杂的特效效果，可以借助于 jQuery
+插件完成。</p>
+<p>注意:
+这些插件也是依赖于jQuery来完成的，所以必须要先引入jQuery文件，因此也称为
+jQuery 插件。</p>
+<p><strong>jQuery</strong> <strong>插件常用的网站：</strong></p>
+<p>\1. jQuery 插件库 <a target="_blank" rel="noopener" href="http://www.jq22.com/"
+title="http://www.jq22.com/">http://www.jq22.com/</a></p>
+<p>\2. jQuery 之家 <a target="_blank" rel="noopener" href="http://www.htmleaf.com/"
+title="http://www.htmleaf.com/">http://www.htmleaf.com/</a></p>
+<p><strong>jQuery</strong> <strong>插件使用步骤：</strong></p>
+<p>\1. 引入相关文件。（jQuery 文件 和 插件文件）</p>
+<p>\2. 复制相关html、css、js (调用插件)。</p>
+<p><strong>jQuery</strong> <strong>插件演示：</strong></p>
+<p>\1. 瀑布流</p>
+<p>\2.
+图片懒加载（图片使用延迟加载在可提高网页下载速度。它也能帮助减轻服务器负载）</p>
+<p>当我们页面滑动到可视区域，再显示图片。</p>
+<p>我们使用jquery 插件库 EasyLazyload。
+注意，此时的js引入文件和js调用必须写到 DOM元素（图片）最后面</p>
+<p>\3. 全屏滚动（fullpage.js）</p>
+<p>gitHub： <a target="_blank" rel="noopener" href="https://github.com/alvarotrigo/fullPage.js"
+title="https://github.com/alvarotrigo/fullPage.js">https://github.com/alvarotrigo/fullPage.js</a></p>
+<p>中文翻译网站： <a target="_blank" rel="noopener" href="http://www.dowebok.com/demo/2014/77/"
+title="http://www.dowebok.com/demo/2014/77/">http://www.dowebok.com/demo/2014/77/</a></p>
+<p><strong>bootstrap JS</strong> <strong>插件：</strong></p>
+<p>bootstrap 框架也是依赖于 jQuery 开发的，因此里面的 js插件使用
+，也必须引入jQuery 文件。</p>
+<h2 id="案例todolist">案例：toDoList</h2>
+<p>①文本框里面输入内容，按下回车，就可以生成待办事项。</p>
+<p>②点击待办事项复选框，就可以把当前数据添加到已完成事项里面。</p>
+<p>③点击已完成事项复选框，就可以把当前数据添加到待办事项里面。</p>
+<p>④<strong>但是本页面内容刷新页面不会丢失。</strong></p>
+<p>①刷新页面不会丢失数据，因此需要用到本地存储 localStorage</p>
+<p>②<strong>核心思路：
+不管按下回车，还是点击复选框，都是把本地存储的数据加载到页面中，这样保证刷新关闭页面不会丢失数据</strong></p>
+<p>③存储的数据格式：var todolist = [{ title : ‘xxx’, done: false}]</p>
+<p>④注意点1： 本地存储 localStorage 里面只能存储字符串格式
+，因此需要把对象转换为字符串 JSON.stringify(data)。</p>
+<p>⑤注意点2：
+获取本地存储数据，需要把里面的字符串转换为对象格式JSON.parse()
+我们才能使用里面的数据。</p>
+<p>①切记：
+页面中的数据，都要从本地存储里面获取，这样刷新页面不会丢失数据，所以先要把数据保存到本地存储里面。</p>
+<p>②利用事件对象.keyCode判断用户按下回车键（13）。</p>
+<p>③声明一个数组，保存数据。</p>
+<p>④先要读取本地存储原来的数据（声明函数
+getData()），放到这个数组里面。</p>
+<p>⑤之后把最新从表单获取过来的数据，追加到数组里面。</p>
+<p>⑥最后把数组存储给本地存储 (声明函数 savaDate())</p>
+<p>①因为后面也会经常渲染加载操作，所以声明一个函数
+load，方便后面调用</p>
+<p>②先要读取本地存储数据。（数据不要忘记转换为对象格式）</p>
+<p>③之后遍历这个数据（$.each()），有几条数据，就生成几个小li 添加到 ol
+里面。</p>
+<p>④每次渲染之前，先把原先里面 ol
+的内容清空，然后渲染加载最新的数据。</p>
+<p>①点击里面的a链接，不是删除的li，而是删除本地存储对应的数据。</p>
+<p>②核心原理：先获取本地存储数据，删除对应的数据，保存给本地存储，重新渲染列表li</p>
+<p>③我们可以给链接自定义属性记录当前的索引号</p>
+<p>④根据这个索引号删除相关的数据----数组的splice(i, 1)方法</p>
+<p>⑤存储修改后的数据，然后存储给本地存储</p>
+<p>⑥重新渲染加载数据列表</p>
+<p>⑦因为a是动态创建的，我们使用on方法绑定事件</p>
+<p>①当我们点击了小的复选框，修改本地存储数据，再重新渲染数据列表。</p>
+<p>②点击之后，获取本地存储数据。</p>
+<p>③修改对应数据属性 done 为当前复选框的checked状态。</p>
+<p>④之后保存数据到本地存储</p>
+<p>⑤重新渲染加载数据列表</p>
+<p>⑥load 加载函数里面，新增一个条件,如果当前数据的done为true
+就是已经完成的，就把列表渲染加载到 ul 里面</p>
+<p>⑦如果当前数据的done 为false， 则是待办事项，就把列表渲染加载到 ol
+里面</p>
+<p>①在我们load 函数里面操作</p>
+<p>②声明2个变量 ：todoCount 待办个数 doneCount 已完成个数</p>
+<p>③当进行遍历本地存储数据的时候， 如果 数据done为 false， 则
+todoCount++, 否则 doneCount++</p>
+<p>④最后修改相应的元素 text()</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/03-jQuery%20%E4%BA%8B%E4%BB%B6/03-jQuery%20%E4%BA%8B%E4%BB%B6/" rel="prev" title="web相关-JQuery（三、JQuery事件）">
+      <i class="fa fa-chevron-left"></i> web相关-JQuery（三、JQuery事件）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/01-%E4%BB%8B%E7%BB%8D/01-%E4%BB%8B%E7%BB%8D/" rel="next" title="web相关-Django（一、介绍）">
+      web相关-Django（一、介绍） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E5%85%B6%E4%BB%96%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">jQuery 其他方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E5%AF%B9%E8%B1%A1%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.</span> <span class="nav-text">jQuery 对象拷贝</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E5%A4%9A%E5%BA%93%E5%85%B1%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">jQuery 多库共存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E6%8F%92%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">jQuery 插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8Btodolist"><span class="nav-number">4.1.</span> <span class="nav-text">案例：toDoList</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

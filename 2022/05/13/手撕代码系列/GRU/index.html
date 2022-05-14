@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="基于python和pytorch的gru代码设计实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撕GRU">
+<meta property="og:url" content="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/GRU/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="基于python和pytorch的gru代码设计实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_1OEqlMfeot.png">
+<meta property="og:image" content="http://example.com/image/image_G13sUtpQzD.png">
+<meta property="og:image" content="http://example.com/image/image_923-UjYKSx.png">
+<meta property="og:image" content="http://example.com/image/image_jQllbtFtFz.png">
+<meta property="article:published_time" content="2022-05-13T10:43:56.099Z">
+<meta property="article:modified_time" content="2022-05-13T10:45:45.371Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_1OEqlMfeot.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/GRU/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>手撕GRU | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/GRU/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          手撕GRU
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 18:43:56 / 修改时间：18:45:45" itemprop="dateCreated datePublished" datetime="2022-05-13T18:43:56+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">手撕代码系列</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>基于python和pytorch的gru代码设计实现</p>
+<span id="more"></span>
+<h1 id="什么是gru">什么是GRU</h1>
+<p>GRU（Gate Recurrent Unit）是循环神经网络（Recurrent Neural Network,
+RNN）的一种。和LSTM（Long-Short Term
+Memory）一样，也是为了解决长期记忆和反向传播中的梯度等问题而提出来的。</p>
+<p>GRU和LSTM在很多情况下实际表现上相差无几，那么为什么我们要使用新人GRU（2014年提出）而不是相对经受了更多考验的LSTM（1997提出）呢。</p>
+<p>下图1-1引用论文中的一段话来说明GRU的优势所在。</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-a8424cd80eae1b7d312991692decbe8b_720w.jpg" /></p>
+<blockquote>
+<p>简单译文：我们在我们的实验中选择GRU是因为它的实验效果与LSTM相似，但是更易于计算。</p>
+</blockquote>
+<p><strong>简单来说就是贫穷限制了我们的计算能力...</strong></p>
+<p>相比LSTM，使用GRU能够达到相当的效果，并且相比之下更容易进行训练，能够很大程度上提高训练效率，因此很多时候会更倾向于使用GRU。</p>
+<p>OK，那么为什么说GRU更容易进行训练呢，下面开始介绍一下GRU的内部结构。</p>
+<h1 id="gru浅析">GRU浅析</h1>
+<h2 id="gru输入输出结构">GRU输入输出结构</h2>
+<p>GRU的输入输出结构与普通的RNN是一样的。</p>
+<p>有一个当前的输入<span
+class="math inline">\(x^t\)</span>，和上一个节点传递下来的隐状态（hidden
+state）<span
+class="math inline">\(h^{t-1}\)</span>，这个隐状态包含了之前节点的相关信息。</p>
+<p>结合<span class="math inline">\(x^t\)</span>和<span
+class="math inline">\(h^{t-1}\)</span>，GRU会得到当前隐藏节点的输出<span
+class="math inline">\(y^t\)</span>和传递给下一个节点的隐状态<span
+class="math inline">\(h^t\)</span>。</p>
+<p><img src="/image/image_1OEqlMfeot.png" /></p>
+<p>那么，GRU到底有什么特别之处呢？下面来对它的内部结构进行分析！</p>
+<h2 id="gru的内部结构">GRU的内部结构</h2>
+<p>首先，我们先通过上一个传输下来的状态 <span
+class="math inline">\(h^{t-1}\)</span> 和当前节点的输入<span
+class="math inline">\(x^t\)</span>来获取两个门控状态。如下图所示，其中<span
+class="math inline">\(r\)</span>控制重置的门控（reset gate），<span
+class="math inline">\(z\)</span>为控制更新的门控（update gate）。</p>
+<blockquote>
+<p>Tips：激活函数为<span
+class="math inline">\(sigmoid\)</span>函数，通过这个函数可以将数据变换为0-1范围内的数值，从而来充当门控信号。</p>
+</blockquote>
+<p><img src="/image/image_G13sUtpQzD.png" /></p>
+<p><strong>与LSTM分明的层次结构不同，下面将对GRU进行一气呵成的介绍~~~
+请大家屏住呼吸，不要眨眼。</strong></p>
+<p>得到门控信号之后，首先使用重置门控来得到**“重置”** 之后的数据<span
+class="math inline">\(h^{t-1&#39;}=h^{t-1}\odot{r}\)</span> ，再将<span
+class="math inline">\(h^{t-1&#39;}\)</span>与输入</p>
+<p><span class="math inline">\(x^t\)</span>进行拼接，再通过一个<span
+class="math inline">\(tanh\)</span>激活函数来将数据放缩到**-1~1**的范围内。即得到如下图所示的<span
+class="math inline">\(h^{&#39;}\)</span>。</p>
+<p><img src="/image/image_923-UjYKSx.png" /></p>
+<p>这里的<span
+class="math inline">\(h^{&#39;}\)</span>主要是包含了当前输入的<span
+class="math inline">\(x^t\)</span>数据。有针对性地对 <span
+class="math inline">\(h^{&#39;}\)</span>添加到当前的隐藏状态，相当于”记忆了当前时刻的状态“。类似于LSTM的选择记忆阶段。</p>
+<p><img src="/image/image_jQllbtFtFz.png" /></p>
+<p>最后介绍GRU最关键的一个步骤，我们可以称之为**”更新记忆“** 阶段。</p>
+<p>在这个阶段，我们同时进行了遗忘了记忆两个步骤。我们使用了先前得到的更新门控<span
+class="math inline">\(z\)</span>update
+gate）。<strong>更新表达式</strong>：</p>
+<p><span class="math display">\[
+h^t=(1-z)\odot{h}^{t-1}+z\odot{h^{&#39;}}
+\]</span></p>
+<p>首先再次强调一下，门控信号（这里的<span
+class="math inline">\(z\)</span>）的范围为0~1。门控信号越接近1，代表”记忆“下来的数据越多；而越接近0则代表”遗忘“的越多。</p>
+<p>GRU很聪明的一点就在于，<strong>我们使用了同一个门控</strong><span
+class="math inline">\(z\)</span><strong>就同时可以进行遗忘和选择记忆（LSTM则要使用多个门控）</strong>。</p>
+<ul>
+<li><p><span
+class="math inline">\((1-z)\odot{h^{t-1}}\)</span>：表示对原本隐藏状态的选择性“遗忘”。这里的<span
+class="math inline">\(1-z\)</span>可以想象成遗忘门（forget
+gate），忘记<span
+class="math inline">\(h^{t-1}\)</span>维度中一些不重要的信息。</p></li>
+<li><p><span
+class="math inline">\(z\odot{h^{&#39;}}\)</span>：表示对包含当前节点信息的<span
+class="math inline">\(h^{&#39;}\)</span>进行选择性”记忆“。与上面类似，这里的<span
+class="math inline">\((1-z)\)</span>同理会忘记 <span
+class="math inline">\(h^{&#39;}\)</span>维度中的一些不重要的信息。或者，这里我们更应当看做是对
+<span
+class="math inline">\(h^{&#39;}\)</span>维度中的某些信息进行选择。</p></li>
+<li><p><span
+class="math inline">\(h^t=(1-z)\odot{h}^{t-1}+z\odot{h^{&#39;}}\)</span>：结合上述，这一步的操作就是忘记传递下来的<span
+class="math inline">\(h^{t-1}\)</span>中的某些维度信息，并加入当前节点输入的某些维度信息。</p></li>
+</ul>
+<blockquote>
+<p>可以看到，这里的遗忘<span class="math inline">\(z\)</span>和选择<span
+class="math inline">\(1-z\)</span>
+是联动的。也就是说，对于传递进来的维度信息，我们会进行选择性遗忘，则遗忘了多少权重<span
+class="math inline">\((z)\)</span>，我们就会使用包含当前输入的<span
+class="math inline">\(h^{&#39;}\)</span>中所对应的权重进行弥补<span
+class="math inline">\((1-z)\)</span>。以保持一种”恒定“状态。</p>
+</blockquote>
+<h1 id="lstm与gru的关系">LSTM与GRU的关系</h1>
+<p>GRU是在2014年提出来的，而LSTM是1997年。他们的提出都是为了解决相似的问题，那么GRU难免会参考LSTM的内部结构。那么他们之间的关系大概是怎么样的呢？这里简单介绍一下。</p>
+<p><span class="math inline">\(r(reset\
+gate)\)</span>实际上与他的名字有点不符。我们仅仅使用它来获得了<span
+class="math inline">\(h^{&#39;}\)</span>。</p>
+<p>那么这里的<span
+class="math inline">\(h^{&#39;}\)</span>实际上可以看成对应于LSTM中的hidden
+state；上一个节点传下来的 <span
+class="math inline">\(h^{t-1}\)</span>则对应于LSTM中的cell
+state。1-z对应的则是LSTM中的<span
+class="math inline">\(z^f\)</span>forget gate，那么
+z我们似乎就可以看成是选择门<span
+class="math inline">\(z^i\)</span>。</p>
+<h1 id="手撕gru">手撕GRU</h1>
+<h2 id="普通gru单元">普通GRU单元：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GRUCell</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 一般数据输入为[bs, suq_size, feature_size]</span></span><br><span class="line">        <span class="comment"># 输入每个tokenize的size(即每个词向量编码长度)</span></span><br><span class="line">        self.input_size = input_size</span><br><span class="line">        <span class="comment"># 隐层每个tokenize的size</span></span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输入变量的线性变换过程是 x @ W.T + b (@代表矩阵乘法， .T代表矩阵转置)</span></span><br><span class="line">        self.W = nn.Parameter(torch.Tensor(input_size, hidden_size * <span class="number">3</span>))</span><br><span class="line">        self.U = nn.Parameter(torch.Tensor(hidden_size, hidden_size * <span class="number">3</span>))</span><br><span class="line">        self.bias_1 = nn.Parameter(torch.Tensor(hidden_size * <span class="number">3</span>))</span><br><span class="line">        self.bias_2 = nn.Parameter(torch.Tensor(hidden_size * <span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">        self.init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        权重与偏置初始化</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        stdv = <span class="number">1.0</span> / math.sqrt(self.hidden_size)</span><br><span class="line">        <span class="keyword">for</span> weight <span class="keyword">in</span> self.parameters():</span><br><span class="line">            weight.data.uniform_(-stdv, stdv)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, init_states=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        assumes x.shape represents (batch_size, sequence_size, input_size)</span></span><br><span class="line"><span class="string">        input: 前馈操作接收init_states参数，该参数是上面方程的（h_t, c_t）参数的元组，</span></span><br><span class="line"><span class="string">                如果不引入，则设置为零。然后，我们对每个保留（h_t, c_t）的序列元素执行LSTM方程的前馈，</span></span><br><span class="line"><span class="string">                并将其作为序列下一个元素的状态引入.</span></span><br><span class="line"><span class="string">        return: 预测和最后一个状态元组</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;assumes x.shape represents (batch_size, sequence_size, input_size)</span></span><br><span class="line"><span class="string">                input: 前馈操作接收init_states参数，该参数是上面方程的（h_t, c_t）参数的元组，</span></span><br><span class="line"><span class="string">                        如果不引入，则设置为零。然后，我们对每个保留（h_t, c_t）的序列元素执行LSTM方程的前馈，</span></span><br><span class="line"><span class="string">                        并将其作为序列下一个元素的状态引入.</span></span><br><span class="line"><span class="string">                return: 预测和最后一个状态元组</span></span><br><span class="line"><span class="string">                &quot;&quot;&quot;</span></span><br><span class="line">        batch_size, seq_size, _ = x.size()</span><br><span class="line">        hidden_seq = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> init_states <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 初始化历史状态</span></span><br><span class="line">            h_t = (</span><br><span class="line">                torch.zeros(batch_size, self.hidden_size).to(x.device)</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            h_t = init_states</span><br><span class="line"></span><br><span class="line">        HS = self.hidden_size</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(seq_size):</span><br><span class="line">            <span class="comment"># 获取单个词的feature 向量</span></span><br><span class="line">            x_t = x[:, t, :]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># batch the computations into a single matrix multiplication</span></span><br><span class="line">            gate_1 = x_t @ self.W + self.bias_1</span><br><span class="line">            gate_2 = h_t @ self.U + self.bias_2</span><br><span class="line"></span><br><span class="line">            r_t, z_t = (</span><br><span class="line">                torch.sigmoid(gate_1[:, :HS] + gate_2[:, :HS]),</span><br><span class="line">                torch.sigmoid(gate_1[:, HS:HS * <span class="number">2</span>] + gate_2[:, HS:HS * <span class="number">2</span>]),</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">            n_t = torch.tanh(gate_1[:, HS * <span class="number">2</span>:] + torch.mul(r_t, gate_2[:, HS * <span class="number">2</span>:]))</span><br><span class="line"></span><br><span class="line">            h_t = torch.mul(<span class="number">1</span> - z_t, n_t) + torch.mul(z_t, h_t)</span><br><span class="line">            hidden_seq.append(h_t.unsqueeze(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># reshape hidden_seq p/ retornar</span></span><br><span class="line">        hidden_seq = torch.cat(hidden_seq, dim=<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># reshape from shape (sequence, batch, feature) to (batch, sequence, feature)</span></span><br><span class="line">        hidden_seq = hidden_seq.transpose(<span class="number">0</span>, <span class="number">1</span>).contiguous()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> hidden_seq</span><br></pre></td></tr></table></figure>
+<h2 id="gru">GRU：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GRU</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(GRU, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.GRU_layer = nn.GRU(input_size=input_size,</span><br><span class="line">                                hidden_size=hidden_size,</span><br><span class="line">                                batch_first=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        self.output_linear = nn.Linear(hidden_size, output_size)</span><br><span class="line">        self.hidden = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x, self.hidden = self.GRU_layer(x)</span><br><span class="line">        x = self.output_linear(x)</span><br><span class="line">        <span class="keyword">return</span> x, self.hidden</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">GRUModel</span>(nn.Module):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_num, hidden_num, output_num</span>):</span><br><span class="line">        <span class="built_in">super</span>(GRUModel, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_num</span><br><span class="line">        self.grucell = nn.GRUCell(input_num, hidden_num)</span><br><span class="line">        self.out_linear = nn.Linear(hidden_num, output_num)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, hid</span>):</span><br><span class="line">        <span class="keyword">if</span> hid <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            hid = torch.randn(x.shape[<span class="number">0</span>], self.hidden_size)</span><br><span class="line">        next_hid = self.grucell(x, hid)  <span class="comment"># 需要传入隐藏层状态</span></span><br><span class="line">        y = self.out_linear(next_hid)</span><br><span class="line">        <span class="keyword">return</span> y, next_hid.detach()  <span class="comment"># detach()和detach_()都可以使用</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/LSTM/" rel="prev" title="手撕LSTM">
+      <i class="fa fa-chevron-left"></i> 手撕LSTM
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/Transformer/" rel="next" title="手撕Transformer">
+      手撕Transformer <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFgru"><span class="nav-number">1.</span> <span class="nav-text">什么是GRU</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gru%E6%B5%85%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">GRU浅析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#gru%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">GRU输入输出结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gru%E7%9A%84%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">GRU的内部结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lstm%E4%B8%8Egru%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">LSTM与GRU的关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%92%95gru"><span class="nav-number">4.</span> <span class="nav-text">手撕GRU</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9Agru%E5%8D%95%E5%85%83"><span class="nav-number">4.1.</span> <span class="nav-text">普通GRU单元：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gru"><span class="nav-number">4.2.</span> <span class="nav-text">GRU：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

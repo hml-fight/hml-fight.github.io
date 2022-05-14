@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-Django（十九、Cookies和Session）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/19-Cookies%E5%92%8CSession/19-Cookies%E5%92%8CSession/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="Django">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_sfTYu7K43t.png">
+<meta property="og:image" content="http://example.com/image/image__LadyTCYqt.png">
+<meta property="og:image" content="http://example.com/image/image_u9breMPOgo.png">
+<meta property="og:image" content="http://example.com/image/image_YIOLy1ETkX.png">
+<meta property="og:image" content="http://example.com/image/image_PeoWLvBx0A.png">
+<meta property="og:image" content="http://example.com/image/image_HWJryaL16B.png">
+<meta property="og:image" content="http://example.com/image/image_ZxCr3Mg9Bz.png">
+<meta property="og:image" content="http://example.com/image/image_DG-r6v1VzV.png">
+<meta property="og:image" content="http://example.com/image/image_u21TF28L8V.png">
+<meta property="og:image" content="http://example.com/image/image_g5C6ZTLK0Y.png">
+<meta property="og:image" content="http://example.com/image/image_AmvwolvWPi.png">
+<meta property="og:image" content="http://example.com/image/image_PR3jVEoryK.png">
+<meta property="og:image" content="http://example.com/image/image_9i-UnzvF3n.png">
+<meta property="og:image" content="http://example.com/image/image_8sqJl9NvBW.png">
+<meta property="og:image" content="http://example.com/image/image_EfxQ3hxrII.png">
+<meta property="og:image" content="http://example.com/image/image_NMySncTd-_.png">
+<meta property="article:published_time" content="2022-05-14T07:33:29.607Z">
+<meta property="article:modified_time" content="2022-05-14T08:42:22.222Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_sfTYu7K43t.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/19-Cookies%E5%92%8CSession/19-Cookies%E5%92%8CSession/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-Django（十九、Cookies和Session） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/19-Cookies%E5%92%8CSession/19-Cookies%E5%92%8CSession/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-Django（十九、Cookies和Session）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:29 / 修改时间：16:42:22" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:29+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Django</p>
+<span id="more"></span>
+<h1 id="cookies和session">Cookies和Session</h1>
+<h1 id="会话">会话</h1>
+<p>从打开浏览器访问一个网站，到关闭浏览器结束此次访问，称之为一次会话。
+HTTP本身是无状态的，导致会话状态难以保持。</p>
+<h1 id="cookies">Cookies</h1>
+<p>保存在客户端浏览器上的存储空间 </p>
+<p>特点：</p>
+<ul>
+<li><p>cookies在浏览器是以键值对的形式进行存储的，键和值都是以ASCII码的形式存储的</p></li>
+<li><p>存储的数据带有生命周期</p></li>
+<li><p>cookies的数据是按照域隔离的，不同的域之间无法访问</p></li>
+<li><p><strong>cookies的内部数据会在每次访问此网站时都会携带到服务器，如果cookies过大会影响访问速度。</strong></p></li>
+</ul>
+<h2 id="存储">存储</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HttpResponse.set_cookie(key,value=’’,max_age=<span class="literal">None</span>,expires=<span class="literal">None</span>)</span><br><span class="line">-key:cookie的名字</span><br><span class="line">-value：cookie的值</span><br><span class="line">-max_age：存活相对时间，秒</span><br><span class="line">-expires：具体过期时间</span><br><span class="line">当不指定max_age和expires时，关闭浏览器时此数据失效。</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">set_cookies</span>(<span class="params">request</span>):</span><br><span class="line"></span><br><span class="line">    resp = HttpResponse(<span class="string">&#x27;set cookie is ok&#x27;</span>)</span><br><span class="line">    resp.set_cookie(<span class="string">&#x27;hml&#x27;</span>, <span class="number">123</span>)</span><br><span class="line">    <span class="keyword">return</span> resp</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_sfTYu7K43t.png" /></p>
+<p><img src="/image/image__LadyTCYqt.png" /></p>
+<p>删除&amp;获取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">获取：request.COOKIES</span><br><span class="line">删除：request.delete_cookie(key)</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_u9breMPOgo.png" /></p>
+<p><img src="/image/image_YIOLy1ETkX.png" /></p>
+<p><img src="/image/image_PeoWLvBx0A.png" /></p>
+<h1 id="session">Session</h1>
+<p>会话保持-登录流程
+用户登录-&gt;账号密码传至后端，服务器数据库验证，正确则发放cookie-&gt;后续浏览器将自动把当前域下的cookie都发送至服务器。但浏览器存储不是十分安全，因此引入了session。</p>
+<p><img src="/image/image_HWJryaL16B.png" /></p>
+<p>session技术实际将数据存在了服务器里，对于不同的浏览器有不同的存储空间，生成空间后，会将一个sessionID返还给浏览器，浏览器会将sessionID存储在Cookies，之后每次返还给服务器。</p>
+<p>session是在服务器上开辟一段空间用于保留浏览器和服务器交互时的重要数据。</p>
+<p><img src="/image/image_ZxCr3Mg9Bz.png" /></p>
+<p><img src="/image/image_DG-r6v1VzV.png" /></p>
+<p>session初始配置： session的使用：
+session对象是一个类似于字典的SessionStore类型的对象。</p>
+<p><img src="/image/image_u21TF28L8V.png" /></p>
+<p><img src="/image/image_g5C6ZTLK0Y.png" /></p>
+<blockquote>
+<p>保存session的值到服务器： request.session[‘KEY’] = VALUE</p>
+</blockquote>
+<blockquote>
+<p>获取session的值 value = request.session[‘KEY’] value =
+request.session.get(‘KEY’,默认值)</p>
+</blockquote>
+<blockquote>
+<p>删除session del request.session[‘KEY’]</p>
+</blockquote>
+<p><img src="/image/image_AmvwolvWPi.png" /></p>
+<p><img src="/image/image_PR3jVEoryK.png" /></p>
+<p><img src="/image/image_9i-UnzvF3n.png" /></p>
+<p><img src="/image/image_8sqJl9NvBW.png" /></p>
+<p><img src="/image/image_EfxQ3hxrII.png" /></p>
+<p><img src="/image/image_NMySncTd-_.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/18-%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84/18-%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84/" rel="prev" title="web相关-Django（十八、关系映射）">
+      <i class="fa fa-chevron-left"></i> web相关-Django（十八、关系映射）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/20-%E4%BA%91%E7%AC%94%E8%AE%B0%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/20-%E4%BA%91%E7%AC%94%E8%AE%B0%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/" rel="next" title="web相关-Django（二十、云笔记项目）">
+      web相关-Django（二十、云笔记项目） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#cookies%E5%92%8Csession"><span class="nav-number">1.</span> <span class="nav-text">Cookies和Session</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D"><span class="nav-number">2.</span> <span class="nav-text">会话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cookies"><span class="nav-number">3.</span> <span class="nav-text">Cookies</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%98%E5%82%A8"><span class="nav-number">3.1.</span> <span class="nav-text">存储</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#session"><span class="nav-number">4.</span> <span class="nav-text">Session</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

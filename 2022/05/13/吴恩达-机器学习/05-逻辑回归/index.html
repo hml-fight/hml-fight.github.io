@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="吴恩达-机器学习第五章：逻辑回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="吴恩达-机器学习（五：逻辑回归）">
+<meta property="og:url" content="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="吴恩达-机器学习第五章：逻辑回归">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_vqNG0l2Xe3.png">
+<meta property="og:image" content="http://example.com/image/image_p2Dr0lYdEr.png">
+<meta property="og:image" content="http://example.com/image/image_nlWk5HQYLI.png">
+<meta property="og:image" content="http://example.com/image/image_yhXgSYU0l2.png">
+<meta property="og:image" content="http://example.com/image/image_VR7okhBYys.png">
+<meta property="og:image" content="http://example.com/image/image_IFfNtT7z39.png">
+<meta property="og:image" content="http://example.com/image/image_iR5WnBWSIC.png">
+<meta property="og:image" content="http://example.com/image/image_HLObKiF6lg.png">
+<meta property="og:image" content="http://example.com/image/image_9HT2KtIG3X.png">
+<meta property="og:image" content="http://example.com/image/image_824yAv7oSx.png">
+<meta property="og:image" content="http://example.com/image/image_-PZToS6XQd.png">
+<meta property="og:image" content="http://example.com/image/image_nvnHNrcqUs.png">
+<meta property="og:image" content="http://example.com/image/image_7o0hyEHw7c.png">
+<meta property="og:image" content="http://example.com/image/image_CX0li4JZaS.png">
+<meta property="og:image" content="http://example.com/image/image_D7Yo8V8RIF.png">
+<meta property="og:image" content="http://example.com/image/image_Ap0dI-T0jv.png">
+<meta property="og:image" content="http://example.com/image/image_BJh4c88Esc.png">
+<meta property="article:published_time" content="2022-05-13T14:15:16.003Z">
+<meta property="article:modified_time" content="2022-05-13T14:49:15.412Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_vqNG0l2Xe3.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>吴恩达-机器学习（五：逻辑回归） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          吴恩达-机器学习（五：逻辑回归）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 22:15:16 / 修改时间：22:49:15" itemprop="dateCreated datePublished" datetime="2022-05-13T22:15:16+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%90%B4%E6%81%A9%E8%BE%BE/" itemprop="url" rel="index"><span itemprop="name">机器学习-吴恩达</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>吴恩达-机器学习第五章：逻辑回归</p>
+<span id="more"></span>
+<p>Logistic Regression</p>
+<p>逻辑回归用于解决分类的问题，如果使用线性回归可能会造成很大的误差；假如样本的标签值为0、1，线性回归输出值是连续的存在&gt;1和小于0的情况，不符合实际。</p>
+<p>如果对于一个均匀的数据，使用线性回归，选取0.5作为分界线，可能会得到一个比较准确的模型，但是如果数据不太均匀就会存在很大的误差。</p>
+<p><img src="/image/image_vqNG0l2Xe3.png" /></p>
+<p><img src="/image/image_p2Dr0lYdEr.png" /></p>
+<h1 id="激活函数">激活函数</h1>
+<p>sigmoid</p>
+<p><img src="/image/image_nlWk5HQYLI.png" /></p>
+<p>激活函数的y值分布在[0,1]内，对于分类问题，我们可以使用激活函数的值来表示满足特征的概率。</p>
+<p><img src="/image/image_yhXgSYU0l2.png" /></p>
+<h1 id="决策界限">决策界限</h1>
+<p>决策边界是假设函数的一个属性，取决于函数的参数，而不是数据集。</p>
+<p>假设以x=0，y=0.5作为判断的界限，当<span
+class="math inline">\(\theta^Tx&gt;=0.5\)</span>，预测<span
+class="math inline">\(y=1\)</span>,反之<span
+class="math inline">\(y=0\)</span>。</p>
+<p><img src="/image/image_VR7okhBYys.png" /></p>
+<p><img src="/image/image_IFfNtT7z39.png" /></p>
+<p><img src="/image/image_iR5WnBWSIC.png" /></p>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/Sanzona/ML-homework/blob/main/ex2-logistic%20regression/ex2-regularized%20logistic%20regression.ipynb"
+class="uri">https://github.com/Sanzona/ML-homework/blob/main/ex2-logistic%20regression/ex2-regularized%20logistic%20regression.ipynb</a></p>
+<h1 id="代价函数">代价函数</h1>
+<p>对于函数$ f(x)= ​ <span
+class="math inline">\(，如果使用类似线性回归的代价函数\)</span>(h(x)-y)^2$，将得到一个非凸函数，这样就不能使用梯度下降的方法求解全局最优解。</p>
+<p><img src="/image/image_HLObKiF6lg.png" /></p>
+<p>逻辑回归一般使用<strong>对数函数</strong>作为代价函数：</p>
+<p>首先对于分类函数来说，他的输出值范围为[0,1]，得到的对数图像如下：</p>
+<p><img src="/image/image_9HT2KtIG3X.png" /></p>
+<p>当评估模型参数对y=1（恶性肿瘤）进行预测的好坏时，如果实际为恶性，预测值也为1（恶性），此时的代价为0；如果实际为恶性，预测为0（良性），此时的代价为+∞，这时代价函数就很好的评估了参数θ的表现。</p>
+<p><img src="/image/image_824yAv7oSx.png" /></p>
+<p>同样对于y=0（良性肿瘤）的代价函数为：</p>
+<p><img src="/image/image_-PZToS6XQd.png" /></p>
+<p>y的取值只有0、1，可以将上面两个函数合成一个，评估当前参数的<span
+class="math inline">\(J(\theta)\)</span>为：</p>
+<p><img src="/image/image_nvnHNrcqUs.png" /></p>
+<h1 id="梯度下降">梯度下降</h1>
+<p>在确定代价函数之后的任务是，如何最小化代价函数，因为代价函数是凸的，所以可以使用梯度下降求解。</p>
+<p><img src="/image/image_7o0hyEHw7c.png" /></p>
+<p><img src="/image/image_CX0li4JZaS.png" /></p>
+<p>虽然求偏导之后，<span
+class="math inline">\(\theta\)</span>更新的形式和线性回归类似，但是他们本质不同，因为<span
+class="math inline">\(h_\theta(x)\)</span>完全不一样。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhongmiaozhimen/p/6155093.html"
+title="具体的偏导推导过程">具体的偏导推导过程</a>：</p>
+<p><img src="/image/image_D7Yo8V8RIF.png" /></p>
+<h1 id="多元分类">多元分类</h1>
+<p><img src="/image/image_Ap0dI-T0jv.png" /></p>
+<p>对每个特征单独训练，在做预测的时候，取三个分类器结果最大的。</p>
+<p><img src="/image/image_BJh4c88Esc.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%AD%A3%E5%88%99%E6%96%B9%E7%A8%8B/" rel="prev" title="吴恩达-机器学习（四：正则方程）">
+      <i class="fa fa-chevron-left"></i> 吴恩达-机器学习（四：正则方程）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E8%BF%87%E6%8B%9F%E5%90%88/" rel="next" title="吴恩达-机器学习（六：过拟合）">
+      吴恩达-机器学习（六：过拟合） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">激活函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%B3%E7%AD%96%E7%95%8C%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text">决策界限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">代价函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D"><span class="nav-number">4.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%85%83%E5%88%86%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">多元分类</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

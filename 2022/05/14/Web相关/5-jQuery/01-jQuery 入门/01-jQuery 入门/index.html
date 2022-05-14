@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JS编程基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-JQuery（一、JQuery入门）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/01-jQuery%20%E5%85%A5%E9%97%A8/01-jQuery%20%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="JS编程基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image-20220105233539930_PX4fTmKrfT.png">
+<meta property="article:published_time" content="2022-05-14T07:33:28.793Z">
+<meta property="article:modified_time" content="2022-05-14T08:22:46.458Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image-20220105233539930_PX4fTmKrfT.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/01-jQuery%20%E5%85%A5%E9%97%A8/01-jQuery%20%E5%85%A5%E9%97%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-JQuery（一、JQuery入门） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/01-jQuery%20%E5%85%A5%E9%97%A8/01-jQuery%20%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-JQuery（一、JQuery入门）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：16:22:46" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/JQuery/" itemprop="url" rel="index"><span itemprop="name">JQuery</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JS编程基础</p>
+<span id="more"></span>
+<h1 id="jquery-入门">jQuery 入门</h1>
+<h1 id="jquery概述">jQuery概述</h1>
+<h2 id="javascript库">JavaScript库</h2>
+<p>仓库：
+可以把很多东西放到这个仓库里面。找东西只需要到仓库里面查找到就可以了。</p>
+<p>JavaScript库：即
+library，是一个封装好的特定的集合（方法和函数）。从封装一大堆函数的角度理解库，就是在这个库中，封装了很多预先定义好的函数在里面，比如动画animate、hide、show，比如获取元素等。</p>
+<p>简单理解： 就是一个JS
+文件，里面对我们原生js代码进行了封装，存放到里面。这样我们可以快速高效的使用这些封装好的功能了。</p>
+<p>比如
+jQuery，就是为了快速方便的操作DOM，里面基本都是函数（方法）。</p>
+<p>常见的JavaScript库：</p>
+<blockquote>
+<p>jQuery Prototype YUI Dojo Ext JS 移动端的zepto</p>
+</blockquote>
+<p>这些库都是对原生 JavaScript 的封装，内部都是用 JavaScript
+实现的，我们主要学习的是 jQuery。</p>
+<h2 id="jquery-的概念">jQuery 的概念</h2>
+<p>jQuery 是一个快速、简洁的 JavaScript 库，其设计的宗旨是“write
+Less，Do More”，即倡导写更少的代码，做更多的事情。</p>
+<p>j 就是 JavaScript； Query 查询；
+意思就是查询js，把js中的DOM操作做了封装，我们可以快速的查询使用里面的功能。</p>
+<p>jQuery 封装了 JavaScript 常用的功能代码，优化了 DOM
+操作、事件处理、动画设计和 Ajax 交互。</p>
+<p>学习jQuery本质： 就是学习调用这些函数（方法）。</p>
+<p>jQuery
+出现的目的是加快前端人员的开发速度，我们可以非常方便的调用和使用它，从而提高开发效率。</p>
+<p><img src="/image/image-20220105233539930_PX4fTmKrfT.png" /></p>
+<h2 id="jquery-的优点">jQuery 的优点</h2>
+<p><strong>优点</strong></p>
+<p>l轻量级。核心文件才几十kb，不会影响页面加载速度</p>
+<p>l跨浏览器兼容。基本兼容了现在主流的浏览器</p>
+<p>l链式编程、隐式迭代</p>
+<p>l对事件、样式、动画支持，大大简化了DOM操作</p>
+<p>l支持插件扩展开发。有着丰富的第三方的插件，例如：树形菜单、日期控件、轮播图等</p>
+<p>l免费、开源</p>
+<h1 id="jquery-的基本使用">jQuery 的基本使用</h1>
+<h2 id="jquery-的下载">jQuery 的下载</h2>
+<p>官网地址： <a target="_blank" rel="noopener" href="https://jquery.com/"
+title="https://jquery.com/">https://jquery.com/</a></p>
+<p>版本：</p>
+<p>l1x ：兼容 IE 678 等低版本浏览器， 官网不再更新</p>
+<p>l2x ：不兼容 IE 678 等低版本浏览器， 官网不再更新</p>
+<p>l3x ：不兼容 IE 678 等低版本浏览器， 是官方主要更新维护的版本</p>
+<p>各个版本的下载：<a target="_blank" rel="noopener" href="https://code.jquery.com/"
+title="https://code.jquery.com/">https://code.jquery.com/</a></p>
+<h2 id="jquery-的使用步骤">jQuery 的使用步骤</h2>
+<p>\1. 引入 jQuery 文件</p>
+<p>\2. 使用即可</p>
+<h2 id="jquery-的入口函数">jQuery 的入口函数</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="keyword">function</span> (<span class="params"></span>) &#123;   </span><br><span class="line">    ...  <span class="comment">// 此处是页面 DOM 加载完成的入口</span></span><br><span class="line"> &#125;) ;         </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="variable language_">document</span>).<span class="title function_">ready</span>(<span class="keyword">function</span>(<span class="params"></span>)&#123;</span><br><span class="line">   ...  <span class="comment">//  此处是页面DOM加载完成的入口</span></span><br><span class="line">&#125;);       </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>1.等着 DOM
+结构渲染完毕即可执行内部代码，不必等到所有外部资源加载完成，jQuery
+帮我们完成了封装。</p>
+<p>2.相当于原生 js 中的 DOMContentLoaded。</p>
+<p>3.不同于原生 js 中的 load 事件是等页面文档、外部的 js
+文件、css文件、图片加载完毕才执行内部代码。</p>
+<p>4.更推荐使用第一种方式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        // $(&#x27;div&#x27;).hide();</span><br><span class="line">        // 1. 等着页面DOM加载完毕再去执行js 代码</span><br><span class="line">        // $(document).ready(function() &#123;</span><br><span class="line">        //     $(&#x27;div&#x27;).hide();</span><br><span class="line">        // &#125;)</span><br><span class="line">        // 2.  等着页面DOM加载完毕再去执行js 代码</span><br><span class="line">        $(function() &#123;</span><br><span class="line">            $(&#x27;div&#x27;).hide();</span><br><span class="line"></span><br><span class="line">        &#125;)</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="jquery的顶级对象">jQuery的顶级对象$</h2>
+<p>1.<span class="math inline">\(是 jQuery 的别称，在代码中可以使用
+jQuery 代替\)</span>，但一般为了方便，通常都直接使用 $ 。</p>
+<p>2.$ 是jQuery 的顶级对象， 相当于原生JavaScript中的 window。把元素利用
+$包装成jQuery对象，就可以调用jQuery 的方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 200px;</span><br><span class="line">            height: 200px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        // 1. $ 是jQuery的别称（另外的名字）</span><br><span class="line">        // $(function() &#123;</span><br><span class="line">        //     alert(11)</span><br><span class="line">        // &#125;);</span><br><span class="line">        jQuery(function() &#123;</span><br><span class="line">            // alert(11)</span><br><span class="line">            // $(&#x27;div&#x27;).hide();</span><br><span class="line">            jQuery(&#x27;div&#x27;).hide();</span><br><span class="line">        &#125;);</span><br><span class="line">        // 2. $同时也是jQuery的 顶级对象</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="jquery-对象和-dom-对象">jQuery 对象和 DOM 对象</h2>
+<p>\1. 用原生 JS 获取来的对象就是 DOM 对象</p>
+<p>\2. jQuery 方法获取的元素就是 jQuery 对象。</p>
+<p>\3. jQuery 对象本质是： 利用$对DOM
+对象包装后产生的对象（伪数组形式存储）。</p>
+<p>注意：</p>
+<p>只有 jQuery 对象才能使用 jQuery 方法，DOM 对象则使用原生的 JavaScirpt
+方法。</p>
+<p>DOM 对象与 jQuery 对象之间是可以相互转换的。</p>
+<p>因为原生js 比 jQuery 更大，原生的一些属性和方法 jQuery没有给我们封装.
+要想使用这些属性和方法需要把jQuery对象转换为DOM对象才能使用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="variable constant_">DOM</span> 对象转换为 jQuery 对象： $(<span class="variable constant_">DOM</span>对象)</span><br><span class="line">$(<span class="string">&#x27;div&#x27;</span>)         </span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.</span> jQuery 对象转换为 <span class="variable constant_">DOM</span> 对象（两种方式）</span><br><span class="line">$(<span class="string">&#x27;div&#x27;</span>) [index]       index 是索引号           </span><br><span class="line">$(<span class="string">&#x27;div&#x27;</span>) .<span class="title function_">get</span>(index)    index 是索引号      </span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        div &#123;</span><br><span class="line">            width: 100px;</span><br><span class="line">            height: 100px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div&gt;&lt;/div&gt;</span><br><span class="line">    &lt;span&gt;&lt;/span&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        // 1. DOM 对象：  用原生js获取过来的对象就是DOM对象</span><br><span class="line">        var myDiv = document.querySelector(&#x27;div&#x27;); // myDiv 是DOM对象</span><br><span class="line">        var mySpan = document.querySelector(&#x27;span&#x27;); // mySpan 是DOM对象</span><br><span class="line">        console.dir(myDiv);</span><br><span class="line">        // 2. jQuery对象： 用jquery方式获取过来的对象是jQuery对象。 本质：通过$把DOM元素进行了包装</span><br><span class="line">        $(&#x27;div&#x27;); // $(&#x27;div&#x27;)是一个jQuery 对象</span><br><span class="line">        $(&#x27;span&#x27;); // $(&#x27;span&#x27;)是一个jQuery 对象</span><br><span class="line">        console.dir($(&#x27;div&#x27;));</span><br><span class="line">        // 3. jQuery 对象只能使用 jQuery 方法，DOM 对象则使用原生的 JavaScirpt 属性和方法</span><br><span class="line">        // myDiv.style.display = &#x27;none&#x27;;</span><br><span class="line">        // myDiv.hide(); myDiv是一个dom对象不能使用 jquery里面的hide方法</span><br><span class="line">        // $(&#x27;div&#x27;).style.display = &#x27;none&#x27;; 这个$(&#x27;div&#x27;)是一个jQuery对象不能使用原生js 的属性和方法</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span><br><span class="line">    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;</span><br><span class="line">    &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">    &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;video src=&quot;mov.mp4&quot; muted&gt;&lt;/video&gt;</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        // 1. DOM对象转换为 jQuery对象</span><br><span class="line">        // (1) 我们直接获取视频，得到就是jQuery对象</span><br><span class="line">        // $(&#x27;video&#x27;);</span><br><span class="line">        // (2) 我们已经使用原生js 获取过来 DOM对象</span><br><span class="line">        var myvideo = document.querySelector(&#x27;video&#x27;);</span><br><span class="line">        // $(myvideo).play();  jquery里面没有play 这个方法</span><br><span class="line">        // 2.  jQuery对象转换为DOM对象</span><br><span class="line">        // myvideo.play();</span><br><span class="line">        $(&#x27;video&#x27;)[0].play()</span><br><span class="line">        $(&#x27;video&#x27;).get(0).play()</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/4-BOM/04-%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8/04-%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8/" rel="prev" title="web相关-BOM（四、本地存储）">
+      <i class="fa fa-chevron-left"></i> web相关-BOM（四、本地存储）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/5-jQuery/02-jQuery%20%E5%B8%B8%E7%94%A8API/02-jQuery%20%E5%B8%B8%E7%94%A8API/" rel="next" title="web相关-JQuery（二、JQuery常用API）">
+      web相关-JQuery（二、JQuery常用API） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">jQuery 入门</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">jQuery概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#javascript%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">JavaScript库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.</span> <span class="nav-text">jQuery 的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">2.3.</span> <span class="nav-text">jQuery 的优点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jquery-%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">jQuery 的基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E7%9A%84%E4%B8%8B%E8%BD%BD"><span class="nav-number">3.1.</span> <span class="nav-text">jQuery 的下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E7%9A%84%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.2.</span> <span class="nav-text">jQuery 的使用步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E7%9A%84%E5%85%A5%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">jQuery 的入口函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery%E7%9A%84%E9%A1%B6%E7%BA%A7%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.4.</span> <span class="nav-text">jQuery的顶级对象$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jquery-%E5%AF%B9%E8%B1%A1%E5%92%8C-dom-%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.5.</span> <span class="nav-text">jQuery 对象和 DOM 对象</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

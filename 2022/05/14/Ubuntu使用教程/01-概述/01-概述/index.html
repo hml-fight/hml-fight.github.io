@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ubuntn使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntn使用教程（一：概述）">
+<meta property="og:url" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/01-%E6%A6%82%E8%BF%B0/01-%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="ubuntn使用教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_ENv2r--CQ5.png">
+<meta property="og:image" content="http://example.com/image/image_Dzq7k0jqBm.png">
+<meta property="og:image" content="http://example.com/image/image_FjXnq9NBIu.png">
+<meta property="article:published_time" content="2022-05-14T07:22:15.888Z">
+<meta property="article:modified_time" content="2022-05-14T07:24:56.841Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="虚拟机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_ENv2r--CQ5.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/01-%E6%A6%82%E8%BF%B0/01-%E6%A6%82%E8%BF%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ubuntn使用教程（一：概述） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/01-%E6%A6%82%E8%BF%B0/01-%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ubuntn使用教程（一：概述）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:22:15 / 修改时间：15:24:56" itemprop="dateCreated datePublished" datetime="2022-05-14T15:22:15+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/ubuntn/" itemprop="url" rel="index"><span itemprop="name">ubuntn</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ubuntn使用教程</p>
+<span id="more"></span>
+<h1 id="概述">概述</h1>
+<p>1.1. 单用户操作系统和多用户操作系统（科普）</p>
+<ul>
+<li><p>单用户操作系统：指一台计算机在同一时间 只能由一个用户
+使用，一个用户独自享用系统的全部硬件和软件资源 Windows XP
+之前的版本都是单用户操作系统</p></li>
+<li><p>多用户操作系统：指一台计算机在同一时间可以由 多个用户
+使用，多个用户共同享用系统的全部硬件和软件资源 Unix 和 Linux
+的设计初衷就是多用户操作系统</p></li>
+</ul>
+<h2 id="windows-和-linux-文件系统区别">Windows 和 Linux
+文件系统区别</h2>
+<h3 id="windows文件系统">Windows文件系统</h3>
+<p>在 Windows 下，打开 “计算机”，我们看到的是一个个的驱动器盘符：</p>
+<p><img src="/image/image_ENv2r--CQ5.png" /></p>
+<h3 id="linux-下的文件系统">Linux 下的文件系统</h3>
+<p><img src="/image/image_Dzq7k0jqBm.png" /></p>
+<p>Ubuntu 没有盘符这个概念，只有一个根目录 /，所有文件都在它下面</p>
+<p><img src="/image/image_FjXnq9NBIu.png" /></p>
+<h3 id="linux-主要目录速查表">Linux 主要目录速查表</h3>
+<ul>
+<li><p>/</p>
+<p>根目录</p>
+<p>一般根目录下只存放目录，在 linux
+下有且只有一个根目录，所有的东西都是从这里开始 当在终端里输入
+/home，其实是在告诉电脑，先从 /（根目录）开始，再进入到 home
+目录</p></li>
+<li><p>/bin、/usr/bin</p>
+<p>可执行二进制文件的目录，如常用的命令 ls、tar、mv、cat 等</p></li>
+<li><p>/boot</p>
+<p>放置 linux 系统启动时用到的一些文件，如 linux
+的内核文件：/boot/vmlinuz，系统引导管理器：/boot/grub</p></li>
+<li><p>/dev</p>
+<p>存放linux系统下的设备文件，访问该目录下某个文件，相当于访问某个设备，常用的是挂载光驱mount
+/dev/cdrom/mnt</p></li>
+<li><p>/etc</p>
+<ul>
+<li><p>系统配置文件存放的目录，不建议在此目录下存放可执行文件，重要的配置文件有
+</p>
+<p>/etc/inittab </p>
+<p>/etc/fstab </p>
+<p>/etc/init.d </p>
+<p>/etc/X11 </p>
+<p>/etc/sysconfig </p>
+<p>/etc/xinetd.d</p></li>
+</ul></li>
+<li><p>/home</p>
+<p>系统默认的用户家目录，新增用户账号时，用户的家目录都存放在此目录下</p>
+<p>表示当前用户的家目录 ~edu 表示用户 edu 的家目录</p></li>
+<li><p>/lib、/usr/lib、/usr/local/lib</p>
+<p>系统使用的函数库的目录，程序在执行过程中，需要调用一些额外的参数时需要函数库的协助</p></li>
+<li><p>/lost+fount</p>
+<p>系统异常产生错误时，会将一些遗失的片段放置于此目录下</p></li>
+<li><p>/mnt: /media</p>
+<p>光盘默认挂载点，通常光盘挂载于 /mnt/cdrom
+下，也不一定，可以选择任意位置进行挂载</p></li>
+<li><p>/opt</p>
+<p>给主机额外安装软件所摆放的目录</p></li>
+<li><p>/proc</p>
+<p>此目录的数据都在内存中，如系统核心，外部设备，网络状态，由于数据都存放于内存中，所以不占用磁盘空间，比较重要的文件有：/proc/cpuinfo、/proc/interrupts、/proc/dma、/proc/ioports、/proc/net/*等</p></li>
+<li><p>/root</p>
+<p>系统管理员root的家目录</p></li>
+<li><p>/sbin、/usr/sbin、/usr/local/sbin</p>
+<p>放置系统管理员使用的可执行命令，如 fdisk、shutdown、mount 等。与 /bin
+不同的是，这几个目录是给系统管理员
+root使用的命令，一般用户只能"查看"而不能设置和使用</p></li>
+<li><p>/tmp</p>
+<p>一般用户或正在执行的程序临时存放文件的目录，任何人都可以访问，重要数据不可放置在此目录下</p></li>
+<li><p>/srv</p>
+<p>服务启动之后需要访问的数据目录，如 www 服务需要访问的网页数据存放在
+/srv/www 内</p></li>
+<li><p>/usr</p>
+<p>应用程序存放目录</p></li>
+<li><p>/usr/bin</p>
+<p>存放应用程序</p></li>
+<li><p>/usr/share</p>
+<p>存放共享数据</p></li>
+<li><p>/usr/lib</p>
+<p>存放不能直接运行的，却是许多程序运行所必需的一些函数库文件</p></li>
+<li><p>/usr/local</p>
+<p>存放软件升级包</p></li>
+<li><p>/usr/share/doc</p>
+<p>系统说明文件存放目录</p></li>
+<li><p>/usr/share/man</p>
+<p>程序说明文件存放目录</p></li>
+<li><p>/var</p>
+<p>放置系统执行过程中经常变化的文件</p></li>
+<li><p>/var/log</p>
+<p>随时更改的日志文件</p></li>
+<li><p>/var/spool/mail</p>
+<p>邮件存放的目录</p></li>
+<li><p>/var/run</p>
+<p>程序或服务启动后，其 PID 存放在该目录下</p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag"># 虚拟机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/day9-%E9%80%92%E5%BD%92-%E5%9B%9E%E6%BA%AF/day9-%E9%80%92%E5%BD%92-%E5%9B%9E%E6%BA%AF/" rel="prev" title="Leetcode学习计划-算法基础（day9-递归/回溯）">
+      <i class="fa fa-chevron-left"></i> Leetcode学习计划-算法基础（day9-递归/回溯）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02-Ubuntn%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/02-Ubuntn%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" rel="next" title="ubuntn使用教程（二：入门教程）">
+      ubuntn使用教程（二：入门教程） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-%E5%92%8C-linux-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.</span> <span class="nav-text">Windows 和 Linux
+文件系统区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#windows%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.1.1.</span> <span class="nav-text">Windows文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux-%E4%B8%8B%E7%9A%84%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.1.2.</span> <span class="nav-text">Linux 下的文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linux-%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">Linux 主要目录速查表</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ubuntn使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntn使用教程（七：其他命令）">
+<meta property="og:url" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="ubuntn使用教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_HAVAeGNyOO.png">
+<meta property="og:image" content="http://example.com/image/image_2rOZ_QcyFJ.png">
+<meta property="og:image" content="http://example.com/image/image_48uZlwFk1q.png">
+<meta property="article:published_time" content="2022-05-14T07:22:15.954Z">
+<meta property="article:modified_time" content="2022-05-14T07:29:32.566Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="虚拟机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_HAVAeGNyOO.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ubuntn使用教程（七：其他命令） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/07-%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ubuntn使用教程（七：其他命令）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:22:15 / 修改时间：15:29:32" itemprop="dateCreated datePublished" datetime="2022-05-14T15:22:15+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/ubuntn/" itemprop="url" rel="index"><span itemprop="name">ubuntn</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ubuntn使用教程</p>
+<span id="more"></span>
+<h1 id="其他命令">07-其他命令</h1>
+<h2 id="查找文件">7.1 查找文件</h2>
+<h4 id="find命令">find命令</h4>
+<ul>
+<li>功能非常强大，通常用来在 <strong>特定的目录下</strong>
+<strong>搜索</strong> 符合条件的文件</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 45%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>find [路径] -name “*.py”</td>
+<td>查找指定路径下扩展名是 <code>.py</code> 的文件，包括子目录</td>
+</tr>
+</tbody>
+</table>
+<p>如果省略路径，表示在当前文件夹下查找 之前学习的通配符，在使用 find
+命令时同时可用</p>
+<h4 id="练习">练习：</h4>
+<p>1.搜索桌面目录下，文件名包含 <code>1</code> 的文件</p>
+<p>find -name "<em>1</em>"</p>
+<ol type="1">
+<li><p>搜索桌面目录下，所有以 <code>.txt</code> 为扩展名的文件</p>
+<p>find -name "*.txt"</p></li>
+<li><p>搜索桌面目录下，以数字 <code>1</code> 开头的文件</p>
+<p>find -name "1*"</p></li>
+</ol>
+<h2 id="软链接">7.2 软链接</h2>
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 48%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>ln -s 被链接的源文件(位置路径)
+链接文件(给快捷方式取个名字)</td>
+<td>建立文件的软链接，用通俗的方式讲<strong>类似于</strong> Windows
+下的<strong>快捷方式</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>：</p>
+<p>1.没有-s选项建立的是一个硬链接文件(两个文件占用相同大小的硬盘空间，<strong>工作中几乎不会建立文件的硬链接</strong>）</p>
+<p>2.<strong>源文件要使用绝对路径</strong>，不能使用相对路径，这样可以方便移动链接文件后，仍然能够正常使用，相对路径无法找到源文件的位置</p>
+<h4 id="硬链接简介知道">硬链接简介（知道）</h4>
+<ul>
+<li>在使用 <code>ln</code> 创建链接时，如果没有 <code>-s</code>
+选项，会创建一个 <strong>硬链接</strong>，而不是软链接</li>
+</ul>
+<p>文件软硬链接的示意图</p>
+<p><img src="/image/image_HAVAeGNyOO.png" /></p>
+<p>在 Linux 中，<strong>文件名</strong> 和 <strong>文件的数据</strong>
+是分开存储的</p>
+<ul>
+<li><p>提示：</p>
+<ul>
+<li><p>在 Linux 中，只有文件的 <code>硬链接数 == 0</code>
+才会被删除</p></li>
+<li><p>使用 <code>ls -l</code> 可以查看一个文件的硬链接的数量</p></li>
+<li><p>在日常工作中，几乎不会建立文件的硬链接，知道即可</p></li>
+</ul></li>
+</ul>
+<h2 id="打包压缩">7.3 打包压缩</h2>
+<ul>
+<li><p><strong>打包压缩</strong> 是日常工作中备份文件的一种方式</p></li>
+<li><p>在不同操作系统中，常用的打包压缩方式是不同的</p>
+<ul>
+<li><p><code>Windows</code> 常用 <code>rar</code></p></li>
+<li><p><code>Mac</code> 常用 <code>zip</code></p></li>
+<li><p><code>Linux</code> 常用 <code>tar.gz</code></p></li>
+</ul></li>
+</ul>
+<h3 id="打包解包">7.3.1 打包/解包</h3>
+<ul>
+<li><p><code>tar</code> 是 Linux 中最常用的
+<strong>备份</strong>工具，此命令可以 <strong>把一系列文件</strong>
+打包到 <strong>一个大文件中</strong>，也可以把一个
+<strong>打包的大文件恢复成一系列文件</strong></p></li>
+<li><p><code>tar</code> 的命令格式如下：</p></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 打包文件：</span><br><span class="line">tar -cvf 打包文件.tar 被打包文件<span class="number">1</span>/路径 被打包文件<span class="number">2</span>/路径 ...</span><br><span class="line"></span><br><span class="line"># 解包文件</span><br><span class="line">tar -xvf 打包文件.tar</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>tar</code> 选项说明</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>c</td>
+<td>生成档案文件，创建打包文件</td>
+</tr>
+<tr class="even">
+<td>x</td>
+<td>解开档案文件</td>
+</tr>
+<tr class="odd">
+<td>v</td>
+<td>列出归档解档的详细过程，显示进度</td>
+</tr>
+<tr class="even">
+<td>f</td>
+<td>指定档案文件名称，f 后面一定是 .tar 文件，所以必须放选项最后</td>
+</tr>
+</tbody>
+</table>
+<p>注意：<code>f</code> 选项必须放在最后，其他选项顺序可以随意</p>
+<h3 id="压缩解压缩">7.3.2 压缩/解压缩</h3>
+<h4 id="gzip">1) gzip</h4>
+<ul>
+<li><p>tar与gzip命令结合可以使用实现文件打包和压缩</p>
+<ul>
+<li><p><code>tar</code> 只负责打包文件，但不压缩</p></li>
+<li><p>用 <code>gzip</code> 压缩 <code>tar</code>
+打包后的文件，其扩展名一般用 <code>xxx.tar.gz</code></p></li>
+</ul></li>
+</ul>
+<p>在 <code>Linux</code> 中，最常见的压缩文件格式就是
+<code>xxx.tar.gz</code></p>
+<ul>
+<li><p>在 <code>tar</code> 命令中有一个选项 <strong>-z</strong> 可以调用
+<code>gzip</code>，从而可以方便的实现压缩和解压缩的功能</p></li>
+<li><p>命令格式如下：</p></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 压缩文件</span><br><span class="line">tar -zcvf 打包文件.tar.gz 被压缩的文件／路径...</span><br><span class="line"></span><br><span class="line"># 解压缩文件</span><br><span class="line">tar -zxvf 打包文件.tar.gz</span><br><span class="line"></span><br><span class="line"># 解压缩到指定路径</span><br><span class="line">tar -zxvf 打包文件.tar.gz -C 目标路径</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-C</td>
+<td>解压缩到指定目录，注意：要解压缩的目录必须存在</td>
+</tr>
+</tbody>
+</table>
+<h4 id="bzip2two">2) bzip2(two)</h4>
+<ul>
+<li><p><code>tar</code> 与 <code>bzip2</code> 命令结合可以使用实现文件
+<strong>打包和压缩</strong>（用法和 <code>gzip</code> 一样）</p>
+<ul>
+<li><p><code>tar</code> 只负责打包文件，但不压缩，</p></li>
+<li><p>用 <code>bzip2</code> 压缩 <code>tar</code>
+打包后的文件，其扩展名一般用 <code>xxx.tar.bz2</code></p></li>
+</ul></li>
+<li><p>在 <code>tar</code> 命令中有一个选项 <strong>-j</strong> 可以调用
+<code>bzip2</code>，从而可以方便的实现压缩和解压缩的功能</p></li>
+<li><p>命令格式如下：</p></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 压缩文件</span><br><span class="line">tar -jcvf 打包文件.tar.bz2 被压缩的文件／路径...</span><br><span class="line"></span><br><span class="line"># 解压缩文件</span><br><span class="line">tar -jxvf 打包文件.tar.bz2</span><br></pre></td></tr></table></figure>
+<h2 id="软件安装">7.4 软件安装</h2>
+<h3 id="通过-apt-安装卸载软件">7.4.1 通过 apt 安装／卸载软件</h3>
+<ul>
+<li><p>apt 是 <code>Advanced Packaging Tool</code>，是 Linux
+下的一款安装包管理工具</p></li>
+<li><p>可以在终端中方便的
+<strong>安装</strong>／<strong>卸载</strong>／<strong>更新软件包</strong></p></li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">1.</span> 安装软件</span><br><span class="line">$ sudo apt install 软件包</span><br><span class="line"></span><br><span class="line"># <span class="number">2.</span> 卸载软件</span><br><span class="line">$ sudo apt remove 软件名</span><br><span class="line"></span><br><span class="line"># <span class="number">3.</span> 更新已安装的包</span><br><span class="line">$ sudo apt upgrade </span><br></pre></td></tr></table></figure>
+<h3 id="安装演练">7.4.2安装演练</h3>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 一个小火车提示</span><br><span class="line">$ sudo apt install sl</span><br><span class="line"></span><br><span class="line"># 一个比较漂亮的查看当前进程排名的软件</span><br><span class="line">$ sudo apt install htop</span><br></pre></td></tr></table></figure>
+<h3 id="配置软件源">7.4.3 配置软件源</h3>
+<ul>
+<li><p>如果希望在 <code>ubuntu</code>
+中安装软件，<strong>更加快速</strong>，可以通过设置<strong>镜像源</strong>，选择一个访问网速更快的服务器，来提供软件下载／安装服务</p></li>
+<li><p>提示：更换服务器之后，需要一个相对比较长时间的更新过程，需要耐心等待。更新完成后，再安装软件都会从新设置的服务器下载软件了</p></li>
+</ul>
+<p>所谓镜像源，就是<strong>所有服务器的内容是相同的（镜像）</strong>，但是根据所在位置不同，国内服务器通常速度会更快一些！</p>
+<p><img src="/image/image_2rOZ_QcyFJ.png" /></p>
+<p><img src="/image/image_48uZlwFk1q.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag"># 虚拟机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/06-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/06-%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" rel="prev" title="ubuntn使用教程（六：系统信息相关命令）">
+      <i class="fa fa-chevron-left"></i> ubuntn使用教程（六：系统信息相关命令）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/Web%E7%9B%B8%E5%85%B3/" rel="next" title="">
+       <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">07-其他命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">7.1 查找文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#find%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">find命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">1.1.0.2.</span> <span class="nav-text">练习：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E9%93%BE%E6%8E%A5"><span class="nav-number">1.2.</span> <span class="nav-text">7.2 软链接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A1%AC%E9%93%BE%E6%8E%A5%E7%AE%80%E4%BB%8B%E7%9F%A5%E9%81%93"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">硬链接简介（知道）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.3.</span> <span class="nav-text">7.3 打包压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%93%E5%8C%85%E8%A7%A3%E5%8C%85"><span class="nav-number">1.3.1.</span> <span class="nav-text">7.3.1 打包&#x2F;解包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.3.2.</span> <span class="nav-text">7.3.2 压缩&#x2F;解压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gzip"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">1) gzip</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bzip2two"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">2) bzip2(two)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-number">1.4.</span> <span class="nav-text">7.4 软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87-apt-%E5%AE%89%E8%A3%85%E5%8D%B8%E8%BD%BD%E8%BD%AF%E4%BB%B6"><span class="nav-number">1.4.1.</span> <span class="nav-text">7.4.1 通过 apt 安装／卸载软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%BC%94%E7%BB%83"><span class="nav-number">1.4.2.</span> <span class="nav-text">7.4.2安装演练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="nav-number">1.4.3.</span> <span class="nav-text">7.4.3 配置软件源</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="pandas&amp;sql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据分析自学课程（第五课：pandas\&amp;sql）">
+<meta property="og:url" content="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%BA%94%E8%AF%BE-pandas&sql/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="pandas&amp;sql">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_px_-A7tbW-.png">
+<meta property="og:image" content="http://example.com/image/image_ju1C608rlQ.png">
+<meta property="article:published_time" content="2022-05-13T15:09:00.709Z">
+<meta property="article:modified_time" content="2022-05-13T15:16:59.212Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="Tableau">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_px_-A7tbW-.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%BA%94%E8%AF%BE-pandas&sql/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据分析自学课程（第五课：pandas\&sql） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%BA%94%E8%AF%BE-pandas&sql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据分析自学课程（第五课：pandas\&sql）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 23:09:00 / 修改时间：23:16:59" itemprop="dateCreated datePublished" datetime="2022-05-13T23:09:00+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">数据分析</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>pandas&amp;sql</p>
+<span id="more"></span>
+<h1 id="知识点1-去重">知识点1-去重</h1>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 78%" />
+<col style="width: 1%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>pandas</th>
+<th>注释（方法的参数包括但不限于以下，更多参数可自行在jupyter notebook
+按shift+tab查看👀 ）</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>df.column、df['column']</td>
+<td>涉及选取多列，需要采用嵌套列表形式[['x','y']]</td>
+<td>column</td>
+</tr>
+<tr class="even">
+<td>df = pd.read_csv('./table_name.csv')
+df = pd.read_excel('./table_name.xlsx')</td>
+<td><strong>read_csv()</strong>path：指明所需读取表格所在的文件路径。若表格与代码文件在同一文件夹，仅需'./表格名称.csv'。若不在同一文件夹，需要右键表格属性，查看表格路径，在文件路径前加r，如r'C:.csv'。sep：分隔符，常见为逗号，如sep=','usecols：返回指定的列，如usecols=['曝光数','进店数']encoding：指定编码格式，如encoding
+=
+'gbk'<strong>read_excel</strong>()sheet_name：指定要读取的sheet，如sheet_name='sheet2'index_col：指定某列为索引，如index_col='日期'usecols：返回指定的列，如usecols=['曝光数','进店数']</td>
+<td>from</td>
+</tr>
+<tr class="odd">
+<td>pd.unique(df.column)
+pd.drop_duplicates()</td>
+<td>**unique()**对于单个字段去重，如unique(cpc.日期)
+**drop_duplicates()**对于多个字段去重，如drop_duplicates(['曝光数','进店数'])。若对于整个DataFrame去重，如cpc.drop_duplicates()</td>
+<td>distinct</td>
+</tr>
+</tbody>
+</table>
+<h2 id="筛选门店名称并且去重">筛选门店名称并且去重</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">  <span class="keyword">distinct</span>(平台门店名称) </span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">  ddm.cpc</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.Series(pd.unique(cpc[<span class="string">&#x27;平台门店名称&#x27;</span>]))</span><br></pre></td></tr></table></figure>
+<p>部分结果展示：</p>
+<p>0 蛙小辣火锅杯（合生汇店） 1 蛙小辣美蛙火锅杯（大宁国际店） 2
+蛙小辣·美蛙火锅杯（长风大悦城店） 3 蛙小辣·美蛙火锅杯（虹口足球场店） 4
+利芳·一人食大盘鸡(国定路店) 5 蛙小辣·美蛙火锅杯(虹口足球场店) 6
+蛙小辣·美蛙火锅杯(宝山店) 7 蛙小辣火锅杯(五角场店)</p>
+<h2
+id="筛选出平台门店名称以及计算下单率">筛选出平台门店名称，以及计算下单率</h2>
+<p>SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">  平台门店名称, (门店下单量<span class="operator">/</span>门店访问量)</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">  ddm.cpc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>pandas：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 计算每天每个门店的下单率</span></span><br><span class="line">cpc[<span class="string">&#x27;符号&#x27;</span>] = <span class="string">&#x27;%&#x27;</span></span><br><span class="line">cpc[<span class="string">&#x27;下单率&#x27;</span>] = (<span class="built_in">round</span>(cpc.门店下单量/cpc.门店访问量*<span class="number">100</span>,<span class="number">2</span>)).<span class="built_in">map</span>(<span class="built_in">str</span>).<span class="built_in">str</span>.cat(cpc[<span class="string">&#x27;符号&#x27;</span>])</span><br><span class="line">cpc.head()</span><br></pre></td></tr></table></figure>
+<p>部分结果展示：</p>
+<table>
+<thead>
+<tr class="header">
+<th>updateTime</th>
+<th>平台门店名称</th>
+<th>下单率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2019/12/12 11:54</td>
+<td>蛙小辣火锅杯（合生汇店）</td>
+<td>16.87%</td>
+</tr>
+<tr class="even">
+<td>2019/12/12 11:54</td>
+<td>蛙小辣美蛙火锅杯（大宁国际店）</td>
+<td>12.55%</td>
+</tr>
+<tr class="odd">
+<td>2019/12/12 11:54</td>
+<td>蛙小辣·美蛙火锅杯（长风大悦城店）</td>
+<td>18.03%</td>
+</tr>
+<tr class="even">
+<td>2019/12/12 11:54</td>
+<td>蛙小辣·美蛙火锅杯（虹口足球场店）</td>
+<td>19.33%</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果我们要聚合计算呢</span></span><br><span class="line">temp = cpc[[<span class="string">&#x27;平台门店名称&#x27;</span>,<span class="string">&#x27;门店下单量&#x27;</span>,<span class="string">&#x27;门店访问量&#x27;</span>]].groupby(<span class="string">&#x27;平台门店名称&#x27;</span>).<span class="built_in">sum</span>()</span><br><span class="line">temp[<span class="string">&#x27;符号&#x27;</span>] = <span class="string">&#x27;%&#x27;</span></span><br><span class="line">temp[<span class="string">&#x27;下单率&#x27;</span>] = (<span class="built_in">round</span>(temp.门店下单量/temp.门店访问量*<span class="number">100</span>,<span class="number">2</span>)).<span class="built_in">map</span>(<span class="built_in">str</span>).<span class="built_in">str</span>.cat(temp[<span class="string">&#x27;符号&#x27;</span>])</span><br><span class="line">temp.rename(&#123;<span class="string">&#x27;门店下单量&#x27;</span>: <span class="string">&#x27;门店下单总量&#x27;</span>, <span class="string">&#x27;门店访问量&#x27;</span>: <span class="string">&#x27;门店访问总量&#x27;</span>&#125;, axis=<span class="number">1</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>部分结果展示：</p>
+<table>
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 16%" />
+<col style="width: 19%" />
+<col style="width: 5%" />
+<col style="width: 16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>平台门店名称</th>
+<th>门店下单总量</th>
+<th>门店访问总量</th>
+<th>符号</th>
+<th>下单率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>利芳·一人食大盘鸡(国定路店)</td>
+<td>3087.0</td>
+<td>20388.0</td>
+<td>%</td>
+<td>15.14%</td>
+</tr>
+<tr class="even">
+<td>利芳大盘鸡(国定路店)</td>
+<td>2858.0</td>
+<td>12953.0</td>
+<td>%</td>
+<td>22.06%</td>
+</tr>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>8314.0</td>
+<td>31427.0</td>
+<td>%</td>
+<td>26.45%</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫(武宁路店)</td>
+<td>72.0</td>
+<td>441.0</td>
+<td>%</td>
+<td>16.33%</td>
+</tr>
+<tr class="odd">
+<td>拌客干拌麻辣烫（武宁路店）</td>
+<td>2329.0</td>
+<td>8590.0</td>
+<td>%</td>
+<td>27.11%</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点2-运算符条件">知识点2-运算符（条件）</h1>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 17%" />
+<col style="width: 59%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>运算符</th>
+<th>pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&gt;</td>
+<td>df.query('column&gt;x')</td>
+<td>通过字符串表达式对列进行筛选</td>
+<td>where column &gt; x</td>
+</tr>
+<tr class="even">
+<td>=</td>
+<td>df.query('column=x')</td>
+<td></td>
+<td>where column = x</td>
+</tr>
+<tr class="odd">
+<td>&lt;</td>
+<td>df.query('column&lt;x')</td>
+<td></td>
+<td>where column &lt; x</td>
+</tr>
+<tr class="even">
+<td>between..and..</td>
+<td>df[df.column.between(x,y)]</td>
+<td><strong>参数</strong>：<strong>right/left</strong>：左右边界的值，如between(x,y)<strong>inclusive</strong>：确定是否包括边界值，若包括inclusive
+= True；若不包括，inclusive = False。默认为True</td>
+<td>where column between x and y</td>
+</tr>
+<tr class="odd">
+<td>in</td>
+<td>df[df.column.isin([x,y,z...])]</td>
+<td>判断指定字段中的值是否包含在所传入的列表当中，并返回一个全为Bool值的Series</td>
+<td>where column in (x,y,z...)</td>
+</tr>
+<tr class="even">
+<td>not in</td>
+<td>df[~df.column.isin([x,y,z...])]</td>
+<td>isnotin()</td>
+<td>where column not in (x,y,z...)</td>
+</tr>
+<tr class="odd">
+<td>is null</td>
+<td>df[df.column.isnull()]</td>
+<td>检测指定字段的缺失值，若出现Nan，则映射到True值，非空则映射到False。并返回与字段形状相同的Bool值的Series</td>
+<td>where column is null</td>
+</tr>
+<tr class="even">
+<td>is not null</td>
+<td>df[~df.column.isnull()]</td>
+<td>notna()</td>
+<td>where column is not null</td>
+</tr>
+<tr class="odd">
+<td>and</td>
+<td>df.query('x&lt;column&amp;column&lt;y')</td>
+<td>python中使用&amp;表示 与</td>
+<td>where x&lt;column and column &lt;y</td>
+</tr>
+<tr class="even">
+<td>or</td>
+<td>df.query('x&lt;column|column&lt;y')</td>
+<td>python中使用|表示 或</td>
+<td>where x&lt;column or column &lt;y</td>
+</tr>
+<tr class="odd">
+<td>not</td>
+<td>在df前加一个 ~</td>
+<td>python中使用~表示 非</td>
+<td>放在配合使用的运算符前</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 17%" />
+<col style="width: 67%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>模糊查询</th>
+<th>pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>like</td>
+<td>df[df.column.str.contains('xxx')]</td>
+<td>判断所传入的字符串是否包含在我们指定字段的内容中，并返回与字段形状相同的Bool值的Series<strong>参数</strong>：pat：字符串，如左侧实例case：是否区分pat中的大小写，若区分，则case
+= True；若不区分，则case = False。默认为True，区分。</td>
+<td>where column like '%xxx%'</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>df[df.column.str.startswith('x')]</td>
+<td>判断指定字段的内容是否以传入的字符串为开头，并返回与字段形状相同的Bool值的Series<strong>参数</strong>：pat：字符串，如左侧实例</td>
+<td>where column like 'x%'</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>df[df.column.str.startswith('x')]</td>
+<td>判断指定字段的内容是否以传入的字符串为结尾，并返回与字段形状相同的Bool值的Series<strong>参数</strong>：pat：字符串，如左侧实例</td>
+<td>where column like '%x'</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查找gmvroi7-且-gmvroi8-的门店id跟名字">查找gmvroi&gt;7 且
+gmvroi&lt;8 的门店ID跟名字</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  </span><br><span class="line">  门店ID,平台门店名称</span><br><span class="line"><span class="keyword">from</span>    </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span>   </span><br><span class="line">  gmvroi <span class="operator">&lt;</span><span class="number">8.0</span></span><br><span class="line"><span class="keyword">and</span>     </span><br><span class="line">  gmvroi <span class="operator">&gt;</span><span class="number">7.0</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc.query(<span class="string">&#x27;gmvroi&gt;7.0&amp;gmvroi&lt;8.0&#x27;</span>)[[<span class="string">&#x27;门店ID&#x27;</span>,<span class="string">&#x27;平台门店名称&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<p>部分结果展示:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>门店ID</th>
+<th>平台门店名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>8184590</td>
+<td>蛙小辣火锅杯（合生汇店）</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>8165842</td>
+<td>蛙小辣·美蛙火锅杯（虹口足球场店）</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>8184590</td>
+<td>蛙小辣火锅杯（合生汇店）</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td>2001104355</td>
+<td>蛙小辣·美蛙火锅杯(宝山店)</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="查找门店gmvroi等于78的门店id跟名字">查找门店gmvroi等于[7,8]的门店ID跟名字</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">select</span>   </span><br><span class="line">  门店ID,平台门店名称</span><br><span class="line"><span class="keyword">from</span>   </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">  gmvroi <span class="keyword">in</span>(<span class="number">7.0</span>,<span class="number">8.0</span>)</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc[[<span class="string">&#x27;门店ID&#x27;</span>,<span class="string">&#x27;平台门店名称&#x27;</span>]][cpc.gmvroi.isin([<span class="number">7.0</span>,<span class="number">8.0</span>])]</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>门店ID</th>
+<th>平台门店名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>378</td>
+<td>8052557</td>
+<td>蛙小辣火锅杯（真如店）</td>
+</tr>
+<tr class="even">
+<td>488</td>
+<td>2001053699</td>
+<td>蛙小辣·美蛙火锅杯(大宁店)</td>
+</tr>
+<tr class="odd">
+<td>1012</td>
+<td>8491999</td>
+<td>蛙小辣火锅杯（宝山店）</td>
+</tr>
+<tr class="even">
+<td>1064</td>
+<td>8491999</td>
+<td>蛙小辣火锅杯（宝山店）</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="查找门店实收为空的门店id跟名字">查找门店实收为空的门店ID跟名字</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>   </span><br><span class="line">  门店ID,平台门店名称</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">  门店实收 <span class="keyword">is</span> <span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc[[<span class="string">&#x27;门店ID&#x27;</span>,<span class="string">&#x27;平台门店名称&#x27;</span>]][cpc.门店实收.isnull()]</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>门店ID</th>
+<th>平台门店名称</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>306</td>
+<td>2001104355</td>
+<td>蛙小辣·美蛙火锅杯(宝山店)</td>
+</tr>
+<tr class="even">
+<td>332</td>
+<td>2000555792</td>
+<td>蛙小辣·美蛙火锅杯(虹口足球场店)</td>
+</tr>
+<tr class="odd">
+<td>805</td>
+<td>8491999</td>
+<td>蛙小辣火锅杯（宝山店）</td>
+</tr>
+<tr class="even">
+<td>806</td>
+<td>8491999</td>
+<td>蛙小辣火锅杯（宝山店）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查找名称带有宝山的门店">查找名称带有宝山的门店</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  </span><br><span class="line">  <span class="keyword">distinct</span>(平台门店名称)</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span> </span><br><span class="line">  平台门店名称 <span class="keyword">like</span> <span class="string">&#x27;%宝山%&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.Series(cpc[<span class="string">&#x27;平台门店名称&#x27;</span>][cpc.平台门店名称.<span class="built_in">str</span>.contains(<span class="string">&#x27;宝山&#x27;</span>)].unique())</span><br></pre></td></tr></table></figure>
+<p>部分结果展示：</p>
+<p>0 蛙小辣·美蛙火锅杯(宝山店) 1 蛙小辣火锅杯（宝山店） 2
+蛙小辣·美蛙火锅杯麻辣烫(宝山店)</p>
+<h1 id="知识点3-聚合函数">知识点3-聚合函数</h1>
+<table>
+<thead>
+<tr class="header">
+<th>聚合函数</th>
+<th>pandas</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AGV()</td>
+<td>df.column.mean()</td>
+<td>select avg(column) from df</td>
+</tr>
+<tr class="even">
+<td>COUNT()</td>
+<td>df.column.count()</td>
+<td>select count(column) from df</td>
+</tr>
+<tr class="odd">
+<td>MAX()</td>
+<td>df.column.max()</td>
+<td>select max(column) from df</td>
+</tr>
+<tr class="even">
+<td>MIN()</td>
+<td>df.column.min()</td>
+<td>select min(column) from df</td>
+</tr>
+<tr class="odd">
+<td>SUM()</td>
+<td>df.column.sum()</td>
+<td>select sum(column) from df</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 2%" />
+<col style="width: 44%" />
+<col style="width: 45%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>分组筛选</th>
+<th>pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>group</td>
+<td>df.groupby('column').agg(列名
+=('values','sum'))df.groupby(['column1','column2']).agg(列名 =
+('values','sum'))</td>
+<td><strong>groupby('column')</strong>：指定我们的分组字段<strong>agg()</strong>：聚合函数列名：我们对聚合字段名别名<strong>'value'</strong>：数值型字段的名字<strong>'sum'</strong>：聚合函数的名字，也可以是max、min等</td>
+<td>group by column</td>
+</tr>
+<tr class="even">
+<td>having</td>
+<td>df.groupby('column').agg(列名 =
+('values','sum')).query('列名&gt;x')</td>
+<td>通过对分组聚合后形成的表格，进行query条件筛选</td>
+<td>having sum(value)&gt;x</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查找各个门店的平均实收">查找各个门店的平均实收</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">  平台门店名称,<span class="built_in">avg</span>(门店实收) <span class="keyword">as</span> 平均实收</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span></span><br><span class="line">  平台门店名称</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc.groupby(<span class="string">&#x27;平台门店名称&#x27;</span>).agg(平均实收 = (<span class="string">&#x27;门店实收&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th>平台门店名称</th>
+<th>平均实收</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>利芳·一人食大盘鸡(国定路店)</td>
+<td>1167.085227</td>
+</tr>
+<tr class="even">
+<td>利芳大盘鸡(国定路店)</td>
+<td>1003.666667</td>
+</tr>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>1694.323253</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫(武宁路店)</td>
+<td>798.885000</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="查找实收10k的门店名称-与-实收按实收降序">查找实收&gt;10k的门店名称
+与 实收，按实收降序</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">  平台门店名称,<span class="built_in">sum</span>(门店实收)</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span>   </span><br><span class="line">  平台门店名称</span><br><span class="line"><span class="keyword">having</span>      </span><br><span class="line">  <span class="built_in">sum</span>(门店实收)<span class="operator">&gt;</span><span class="number">10000</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span>    </span><br><span class="line">  <span class="built_in">sum</span>(门店实收) <span class="keyword">desc</span> </span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc.groupby(<span class="string">&#x27;平台门店名称&#x27;</span>).agg(总和 = (<span class="string">&#x27;门店实收&#x27;</span>, <span class="string">&#x27;sum&#x27;</span>)).query(<span class="string">&#x27;总和&gt;10000&#x27;</span>).sort_values(by = <span class="string">&#x27;总和&#x27;</span>, ascending=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th>平台门店名称</th>
+<th>总和</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>140628.83</td>
+</tr>
+<tr class="even">
+<td>蛙小辣·美蛙火锅杯(宝山店)</td>
+<td>101526.14</td>
+</tr>
+<tr class="odd">
+<td>蛙小辣火锅杯(五角场店)</td>
+<td>99578.18</td>
+</tr>
+<tr class="even">
+<td>蛙小辣·美蛙火锅杯(虹口足球场店)</td>
+<td>71286.21</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点4-排序">知识点4-排序</h1>
+<table>
+<colgroup>
+<col style="width: 1%" />
+<col style="width: 26%" />
+<col style="width: 61%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>排序</th>
+<th>pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>正序</td>
+<td>df.sort_values(by = 'column',ascending = True)</td>
+<td>参数：
+by：选择排序依据的字段。若需要依据多列，则：['x1','x2']。
+ascending：选择排序方式。若正序，则：ascending=True；若倒序，则：ascending=True</td>
+<td>order by column asc</td>
+</tr>
+<tr class="even">
+<td>倒序</td>
+<td>df.sort_values(by = 'column',ascending = False)</td>
+<td></td>
+<td>order by column desc</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="查看每个武宁路门店的实收按实收降序">查看每个“武宁路”门店的实收，按实收降序</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">  平台门店名称,<span class="built_in">sum</span>(门店实收)</span><br><span class="line"><span class="keyword">from</span>    </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span>     </span><br><span class="line">  平台门店名称 <span class="keyword">like</span> <span class="string">&#x27;%武宁路%&#x27;</span></span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span>   </span><br><span class="line">  平台门店名称</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span>   </span><br><span class="line">  <span class="built_in">sum</span>(门店实收) <span class="keyword">desc</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = cpc[cpc.平台门店名称.<span class="built_in">str</span>.contains(<span class="string">&#x27;武宁路&#x27;</span>)]</span><br><span class="line">x.groupby(cpc.平台门店名称).agg(实收 = (<span class="string">&#x27;门店实收&#x27;</span>,<span class="string">&#x27;sum&#x27;</span>)).sort_values(by=<span class="string">&#x27;实收&#x27;</span>,ascending = <span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>部分结果展示：</p>
+<table>
+<thead>
+<tr class="header">
+<th>平台门店名称</th>
+<th>实收</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>140628.83</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫（武宁路店）</td>
+<td>36582.48</td>
+</tr>
+<tr class="odd">
+<td>拌客干拌麻辣烫(武宁路店)</td>
+<td>1597.77</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点5-limit">知识点5-limit</h1>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 39%" />
+<col style="width: 12%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>限制</th>
+<th>pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>limit x</td>
+<td>df.head(x)</td>
+<td>取前x行</td>
+<td>limit x</td>
+</tr>
+<tr class="even">
+<td>limit x,y</td>
+<td>df[x:y] / df.loc[x:y,'字段']</td>
+<td>跳过前x行，取y行</td>
+<td>limit x,y</td>
+</tr>
+<tr class="odd">
+<td>limit x offsets y</td>
+<td>df[x:y]</td>
+<td>跳过前x行，取y行</td>
+<td>limit x offsets y</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h2 id="跳过前5行显示5条数据">跳过前5行，显示5条数据</h2>
+<p> sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">  <span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span>   </span><br><span class="line">  ddm.cpc</span><br><span class="line">limit   </span><br><span class="line">  <span class="number">5</span>,<span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc[<span class="number">5</span>:<span class="number">10</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="查找前5行的门店名称">查找前5行的门店名称</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">  平台门店名称</span><br><span class="line"><span class="keyword">from</span>   </span><br><span class="line">  ddm.cpc</span><br><span class="line">limit  </span><br><span class="line">  <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc.loc[:<span class="number">5</span>, <span class="string">&#x27;平台门店名称&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<p>0 蛙小辣火锅杯（合生汇店） 1 蛙小辣美蛙火锅杯（大宁国际店） 2
+蛙小辣·美蛙火锅杯（长风大悦城店） 3 蛙小辣·美蛙火锅杯（虹口足球场店） 4
+利芳·一人食大盘鸡(国定路店) 5 蛙小辣·美蛙火锅杯(虹口足球场店)</p>
+<h2
+id="查找门店平均实收1k的门店名称与平均实收显示前10条数据结构按照平均实收降序">查找门店平均实收&gt;1K的门店名称与平均实收，显示前10条数据，结构按照平均实收降序</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>     </span><br><span class="line">  平台门店名称,<span class="built_in">avg</span>(门店实收) <span class="keyword">as</span> 平均实收</span><br><span class="line"><span class="keyword">from</span>    </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span>   </span><br><span class="line">  平台门店名称</span><br><span class="line"><span class="keyword">having</span>      </span><br><span class="line">  平均实收 <span class="operator">&gt;</span> <span class="number">1000</span></span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span>   </span><br><span class="line">  平均实收 <span class="keyword">desc</span></span><br><span class="line">limit       </span><br><span class="line">  <span class="number">5</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpc.groupby(<span class="string">&#x27;平台门店名称&#x27;</span>).agg(平均实收 = (<span class="string">&#x27;门店实收&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>)).query(<span class="string">&#x27;平均实收&gt;1000&#x27;</span>).sort_values(by = <span class="string">&#x27;平均实收&#x27;</span>, ascending=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th>平台门店名称</th>
+<th>平均实收</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>1694.323253</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫（武宁路店）</td>
+<td>1407.018462</td>
+</tr>
+<tr class="odd">
+<td>蛙小辣火锅杯</td>
+<td>1372.333333</td>
+</tr>
+<tr class="even">
+<td>蛙小辣火锅杯(五角场店)</td>
+<td>1310.239211</td>
+</tr>
+<tr class="odd">
+<td>蛙小辣美蛙火锅杯(五角场店)</td>
+<td>1227.000000</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点6-子查询">知识点6-子查询</h1>
+<h2
+id="查找实收cpc.csv1k的门店名称">查找实收（cpc.csv）&gt;1K的门店名称</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  </span><br><span class="line">  <span class="keyword">distinct</span> 平台门店名称</span><br><span class="line"><span class="keyword">from</span>    </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">where</span>   </span><br><span class="line">  门店ID</span><br><span class="line"><span class="keyword">in</span></span><br><span class="line">  (</span><br><span class="line">    <span class="keyword">select</span>  </span><br><span class="line">      门店ID</span><br><span class="line">    <span class="keyword">from</span>    </span><br><span class="line">      ddm.cpc</span><br><span class="line">    <span class="keyword">where</span>   </span><br><span class="line">      门店实收<span class="operator">&gt;</span><span class="number">1000</span></span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = cpc.query(<span class="string">&#x27;门店实收&gt;1000&#x27;</span>).门店ID          <span class="comment">#子查询条件a:门店实收&gt;1k的门店ID</span></span><br><span class="line">b = cpc[<span class="string">&#x27;平台门店名称&#x27;</span>][cpc[<span class="string">&#x27;门店ID&#x27;</span>].isin(a)].unique()  <span class="comment">#将条件放入isin()当中</span></span><br><span class="line">pd.Series(b)</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<p>0 蛙小辣火锅杯（合生汇店） 1 蛙小辣美蛙火锅杯（大宁国际店） 2
+蛙小辣·美蛙火锅杯（长风大悦城店） 3 蛙小辣·美蛙火锅杯（虹口足球场店） 4
+利芳·一人食大盘鸡(国定路店) 5 蛙小辣·美蛙火锅杯(虹口足球场店) 6
+蛙小辣·美蛙火锅杯(宝山店) 7 蛙小辣火锅杯(五角场店)</p>
+<h1 id="知识点7-表连接">知识点7-表连接</h1>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 91%" />
+<col style="width: 3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pandas</th>
+<th>注释</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>merge</td>
+<td>merge对标我们的sql的join语句
+left,right首先传入我们需要进行连接的两表名称
+left/right on：其次选择左右两表的连接字段
+how：最后选择连接方式</td>
+<td>join</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="查看门店名称shop的实收cpc连接字段门店id">查看门店名称（shop）的实收（cpc）（连接字段：门店ID）</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>     </span><br><span class="line">  s.门店名称,</span><br><span class="line">  <span class="built_in">sum</span>(c.门店实收)</span><br><span class="line"><span class="keyword">from</span>     </span><br><span class="line">  ddm.cpc c</span><br><span class="line"><span class="keyword">join</span>     </span><br><span class="line">  ddm.shop s</span><br><span class="line"><span class="keyword">on</span>       </span><br><span class="line">  c.门店ID <span class="operator">=</span> s.门店ID</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span>   </span><br><span class="line">  s.门店名称</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">M = pd.merge(cpc,shop,left_on = <span class="string">&#x27;门店ID&#x27;</span>,right_on = <span class="string">&#x27;门店ID&#x27;</span>,how = <span class="string">&#x27;inner&#x27;</span>)</span><br><span class="line">M.groupby([<span class="string">&#x27;门店名称&#x27;</span>]).agg(门店实收 = (<span class="string">&#x27;门店实收&#x27;</span>,<span class="string">&#x27;sum&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th>门店名称</th>
+<th>门店实收</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>五角场店</td>
+<td>32576771.28</td>
+</tr>
+<tr class="even">
+<td>交大店</td>
+<td>2480.38</td>
+</tr>
+<tr class="odd">
+<td>大世界店</td>
+<td>1536518.72</td>
+</tr>
+<tr class="even">
+<td>大宁店</td>
+<td>1135848.24</td>
+</tr>
+</tbody>
+</table>
+<h2
+id="继续题1采用2个连接字段门店id与日期">继续题1，采用2个连接字段：门店ID与日期</h2>
+<p>sql：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>     </span><br><span class="line">  s.门店名称,</span><br><span class="line">  <span class="built_in">sum</span>(c.门店实收)</span><br><span class="line"><span class="keyword">from</span>     </span><br><span class="line">  ddm.cpc c</span><br><span class="line"><span class="keyword">join</span>     </span><br><span class="line">  ddm.shop s</span><br><span class="line"><span class="keyword">on</span>       </span><br><span class="line">  c.门店ID <span class="operator">=</span> s.门店ID</span><br><span class="line"><span class="keyword">and</span>      </span><br><span class="line">  c.日期 <span class="operator">=</span> s.日期</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span>   </span><br><span class="line">  s.门店名称</span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">M = pd.merge(cpc,shop,left_on = [<span class="string">&#x27;门店ID&#x27;</span>,<span class="string">&#x27;日期&#x27;</span>],right_on = [<span class="string">&#x27;门店ID&#x27;</span>,<span class="string">&#x27;日期&#x27;</span>],how = <span class="string">&#x27;inner&#x27;</span>)</span><br><span class="line">M.groupby([<span class="string">&#x27;门店名称&#x27;</span>]).agg(门店实收 = (<span class="string">&#x27;门店实收&#x27;</span>,<span class="string">&#x27;sum&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th>门店名称</th>
+<th>门店实收</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>五角场店</td>
+<td>159994.53</td>
+</tr>
+<tr class="even">
+<td>交大店</td>
+<td>354.34</td>
+</tr>
+<tr class="odd">
+<td>大宁店</td>
+<td>9011.00</td>
+</tr>
+<tr class="even">
+<td>宝山店</td>
+<td>236248.07</td>
+</tr>
+<tr class="odd">
+<td>怒江路店</td>
+<td>33258.33</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫(武宁路店)</td>
+<td>178809.08</td>
+</tr>
+<tr class="odd">
+<td>真如店</td>
+<td>26326.30</td>
+</tr>
+<tr class="even">
+<td>虹口足球场店</td>
+<td>84359.97</td>
+</tr>
+<tr class="odd">
+<td>龙阳广场店</td>
+<td>7486.00</td>
+</tr>
+<tr class="even">
+<td>龙阳路店</td>
+<td>1607.48</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点8-窗口函数">知识点8-窗口函数</h1>
+<p><img src="/image/image_px_-A7tbW-.png" /></p>
+<h2
+id="每一天不同门店的门店实收排名采用日期门店实收正序输出">每一天/不同门店的/门店实收排名，采用日期、门店实收正序输出</h2>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>  </span><br><span class="line">  日期,</span><br><span class="line">  平台门店名称,</span><br><span class="line">  门店实收,</span><br><span class="line">  <span class="built_in">rank</span>() <span class="keyword">over</span> (<span class="keyword">partition</span> <span class="keyword">by</span> 日期 <span class="keyword">order</span> <span class="keyword">by</span> 门店实收 <span class="keyword">desc</span>) <span class="keyword">as</span> rankk</span><br><span class="line"><span class="keyword">from</span>    </span><br><span class="line">  ddm.cpc</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span> </span><br><span class="line">  日期,门店实收 <span class="keyword">desc</span></span><br></pre></td></tr></table></figure>
+<p>pandas:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cpc[<span class="string">&#x27;rank&#x27;</span>] = cpc.groupby(<span class="string">&#x27;日期&#x27;</span>)[<span class="string">&#x27;门店实收&#x27;</span>].rank(method = <span class="string">&#x27;min&#x27;</span>,ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="comment">#这里相当于rank() over (partition by 日期 order by 门店实收 desc) as rankk</span></span><br><span class="line"></span><br><span class="line">cpc.sort_values(by = [<span class="string">&#x27;日期&#x27;</span>,<span class="string">&#x27;门店实收&#x27;</span>],ascending=[<span class="literal">True</span>,<span class="literal">False</span>])[[<span class="string">&#x27;日期&#x27;</span>,<span class="string">&#x27;平台门店名称&#x27;</span>,<span class="string">&#x27;门店实收&#x27;</span>,<span class="string">&#x27;rank&#x27;</span>]]</span><br><span class="line"><span class="comment">#sort_values(by = [&#x27;日期&#x27;,&#x27;门店实收&#x27;],ascending=[True,False]):order by 日期,门店实收 desc</span></span><br><span class="line"><span class="comment">#[[&#x27;日期&#x27;,&#x27;平台门店名称&#x27;,&#x27;门店实收&#x27;,&#x27;rank&#x27;]]:select  日期,平台门店名称,门店实收,rankk</span></span><br></pre></td></tr></table></figure>
+<h1 id="知识点9-数据透视表">知识点9-数据透视表</h1>
+<p><img src="/image/image_ju1C608rlQ.png" /></p>
+<h2 id="各个门店在不同平台的商家实收">各个门店在不同平台的商家实收</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">table = pd.pivot_table(cpc, values = [<span class="string">&#x27;门店实收&#x27;</span>,<span class="string">&#x27;cpc总费用&#x27;</span>], index = [<span class="string">&#x27;平台门店名称&#x27;</span>], columns = [<span class="string">&#x27;平台i&#x27;</span>], aggfunc = np.<span class="built_in">sum</span>).fillna(<span class="number">0</span>)</span><br><span class="line">table</span><br></pre></td></tr></table></figure>
+<p>部分结果：</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>cpc总费用</th>
+<th></th>
+<th>门店实收</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>平台i</td>
+<td>美团</td>
+<td>饿了么</td>
+<td>美团</td>
+<td>饿了么</td>
+</tr>
+<tr class="even">
+<td>平台门店名称</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>利芳·一人食大盘鸡(国定路店)</td>
+<td>0.00</td>
+<td>16738.51</td>
+<td>0.00</td>
+<td>51351.75</td>
+</tr>
+<tr class="even">
+<td>利芳大盘鸡(国定路店)</td>
+<td>0.00</td>
+<td>11198.71</td>
+<td>0.00</td>
+<td>24088.00</td>
+</tr>
+<tr class="odd">
+<td>拌客·干拌麻辣烫(武宁路店)</td>
+<td>0.00</td>
+<td>19624.31</td>
+<td>0.00</td>
+<td>140628.83</td>
+</tr>
+<tr class="even">
+<td>拌客干拌麻辣烫(武宁路店)</td>
+<td>0.00</td>
+<td>510.90</td>
+<td>0.00</td>
+<td>1597.77</td>
+</tr>
+</tbody>
+</table>
+<h1 id="知识点10-表格合并">知识点10-表格合并</h1>
+<p>核心思路都是采用循环，逐个拼接表格</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当想要合并不同的Excel表格（注意，要保证每个Excel表格的字段相同哦）</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">path = <span class="string">&#x27;./test/&#x27;</span>              <span class="comment">#1、path:选择Excel表格所在路径</span></span><br><span class="line">files = [i <span class="keyword">for</span> i <span class="keyword">in</span> os.listdir(path)]      <span class="comment">#2、files = []:创建一个空列表，将路径中，文件or文件夹的名字装入列表</span></span><br><span class="line"><span class="built_in">print</span>(files)                  <span class="comment">#3、查看是否正确，如：[&#x27;test1&#x27;,&#x27;test2&#x27;]</span></span><br><span class="line"></span><br><span class="line">Merge = pd.DataFrame()              <span class="comment">#4、创建一个空的DataFrame</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> files:                  <span class="comment">#5、for:循环遍历我们的名称列表(2)，</span></span><br><span class="line">    df = pd.read_excel(path+i)          <span class="comment">#6、read_excel(path+i):读取第files[i]份表格。如当i=0,files[0]=&#x27;sheet1&#x27;</span></span><br><span class="line">    Merge = pd.concat([Merge,df])        <span class="comment">#7、concat:将df内容拼接至Merge内</span></span><br><span class="line">Merge.to_excel(path+<span class="string">&#x27;excel合并.xlsx&#x27;</span>,index = <span class="literal">None</span>)  <span class="comment">#8、to_excel:遍历结束后，输出我们合并后的表格</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当想要合并同一张Excel表格内的所有sheet（注意，要保证每个sheet的字段相同哦）</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd  </span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">name_list = pd.ExcelFile(<span class="string">&#x27;./test/学习名单3.xlsx&#x27;</span>)       <span class="comment">#1、ExcelFile:传入Excel表格</span></span><br><span class="line">df_list = pd.DataFrame()              <span class="comment">#2、创建一个空DataFrame</span></span><br><span class="line"><span class="keyword">for</span> sheet <span class="keyword">in</span> name_list.sheet_names:           <span class="comment">#3、for:循环遍历我们的名称列表(1)</span></span><br><span class="line">    df = name_list.parse(sheet_name=sheet)    <span class="comment">#4、name_list的属性parse:读取sheet中的内容</span></span><br><span class="line">    df_list=pd.concat([df_list,df])        <span class="comment">#5、append:我们将读取到的sheet内容，附加到df_list中</span></span><br><span class="line">df_list.to_excel(<span class="string">&#x27;./test/sheet合并.xlsx&#x27;</span>,index=<span class="literal">False</span>)    <span class="comment">#6、将df_list中的内容按行合并，输出</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#ExcelFile()：传入一个表格的路径，并赋予一个对象。</span></span><br><span class="line"><span class="comment">#sheet_names：他是ExcelFile()的一个方法，将Excel子工作表的名字以列表形式返回</span></span><br><span class="line"><span class="comment">#parse：他是ExcelFile()的一个方法</span></span><br><span class="line"><span class="comment">#参数sheet_name：传入子工作表的名称，可以读取里面的内容</span></span><br></pre></td></tr></table></figure>
+<h1 id="知识点11-删除列">知识点11-删除列</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df.drop(columns=<span class="string">&#x27;updateTime&#x27;</span>,inplace = <span class="literal">True</span>)<span class="comment">#当我们通过上一步：df.head()查看数据内容后，可以删除我们认为不需要的字段</span></span><br><span class="line">    <span class="comment">#inplace--我们直接替换原有的数据</span></span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SQL/" rel="tag"># SQL</a>
+              <a href="/tags/Tableau/" rel="tag"># Tableau</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E5%90%B4%E6%81%A9%E8%BE%BE-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/13-%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B/" rel="prev" title="吴恩达-机器学习（十三：异常检测）">
+      <i class="fa fa-chevron-left"></i> 吴恩达-机器学习（十三：异常检测）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E8%87%AA%E5%AD%A6%E8%AF%BE%E7%A8%8B/%E7%AC%AC%E4%BA%8C%E8%AF%BE-excel%E5%AE%9E%E6%88%98/" rel="next" title="数据分析自学课程（第二课：excel））">
+      数据分析自学课程（第二课：excel）） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B91-%E5%8E%BB%E9%87%8D"><span class="nav-number">1.</span> <span class="nav-text">知识点1-去重</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%9B%E9%80%89%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0%E5%B9%B6%E4%B8%94%E5%8E%BB%E9%87%8D"><span class="nav-number">1.1.</span> <span class="nav-text">筛选门店名称并且去重</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%9B%E9%80%89%E5%87%BA%E5%B9%B3%E5%8F%B0%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0%E4%BB%A5%E5%8F%8A%E8%AE%A1%E7%AE%97%E4%B8%8B%E5%8D%95%E7%8E%87"><span class="nav-number">1.2.</span> <span class="nav-text">筛选出平台门店名称，以及计算下单率</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B92-%E8%BF%90%E7%AE%97%E7%AC%A6%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">知识点2-运算符（条件）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BEgmvroi7-%E4%B8%94-gmvroi8-%E7%9A%84%E9%97%A8%E5%BA%97id%E8%B7%9F%E5%90%8D%E5%AD%97"><span class="nav-number">2.1.</span> <span class="nav-text">查找gmvroi&gt;7 且
+gmvroi&lt;8 的门店ID跟名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E9%97%A8%E5%BA%97gmvroi%E7%AD%89%E4%BA%8E78%E7%9A%84%E9%97%A8%E5%BA%97id%E8%B7%9F%E5%90%8D%E5%AD%97"><span class="nav-number">2.2.</span> <span class="nav-text">查找门店gmvroi等于[7,8]的门店ID跟名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E9%97%A8%E5%BA%97%E5%AE%9E%E6%94%B6%E4%B8%BA%E7%A9%BA%E7%9A%84%E9%97%A8%E5%BA%97id%E8%B7%9F%E5%90%8D%E5%AD%97"><span class="nav-number">2.3.</span> <span class="nav-text">查找门店实收为空的门店ID跟名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%90%8D%E7%A7%B0%E5%B8%A6%E6%9C%89%E5%AE%9D%E5%B1%B1%E7%9A%84%E9%97%A8%E5%BA%97"><span class="nav-number">2.4.</span> <span class="nav-text">查找名称带有宝山的门店</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B93-%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">知识点3-聚合函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%90%84%E4%B8%AA%E9%97%A8%E5%BA%97%E7%9A%84%E5%B9%B3%E5%9D%87%E5%AE%9E%E6%94%B6"><span class="nav-number">3.1.</span> <span class="nav-text">查找各个门店的平均实收</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%AE%9E%E6%94%B610k%E7%9A%84%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0-%E4%B8%8E-%E5%AE%9E%E6%94%B6%E6%8C%89%E5%AE%9E%E6%94%B6%E9%99%8D%E5%BA%8F"><span class="nav-number">3.2.</span> <span class="nav-text">查找实收&gt;10k的门店名称
+与 实收，按实收降序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B94-%E6%8E%92%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">知识点4-排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%AF%8F%E4%B8%AA%E6%AD%A6%E5%AE%81%E8%B7%AF%E9%97%A8%E5%BA%97%E7%9A%84%E5%AE%9E%E6%94%B6%E6%8C%89%E5%AE%9E%E6%94%B6%E9%99%8D%E5%BA%8F"><span class="nav-number">4.1.</span> <span class="nav-text">查看每个“武宁路”门店的实收，按实收降序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B95-limit"><span class="nav-number">5.</span> <span class="nav-text">知识点5-limit</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%B3%E8%BF%87%E5%89%8D5%E8%A1%8C%E6%98%BE%E7%A4%BA5%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="nav-number">5.1.</span> <span class="nav-text">跳过前5行，显示5条数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%89%8D5%E8%A1%8C%E7%9A%84%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0"><span class="nav-number">5.2.</span> <span class="nav-text">查找前5行的门店名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E9%97%A8%E5%BA%97%E5%B9%B3%E5%9D%87%E5%AE%9E%E6%94%B61k%E7%9A%84%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0%E4%B8%8E%E5%B9%B3%E5%9D%87%E5%AE%9E%E6%94%B6%E6%98%BE%E7%A4%BA%E5%89%8D10%E6%9D%A1%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%8C%89%E7%85%A7%E5%B9%B3%E5%9D%87%E5%AE%9E%E6%94%B6%E9%99%8D%E5%BA%8F"><span class="nav-number">5.3.</span> <span class="nav-text">查找门店平均实收&gt;1K的门店名称与平均实收，显示前10条数据，结构按照平均实收降序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B96-%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="nav-number">6.</span> <span class="nav-text">知识点6-子查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%AE%9E%E6%94%B6cpc.csv1k%E7%9A%84%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0"><span class="nav-number">6.1.</span> <span class="nav-text">查找实收（cpc.csv）&gt;1K的门店名称</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B97-%E8%A1%A8%E8%BF%9E%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">知识点7-表连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%97%A8%E5%BA%97%E5%90%8D%E7%A7%B0shop%E7%9A%84%E5%AE%9E%E6%94%B6cpc%E8%BF%9E%E6%8E%A5%E5%AD%97%E6%AE%B5%E9%97%A8%E5%BA%97id"><span class="nav-number">7.1.</span> <span class="nav-text">查看门店名称（shop）的实收（cpc）（连接字段：门店ID）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%A7%E7%BB%AD%E9%A2%981%E9%87%87%E7%94%A82%E4%B8%AA%E8%BF%9E%E6%8E%A5%E5%AD%97%E6%AE%B5%E9%97%A8%E5%BA%97id%E4%B8%8E%E6%97%A5%E6%9C%9F"><span class="nav-number">7.2.</span> <span class="nav-text">继续题1，采用2个连接字段：门店ID与日期</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B98-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="nav-number">8.</span> <span class="nav-text">知识点8-窗口函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E4%B8%80%E5%A4%A9%E4%B8%8D%E5%90%8C%E9%97%A8%E5%BA%97%E7%9A%84%E9%97%A8%E5%BA%97%E5%AE%9E%E6%94%B6%E6%8E%92%E5%90%8D%E9%87%87%E7%94%A8%E6%97%A5%E6%9C%9F%E9%97%A8%E5%BA%97%E5%AE%9E%E6%94%B6%E6%AD%A3%E5%BA%8F%E8%BE%93%E5%87%BA"><span class="nav-number">8.1.</span> <span class="nav-text">每一天&#x2F;不同门店的&#x2F;门店实收排名，采用日期、门店实收正序输出</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B99-%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86%E8%A1%A8"><span class="nav-number">9.</span> <span class="nav-text">知识点9-数据透视表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%84%E4%B8%AA%E9%97%A8%E5%BA%97%E5%9C%A8%E4%B8%8D%E5%90%8C%E5%B9%B3%E5%8F%B0%E7%9A%84%E5%95%86%E5%AE%B6%E5%AE%9E%E6%94%B6"><span class="nav-number">9.1.</span> <span class="nav-text">各个门店在不同平台的商家实收</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B910-%E8%A1%A8%E6%A0%BC%E5%90%88%E5%B9%B6"><span class="nav-number">10.</span> <span class="nav-text">知识点10-表格合并</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B911-%E5%88%A0%E9%99%A4%E5%88%97"><span class="nav-number">11.</span> <span class="nav-text">知识点11-删除列</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-Django（四、路由配置）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="Django">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_NHonxGIz1L.png">
+<meta property="og:image" content="http://example.com/image/image_vP5COA7Af5.png">
+<meta property="og:image" content="http://example.com/image/image_fzWqO8X0gd.png">
+<meta property="og:image" content="http://example.com/image/image_bzpqOxsm5Y.png">
+<meta property="og:image" content="http://example.com/image/image_1S4IkYFAz4.png">
+<meta property="og:image" content="http://example.com/image/image_nmbfEkO_R0.png">
+<meta property="og:image" content="http://example.com/image/image_oGCu9gQUOe.png">
+<meta property="og:image" content="http://example.com/image/image_HQkCwAbAGO.png">
+<meta property="og:image" content="http://example.com/image/image_EGRnCw298F.png">
+<meta property="og:image" content="http://example.com/image/image_rry1Gi9ROa.png">
+<meta property="og:image" content="http://example.com/image/image_kQTEuwNYP6.png">
+<meta property="og:image" content="http://example.com/image/image_3JzB3BPcoz.png">
+<meta property="article:published_time" content="2022-05-14T07:33:28.905Z">
+<meta property="article:modified_time" content="2022-05-14T08:32:04.694Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_NHonxGIz1L.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-Django（四、路由配置） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/04-%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-Django（四、路由配置）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：16:32:04" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Django</p>
+<span id="more"></span>
+<h1 id="路由配置">路由配置</h1>
+<h1 id="路由配置-1">路由配置</h1>
+<p><img src="/image/image_NHonxGIz1L.png" /></p>
+<p><strong><em>views不能添加括号，添加括号之后就是讲函数的结果引用过来了，两者完全不同</em></strong>c</p>
+<h1 id="小练习">小练习</h1>
+<p><img src="/image/image_vP5COA7Af5.png" /></p>
+<p>代码如下： urls.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> . <span class="keyword">import</span> views</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">&#x27;admin/&#x27;</span>, admin.site.urls),</span><br><span class="line">    path(<span class="string">&#x27;&#x27;</span>, views.page_front_view),</span><br><span class="line">    <span class="comment"># http://127.0.0.1:8000/page/2003/</span></span><br><span class="line">    path(<span class="string">&#x27;page/1/&#x27;</span>, views.page_1_view),</span><br><span class="line">    path(<span class="string">&#x27;page/2/&#x27;</span>, views.page_2_view)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">page_front_view</span>(<span class="params">request</span>):</span><br><span class="line"></span><br><span class="line">    html = <span class="string">&quot;&lt;h1&gt;这是我的首页&lt;/h1&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">page_1_view</span>(<span class="params">request</span>):</span><br><span class="line"></span><br><span class="line">    html = <span class="string">&quot;&lt;h1&gt;这是第一个页面&lt;/h1&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">page_2_view</span>(<span class="params">request</span>):</span><br><span class="line"></span><br><span class="line">    html = <span class="string">&quot;&lt;h1&gt;这是第二个页面&lt;/h1&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br></pre></td></tr></table></figure>
+<p>当你的老板抽风的时候：</p>
+<p><img src="/image/image_fzWqO8X0gd.png" /></p>
+<p>怎么解决呢？</p>
+<h1 id="path转换器">path转换器</h1>
+<p><img src="/image/image_bzpqOxsm5Y.png" /></p>
+<p>转换器类型及作用：</p>
+<p><img src="/image/image_1S4IkYFAz4.png" /></p>
+<p>然后来解决你老板的问题，访问100的网页：</p>
+<p><img src="/image/image_nmbfEkO_R0.png" /></p>
+<p>代码修改如下： views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">page_view</span>(<span class="params">request, pg</span>):</span><br><span class="line">    html = <span class="string">f&quot;这是编号为<span class="subst">&#123;<span class="built_in">str</span>(pg)&#125;</span>的页面&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br></pre></td></tr></table></figure>
+<p>urls.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">path(<span class="string">&#x27;page/&lt;int:pg&gt;&#x27;</span>, views.page_view)</span><br></pre></td></tr></table></figure>
+<p>这里说一下path的匹配顺序，这里面的匹配顺序是从上到下以此匹配的，</p>
+<p><img src="/image/image_oGCu9gQUOe.png" /></p>
+<h1 id="小练习-1">小练习</h1>
+<p><img src="/image/image_HQkCwAbAGO.png" /></p>
+<p>代码修改如下： views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">reckon</span>(<span class="params">request, pg1, st, pg2</span>):</span><br><span class="line">    DICT = &#123;<span class="string">&#x27;add&#x27;</span>:<span class="string">&#x27;+&#x27;</span>, <span class="string">&#x27;sub&#x27;</span>:<span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27;mul&#x27;</span>:<span class="string">&#x27;*&#x27;</span>&#125;</span><br><span class="line">    <span class="keyword">if</span> st <span class="keyword">not</span> <span class="keyword">in</span> DICT:</span><br><span class="line">        <span class="keyword">return</span> HttpResponse(<span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        html = <span class="string">f&quot;这是编号为<span class="subst">&#123;<span class="built_in">str</span>(<span class="built_in">eval</span>(<span class="built_in">str</span>(pg1)+DICT[st]+<span class="built_in">str</span>(pg2)))&#125;</span>的页面&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br></pre></td></tr></table></figure>
+<p>urls.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">path(<span class="string">&#x27;&lt;int:pg1&gt;/&lt;str:st&gt;/&lt;int:pg2&gt;&#x27;</span>, views.reckon),</span><br></pre></td></tr></table></figure>
+<h1 id="re_path">re_path()</h1>
+<p>场景假设，假设你的老板告诉你，说你做的这个太强大了，咱们公司免费的只能计算两位数的结果，去修改吧。
+这时候我们的path解释器就很难完成了。re_path就来了。</p>
+<p><img src="/image/image_EGRnCw298F.png" /></p>
+<p><img src="/image/image_rry1Gi9ROa.png" /></p>
+<p>解释一下这个正则表达式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">^ 代表开头</span><br><span class="line">&amp; 代表结束</span><br><span class="line">P 代表正则匹配</span><br><span class="line">&lt;x&gt; 代表我们给他命名为x</span><br><span class="line">\d 匹配数字</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">2</span>&#125; 匹配<span class="number">1</span>-<span class="number">2</span>位</span><br><span class="line">\w+ 匹配字符串</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_kQTEuwNYP6.png" /></p>
+<p><img src="/image/image_3JzB3BPcoz.png" /></p>
+<p>代码修改如下： views.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">birthday_one</span>(<span class="params">request, x, y, z</span>):</span><br><span class="line">    html = <span class="string">f&quot;&lt;h1&gt;生日为：<span class="subst">&#123;x&#125;</span>年<span class="subst">&#123;y&#125;</span>月<span class="subst">&#123;z&#125;</span>日&lt;/h1&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">birthday_two</span>(<span class="params">request, x, y, z</span>):</span><br><span class="line">    html = <span class="string">f&quot;&lt;h1&gt;生日为：<span class="subst">&#123;x&#125;</span>年<span class="subst">&#123;y&#125;</span>月<span class="subst">&#123;z&#125;</span>日&lt;/h1&gt;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> HttpResponse(html)</span><br></pre></td></tr></table></figure>
+<p>urls.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">re_path(<span class="string">r&#x27;^birthday/(?P&lt;x&gt;\d&#123;4&#125;)/(?P&lt;y&gt;\d&#123;1,2&#125;)/(?P&lt;z&gt;\d&#123;1,2&#125;)$&#x27;</span>,views.birthday_one),</span><br><span class="line">re_path(<span class="string">r&#x27;^birthday/(?P&lt;y&gt;\d&#123;1,2&#125;)/(?P&lt;z&gt;\d&#123;1,2&#125;)/(?P&lt;x&gt;\d&#123;4&#125;)$&#x27;</span>,views.birthday_two),</span><br></pre></td></tr></table></figure>
+<p><strong><em>注意共同部分birthday填写到^后</em></strong></p>
+<h4 id="小结">小结</h4>
+<p>两种匹配方式，当十分严格时使用re_path，一般的匹配使用path即可，re_path书写格式注意，注意正则表达式的写法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/03-url%E5%92%8C%E8%A7%86%E5%9B%BE%E5%87%BD%E6%95%B0/03-url%E5%92%8C%E8%A7%86%E5%9B%BE%E5%87%BD%E6%95%B0/" rel="prev" title="web相关-Django（三、url和视图函数）">
+      <i class="fa fa-chevron-left"></i> web相关-Django（三、url和视图函数）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/05-%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94/05-%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94/" rel="next" title="web相关-Django（五、请求与响应）">
+      web相关-Django（五、请求与响应） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">路由配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E9%85%8D%E7%BD%AE-1"><span class="nav-number">2.</span> <span class="nav-text">路由配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%83%E4%B9%A0"><span class="nav-number">3.</span> <span class="nav-text">小练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#path%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">path转换器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%83%E4%B9%A0-1"><span class="nav-number">5.</span> <span class="nav-text">小练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#re_path"><span class="nav-number">6.</span> <span class="nav-text">re_path()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">6.0.0.1.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

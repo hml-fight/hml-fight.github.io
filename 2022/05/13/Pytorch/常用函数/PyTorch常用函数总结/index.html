@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Pytorch常用函数总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch常用函数">
+<meta property="og:url" content="http://example.com/2022/05/13/Pytorch/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/PyTorch%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="Pytorch常用函数总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_9rQscXseZ4.png">
+<meta property="og:image" content="http://example.com/image/image_nB2ai_hhHf.png">
+<meta property="og:image" content="http://example.com/image/image_50FzJ0T3pH.png">
+<meta property="og:image" content="http://example.com/image/image_0Z21fxsbr5.png">
+<meta property="article:published_time" content="2022-05-13T12:36:56.858Z">
+<meta property="article:modified_time" content="2022-05-13T12:48:46.143Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="Pytorch">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_9rQscXseZ4.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/Pytorch/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/PyTorch%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Pytorch常用函数 | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/Pytorch/%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/PyTorch%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pytorch常用函数
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 20:36:56 / 修改时间：20:48:46" itemprop="dateCreated datePublished" datetime="2022-05-13T20:36:56+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Pytorch/" itemprop="url" rel="index"><span itemprop="name">Pytorch</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Pytorch常用函数总结 <span id="more"></span></p>
+<h1 id="torch.nn">torch.nn</h1>
+<h2 id="embedding">Embedding</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.Embedding(num_embeddings, </span><br><span class="line">                   embedding_dim, </span><br><span class="line">                   padding_idx=<span class="literal">None</span>, </span><br><span class="line">                   max_norm=<span class="literal">None</span>, </span><br><span class="line">                   norm_type=<span class="number">2</span>, </span><br><span class="line">                   scale_grad_by_freq=<span class="literal">False</span>, </span><br><span class="line">                   sparse=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参数">参数：</h3>
+<blockquote>
+<p>num_embeddings（int）：嵌入字典的大小</p>
+</blockquote>
+<blockquote>
+<p>embedding_dim（int）：词向量的维度</p>
+</blockquote>
+<blockquote>
+<p>padding_idx（int，可选）：如果提供此下标的话，输出遇到此下标时会用零进行填充</p>
+</blockquote>
+<blockquote>
+<p>max_norm（float，可选）：如果提供的话，会重新归一化词嵌入，使它们的范数小于提供的值</p>
+</blockquote>
+<blockquote>
+<p>norm_type（float，可选）：对于max_norm选项计算p范数时的p</p>
+</blockquote>
+<blockquote>
+<p>scale_grad_by_freq（float,
+可选）：如果提供的话，会根据字典中单词频率缩放梯度</p>
+</blockquote>
+<h3 id="变量">变量：</h3>
+<blockquote>
+<p>weight（Tensor）：形状为（num_embeddings，embedding_dim）的模块中可学习的权值</p>
+</blockquote>
+<h3 id="形状">形状：</h3>
+<blockquote>
+<p><strong>输入：</strong>LongTensor(N,W)，N=min-batch，W=每个mini-batch中提取的下标数，W的形式一般为<span
+class="math inline">\([idx_1,idx_2,...,idx_n]\)</span>，为了保证每个文本的W维度一致，需要对其使用pad_sequence进行补齐</p>
+</blockquote>
+<blockquote>
+<p><strong>输出：</strong>(N，W，embedding_dim)的矩阵，表示N个文本的维度为W*embedding_dim的词向量</p>
+</blockquote>
+<h3 id="例子">例子：</h3>
+<p><img src="/image/image_9rQscXseZ4.png" /></p>
+<h2 id="conv1d">Conv1d</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.Conv1d(in_channels, </span><br><span class="line">                out_channels, </span><br><span class="line">                kernel_size, </span><br><span class="line">                stride=<span class="number">1</span>, </span><br><span class="line">                padding=<span class="number">0</span>, </span><br><span class="line">                dilation=<span class="number">1</span>, </span><br><span class="line">                groups=<span class="number">1</span>, </span><br><span class="line">                bias=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参数-1">参数：</h3>
+<blockquote>
+<p>in_channels（int）：输入的通道数，应该为词向量维度一致，也代表了卷积核的维度</p>
+</blockquote>
+<blockquote>
+<p>out_channels（int）：卷积产生的通道数</p>
+</blockquote>
+<blockquote>
+<p>kernel_size（int or tuple）：卷积核的尺寸</p>
+</blockquote>
+<blockquote>
+<p>stride（int or tuple，可选）：卷积的步长</p>
+</blockquote>
+<blockquote>
+<p>padding（int or
+tuple，可选）：输入的每一条边补充0的个数，例：当padding=1，则在输入的每一通道的数列的左右两端各补一个0</p>
+</blockquote>
+<blockquote>
+<p>dilation（int or tuple, 可选）：卷积核元素之间的间距</p>
+</blockquote>
+<blockquote>
+<p>groups（int, 可选）：从输入通道到输出通道的阻塞连接数</p>
+</blockquote>
+<blockquote>
+<p>bias（bool, 可选）：如果为True，则添加偏置</p>
+</blockquote>
+<h3 id="变量-1">变量：</h3>
+<blockquote>
+<p>weight（Tensor）：大小为（out_channels，in_channels，kernel_size）</p>
+</blockquote>
+<blockquote>
+<p>bias （Tensor）：卷积的偏置系数，大小是（out_channels）</p>
+</blockquote>
+<h3 id="形状-1">形状：</h3>
+<blockquote>
+<p><strong>输入：</strong><span
+class="math inline">\(tensor(N,C_{in},L_{in})\)</span>，依次表示batch_size、词向量维度、文本中词语个数即下标数</p>
+</blockquote>
+<blockquote>
+<p><strong>输出</strong><span
+class="math inline">\(tensor(N,C_{out},L_{out})\)</span>，依次表示batch_size，卷积核个数，卷积之后的特征个数，计算公式如下</p>
+</blockquote>
+<p><span class="math display">\[
+L_{out}=floor((L_{in}+2_padding-dilation_(kernerl_size-1)-1)/stride+1)
+\]</span></p>
+<h3 id="例子-1">例子：</h3>
+<p><img src="/image/image_nB2ai_hhHf.png" /></p>
+<h3 id="总结">总结：</h3>
+<p>在Pytorch中，是自左向右进行卷积，长风破浪会有时应该如下表示：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-8457e2728625b788cd028309855811f7_720w.jpg" /></p>
+<p>Pytorch中卷积过程如下：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-3db0c5f8b4c480bc98d319cb1db47067_720w.jpg" /></p>
+<p>Pytroch实现代码如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line">conv1 = nn.Conv1d(in_channels=<span class="number">8</span>, out_channels=<span class="number">1</span>, kernel_size=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">maxp = nn.MaxPool1d(<span class="number">2</span>, stride=<span class="number">1</span>)  <span class="comment">#stride的默认值是kernel_size</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">input</span> = torch.randn(<span class="number">1000</span>, <span class="number">8</span>, <span class="number">7</span>)</span><br><span class="line"></span><br><span class="line">y = conv1(<span class="built_in">input</span>)</span><br><span class="line"></span><br><span class="line">y = maxp(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(y)</span><br></pre></td></tr></table></figure>
+<p>所以当我们使用embedding作为Conv1d的输入时，记得使用permute(0, 2,
+1)改变维度哦！！！</p>
+<h2 id="maxpool1d">MaxPool1d</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.MaxPool1d(kernel_size, </span><br><span class="line">                   stride=<span class="literal">None</span>, </span><br><span class="line">                   padding=<span class="number">0</span>, </span><br><span class="line">                   dilation=<span class="number">1</span>, </span><br><span class="line">                   return_indices=<span class="literal">False</span>, </span><br><span class="line">                   ceil_mode=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参数-2">参数：</h3>
+<blockquote>
+<p>kernel_size（int or tuple）：max_pooling的窗口大小</p>
+</blockquote>
+<blockquote>
+<p>stride（int or tuple，可选）：max
+pooling的窗口移动的步长。默认值是kernel_size</p>
+</blockquote>
+<blockquote>
+<p>padding（int or tuple，可选）：输入的每一条边补充0的层数</p>
+</blockquote>
+<blockquote>
+<p>dilation（int or tuple，可选）：一个控制窗口中元素步幅的参数</p>
+</blockquote>
+<blockquote>
+<p>return_indices：
+如果等于<code>True</code>，会返回输出最大值的序号，对于上采样操作会有帮助</p>
+</blockquote>
+<blockquote>
+<p>dilation（int or tuple, 可选）：卷积核元素之间的间距</p>
+</blockquote>
+<blockquote>
+<p>ceil_mode：
+如果等于<code>True</code>，计算输出信号大小的时候，会使用向上取整，代替默认的向下取整的操作</p>
+</blockquote>
+<h3 id="变量-2">变量：</h3>
+<p>无</p>
+<h3 id="形状-2">形状：</h3>
+<blockquote>
+<p><strong>输入：</strong><span
+class="math inline">\(tensor(N,C_{in},L_{in})\)</span>，依次表示batch_size、卷积核个数，卷积之后的特征个数</p>
+</blockquote>
+<blockquote>
+<p><strong>输出</strong>：<span
+class="math inline">\(tensor(N,C_{out},L_{out})\)</span>，依次表示batch_size，卷积核个数，池化之后的特征个数，计算公式如下</p>
+</blockquote>
+<p><span class="math display">\[
+out(N_i, C_j,k)=max^{kernel_size-1}{m=0}input(N{i},C_j,stride*k+m)
+\]</span></p>
+<h3 id="例子-2">例子：</h3>
+<p><img src="/image/image_50FzJ0T3pH.png" /></p>
+<h2 id="linear">Linear</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">torch.nn.Linear(in_features, </span><br><span class="line">                out_features, </span><br><span class="line">                bias=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参数-3">参数：</h3>
+<blockquote>
+<p>in_features：每个输入样本的大小</p>
+</blockquote>
+<blockquote>
+<p>out_features：每个输出样本的大小</p>
+</blockquote>
+<h3 id="变量-3">变量：</h3>
+<blockquote>
+<p>weight（Tensor）：形状为（out_features，in_features）的模块中可学习的权值</p>
+</blockquote>
+<blockquote>
+<p>bias （Tensor）：形状为(out_features)的模块中可学习的偏置</p>
+</blockquote>
+<h3 id="形状-3">形状：</h3>
+<blockquote>
+<p><strong>输入：</strong><span
+class="math inline">\(tensor(N,in\_features)\)</span>，依次表示batch_size、输入特征数</p>
+</blockquote>
+<blockquote>
+<p><strong>输出</strong>：<span
+class="math inline">\(tensor(N,out\_features)\)</span>，依次表示batch_size，输出类别数目</p>
+</blockquote>
+<h3 id="例子-3">例子：</h3>
+<p><img src="/image/image_0Z21fxsbr5.png" /></p>
+<h1 id="torch.utils.data">torch.utils.data</h1>
+<h2 id="dataset">Dataset</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">torch</span>.utils.data.Dataset</span><br></pre></td></tr></table></figure>
+<p>表示Dataset的抽象类。</p>
+<p>所有其他数据集都应该进行子类化。所有子类应该override<code>__len__</code>和<code>__getitem__</code>，前者提供了数据集的大小，后者支持整数索引，范围从0到len(self)。</p>
+<p>默认的自定义Dataset的形式应该为[(tuple)]。</p>
+<p>例：如果在文本分类项目中，<span class="math inline">\([([idx_1,
+idx_2,...,idx_n], target),...]\)</span></p>
+<h3 id="例子-4">例子：</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 自定义数据集</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThusDataset</span>(<span class="title class_ inherited__">Dataset</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, data</span>):</span><br><span class="line">        self.data = data</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__len__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(self.data)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, i</span>):</span><br><span class="line">        <span class="keyword">return</span> self.data[i]</span><br></pre></td></tr></table></figure>
+<h2 id="tensordataset">TensorDataset</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.utils.data.TensorDataset(data_tensor, target_tensor)</span><br></pre></td></tr></table></figure>
+<p>包装数据和目标张量的数据集。</p>
+<p>通过沿着第一个维度索引两个张量来恢复每个样本。</p>
+<h3 id="参数-4">参数：</h3>
+<blockquote>
+<p>data_tensor（tensor）：包含样本数据</p>
+</blockquote>
+<blockquote>
+<p>target_tensor（tensor）：包含样本目标（标签）</p>
+</blockquote>
+<h2 id="dataloader">DataLoader</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">torch.utils.data.DataLoader(dataset, </span><br><span class="line">                            batch_size=<span class="number">1</span>, </span><br><span class="line">                            shuffle=<span class="literal">False</span>, </span><br><span class="line">                            sampler=<span class="literal">None</span>, </span><br><span class="line">                            num_workers=<span class="number">0</span>, </span><br><span class="line">                            collate_fn=&lt;function default_collate&gt;, </span><br><span class="line">                            pin_memory=<span class="literal">False</span>, </span><br><span class="line">                            drop_last=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="参数-5">参数：</h3>
+<blockquote>
+<p>dataset（Dataset）：加载数据的数据集。这里的数据集应该由Dataset类所包装。</p>
+</blockquote>
+<blockquote>
+<p>batch_size（int，可选）：每个batch加载多少个样本(默认: 1)。</p>
+</blockquote>
+<blockquote>
+<p>shuffle（bool，可选）：设置为<code>True</code>时会在每个epoch重新打乱数据(默认:
+False).</p>
+</blockquote>
+<blockquote>
+<p>sampler（<em>Sampler</em>，可选）：
+定义从数据集中提取样本的策略。如果指定，则忽略<code>shuffle</code>参数。</p>
+</blockquote>
+<blockquote>
+<p>num_workers（int，可选）：
+用多少个子进程加载数据。0表示数据将在主进程中加载(默认: 0)</p>
+</blockquote>
+<blockquote>
+<p>collate_fn（callable,
+可选）：默认使用该函数将数据集进行tensor转换</p>
+</blockquote>
+<blockquote>
+<p>pin_memory（bool，可选）</p>
+</blockquote>
+<blockquote>
+<p>drop_last（bool，可选）：如果数据集大小不能被batch
+size整除，则设置为True后可删除最后一个不完整的batch。如果设为False并且数据集的大小不能被batch
+size整除，则最后一个batch将更小。(默认: False)</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Pytorch/%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99/Pytorch%E4%BB%A3%E7%A0%81%E5%B8%B8%E8%A7%81%E6%8A%A5%E9%94%99%E6%80%BB%E7%BB%93/" rel="prev" title="Pytorch常见错误">
+      <i class="fa fa-chevron-left"></i> Pytorch常见错误
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-%E9%A2%84%E8%AE%AD%E7%BB%83%E6%A8%A1%E5%9E%8B/03-%E5%9F%BA%E7%A1%80%E5%B7%A5%E5%85%B7%E9%9B%86%E5%92%8C%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="next" title="自然语言处理-预训练模型（三：基础工具集和常用数据集）">
+      自然语言处理-预训练模型（三：基础工具集和常用数据集） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#torch.nn"><span class="nav-number">1.</span> <span class="nav-text">torch.nn</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#embedding"><span class="nav-number">1.1.</span> <span class="nav-text">Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.1.</span> <span class="nav-text">参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">变量：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6"><span class="nav-number">1.1.3.</span> <span class="nav-text">形状：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.1.4.</span> <span class="nav-text">例子：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conv1d"><span class="nav-number">1.2.</span> <span class="nav-text">Conv1d</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">变量：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">形状：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">例子：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.2.5.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#maxpool1d"><span class="nav-number">1.3.</span> <span class="nav-text">MaxPool1d</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">变量：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6-2"><span class="nav-number">1.3.3.</span> <span class="nav-text">形状：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-2"><span class="nav-number">1.3.4.</span> <span class="nav-text">例子：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linear"><span class="nav-number">1.4.</span> <span class="nav-text">Linear</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">参数：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F-3"><span class="nav-number">1.4.2.</span> <span class="nav-text">变量：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%A2%E7%8A%B6-3"><span class="nav-number">1.4.3.</span> <span class="nav-text">形状：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-3"><span class="nav-number">1.4.4.</span> <span class="nav-text">例子：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#torch.utils.data"><span class="nav-number">2.</span> <span class="nav-text">torch.utils.data</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dataset"><span class="nav-number">2.1.</span> <span class="nav-text">Dataset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-4"><span class="nav-number">2.1.1.</span> <span class="nav-text">例子：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tensordataset"><span class="nav-number">2.2.</span> <span class="nav-text">TensorDataset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-4"><span class="nav-number">2.2.1.</span> <span class="nav-text">参数：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dataloader"><span class="nav-number">2.3.</span> <span class="nav-text">DataLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0-5"><span class="nav-number">2.3.1.</span> <span class="nav-text">参数：</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

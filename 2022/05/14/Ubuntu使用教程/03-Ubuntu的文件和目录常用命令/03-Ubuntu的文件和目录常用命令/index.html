@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ubuntn使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntn使用教程（三：文本和目录常用命令）">
+<meta property="og:url" content="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="ubuntn使用教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-14T07:22:15.915Z">
+<meta property="article:modified_time" content="2022-05-14T07:27:42.547Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="虚拟机">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ubuntn使用教程（三：文本和目录常用命令） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/03-Ubuntu%E7%9A%84%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ubuntn使用教程（三：文本和目录常用命令）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:22:15 / 修改时间：15:27:42" itemprop="dateCreated datePublished" datetime="2022-05-14T15:22:15+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/ubuntn/" itemprop="url" rel="index"><span itemprop="name">ubuntn</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ubuntn使用教程</p>
+<span id="more"></span>
+<h2 id="查看目录内容">查看目录内容</h2>
+<h3 id="ls命令说明">ls命令说明</h3>
+<p>ls 是英文单词 list
+的简写，其功能为列出目录的内容，是用户最常用的命令之一，类似于 DOS 下的
+dir 命令 Linux 下文件和目录的特点</p>
+<ul>
+<li><p>Linux 文件 或者 目录 名称最长可以有 256 个字符</p></li>
+<li><p>以 . 开头的文件为隐藏文件，需要用 -a 参数才能显示</p></li>
+<li><p>. 代表当前目录</p></li>
+<li><p>… 代表上一级目录</p></li>
+</ul>
+<h3 id="ls通配符的使用">ls通配符的使用
+</h3>
+<table>
+<thead>
+<tr class="header">
+<th>通配符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>*</td>
+<td>代表任一个数的字符</td>
+</tr>
+<tr class="even">
+<td>?</td>
+<td>代表任意一个字符，至少1个</td>
+</tr>
+<tr class="odd">
+<td>[]</td>
+<td>表示可以匹配字符组中的任意一个</td>
+</tr>
+<tr class="even">
+<td>[abc]</td>
+<td>匹配a、b、c中的任意一个</td>
+</tr>
+<tr class="odd">
+<td>[a-f]</td>
+<td>匹配从a到f范围内的任意一个字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="切换目录">切换目录</h2>
+<h3 id="cd">cd</h3>
+<p>cd 是英文单词 <strong>change directory</strong>
+的简写，其功能为更改当前的工作目录，也是用户最常用的命令之一</p>
+<table>
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>cd</td>
+<td>切换到当前用户的主目录(/home/用户目录)</td>
+</tr>
+<tr class="even">
+<td>cd ~</td>
+<td>切换到当前用户的主目录(/home/用户目录)</td>
+</tr>
+<tr class="odd">
+<td>cd .</td>
+<td>保持在当前目录不变</td>
+</tr>
+<tr class="even">
+<td>cd …</td>
+<td>切换到上级目录</td>
+</tr>
+<tr class="odd">
+<td>cd -</td>
+<td>可以在最近两次工作目录之间来回切换</td>
+</tr>
+</tbody>
+</table>
+<h3 id="相对路径和绝对路径">相对路径和绝对路径</h3>
+<ul>
+<li><p>相对路径 在输入路径时，最前面不是 / 或者 ~，表示相对 当前目录
+所在的目录位置 </p></li>
+<li><p>绝对路径 在输入路径时，最前面是 / 或者 ~，表示从 根目录/家目录
+开始的具体目录位置</p></li>
+</ul>
+<h2 id="创建和删除操作">创建和删除操作</h2>
+<h3 id="touch-创建文件或修改文件时间">touch 创建文件或修改文件时间</h3>
+<ul>
+<li><p>如果文件 不存在，可以创建一个空白文件</p></li>
+<li><p>如果文件 已经存在，可以修改文件的末次修改日期</p></li>
+</ul>
+<h3 id="mkdir-创建一个新的目录">mkdir 创建一个新的目录</h3>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-p</td>
+<td>可以递归创建目录</td>
+</tr>
+</tbody>
+</table>
+<p>新建目录的名称 不能与当前目录中 已有的目录或文件 同名</p>
+<h3 id="rm-删除文件或目录">rm 删除文件或目录</h3>
+<p>使用 rm 命令要小心，因为文件删除后不能恢复</p>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-f</td>
+<td>强制删除，忽略不存在的目录，无需提示</td>
+</tr>
+<tr class="even">
+<td>-r</td>
+<td>递归删除目录下的内容，删除文件时必须加此参数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="拷贝和移动文件">拷贝和移动文件</h2>
+<table>
+<colgroup>
+<col style="width: 5%" />
+<col style="width: 31%" />
+<col style="width: 11%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>tree [目录名]</td>
+<td>tree</td>
+<td>以树状图列出文件目录结构</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>cp 源文件 目标文件</td>
+<td>copy</td>
+<td>复制文件或者目录</td>
+</tr>
+<tr class="odd">
+<td>03</td>
+<td>mv 源文件 目标文件</td>
+<td>move</td>
+<td>移动文件或者目录／文件或者目录重命名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tree">tree</h3>
+<ul>
+<li>tree 命令可以以树状图列出文件目录结构</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-d</td>
+<td>只显示目录</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cp">cp</h3>
+<ul>
+<li>cp 命令的功能是将给出的 文件 或 目录 复制到另一个 文件 或 目录
+中，相当于 DOS 下的 copy 命令</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 96%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+<tr class="even">
+<td>-r</td>
+<td>若给出的源文件是目录文件，则 cp
+将递归复制该目录下的所有子目录和文件，目标文件必须为一个目录名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mv">mv</h3>
+<ul>
+<li>mv 命令可以用来 移动 文件 或 目录，也可以给 文件或目录重命名</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-i</td>
+<td>覆盖文件前提示</td>
+</tr>
+</tbody>
+</table>
+<h2 id="查看文件内容">查看文件内容</h2>
+<table>
+<colgroup>
+<col style="width: 3%" />
+<col style="width: 25%" />
+<col style="width: 21%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>01</td>
+<td>cat 文件名</td>
+<td>concatenate</td>
+<td>查看文件内容、创建文件、文件合并、追加文件内容等功能</td>
+</tr>
+<tr class="even">
+<td>02</td>
+<td>more 文件名</td>
+<td>more</td>
+<td>分屏显示文件内容</td>
+</tr>
+<tr class="odd">
+<td>03</td>
+<td>grep 搜索文本 文件名</td>
+<td>grep</td>
+<td>搜索文本文件内容</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cat">cat</h3>
+<ul>
+<li><p>cat 命令可以用来 查看文件内容、创建文件、文件合并、追加文件内容
+等功能</p></li>
+<li><p>cat
+会一次显示所有的内容，查询数量较少或者需要对文件执行特定操作时使用</p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-b</td>
+<td>对非空输出行编号</td>
+</tr>
+<tr class="even">
+<td>-n</td>
+<td>对输出的所有行编号</td>
+</tr>
+</tbody>
+</table>
+<p>Linux 中还有一个 nl 的命令和 cat -b 的效果等价</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">例：</span><br><span class="line">cat [n,v,i] <span class="keyword">as</span> <span class="number">123.</span>txt</span><br><span class="line"></span><br><span class="line"><span class="comment">//高亮123.txt中含有as的文本</span></span><br><span class="line">n：显示高亮部分配对的行号</span><br><span class="line">v：（取反）非高亮部分配对的行号</span><br><span class="line">i:对选定条件的额内容不区分大小写比如<span class="string">&quot;Hello JAVA&quot;</span>==<span class="string">&quot;hello java&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="more">more</h3>
+<ul>
+<li><p>more 命令可以用于分屏显示文件内容，每次只显示一页内容</p></li>
+<li><p>适合于 查看内容较多的文本文件</p></li>
+</ul>
+<p>使用 more 的操作键：</p>
+<table>
+<thead>
+<tr class="header">
+<th>操作键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>空格键</td>
+<td>显示手册页的下一屏</td>
+</tr>
+<tr class="even">
+<td>Enter 键</td>
+<td>一次滚动手册页的一行</td>
+</tr>
+<tr class="odd">
+<td>b</td>
+<td>回滚一屏</td>
+</tr>
+<tr class="even">
+<td>f</td>
+<td>前滚一屏</td>
+</tr>
+<tr class="odd">
+<td>q</td>
+<td>退出</td>
+</tr>
+<tr class="even">
+<td>/word</td>
+<td>搜索 word 字符串</td>
+</tr>
+</tbody>
+</table>
+<h3 id="grep">grep</h3>
+<ul>
+<li><p>Linux 系统中 grep 命令是一种文本搜素工具</p></li>
+<li><p>grep允许对文本文件进行
+模式查找，所谓模式查找，又被称为正则表达式，在就业班会详细讲解</p></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>-n</td>
+<td>显示匹配行及行号</td>
+</tr>
+<tr class="even">
+<td>-v</td>
+<td>显示不包含匹配文本的所有行（相当于求反）</td>
+</tr>
+<tr class="odd">
+<td>-i</td>
+<td>忽略大小写</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>常用的两种模式查找</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>^a</td>
+<td>行首，搜寻以 a 开头的行</td>
+</tr>
+<tr class="even">
+<td>ke$</td>
+<td>行尾，搜寻以 ke 结束的行</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他">其他</h2>
+<h3 id="echo-文字内容">echo 文字内容</h3>
+<p>-会在终端中输出你所输入的内容比如 echo
+hello,输出hello常和重定向配合使用</p>
+<h3 id="重定向-和">重定向 &gt; 和 &gt;&gt;</h3>
+<ul>
+<li><p>Linux 允许将命令执行结果 重定向到一个 文件</p></li>
+<li><p>将本应显示在终端上的内容 输出／追加 到指定文件中</p></li>
+</ul>
+<p>其中</p>
+<ul>
+<li><p>“&gt;” 表示输出，会覆盖文件原有的内容</p></li>
+<li><p>“&gt;&gt;” 表示追加，会将内容追加到已有文件的末尾</p></li>
+</ul>
+<h3 id="管道">管道 |</h3>
+<ul>
+<li><p>Linux 允许将 一个命令的输出 可以通过管道 做为
+另一个命令的输入</p></li>
+<li><p>可以理解现实生活中的管子，管子的一头塞东西进去，另一头取出来，这里
+| 的左右分为两端，左端塞东西（写），右端取东西（读）</p></li>
+</ul>
+<p>常用的管道命令有：</p>
+<ul>
+<li><p>more：分屏显示内容</p></li>
+<li><p>grep：在命令执行结果的基础上查询指定的文本</p></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+              <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/" rel="tag"># 虚拟机</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/02-Ubuntn%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/02-Ubuntn%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" rel="prev" title="ubuntn使用教程（二：入门教程）">
+      <i class="fa fa-chevron-left"></i> ubuntn使用教程（二：入门教程）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Ubuntu%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/04-%E8%BF%9C%E7%A8%8B%E7%AE%A1%E7%90%86/" rel="next" title="ubuntn使用教程（四：远程管理）">
+      ubuntn使用教程（四：远程管理） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%9B%AE%E5%BD%95%E5%86%85%E5%AE%B9"><span class="nav-number">1.</span> <span class="nav-text">查看目录内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ls%E5%91%BD%E4%BB%A4%E8%AF%B4%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">ls命令说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ls%E9%80%9A%E9%85%8D%E7%AC%A6%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">ls通配符的使用
+</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">切换目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cd"><span class="nav-number">2.1.</span> <span class="nav-text">cd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84%E5%92%8C%E7%BB%9D%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">相对路径和绝对路径</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">创建和删除操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#touch-%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E6%88%96%E4%BF%AE%E6%94%B9%E6%96%87%E4%BB%B6%E6%97%B6%E9%97%B4"><span class="nav-number">3.1.</span> <span class="nav-text">touch 创建文件或修改文件时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mkdir-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84%E7%9B%AE%E5%BD%95"><span class="nav-number">3.2.</span> <span class="nav-text">mkdir 创建一个新的目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rm-%E5%88%A0%E9%99%A4%E6%96%87%E4%BB%B6%E6%88%96%E7%9B%AE%E5%BD%95"><span class="nav-number">3.3.</span> <span class="nav-text">rm 删除文件或目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%B7%E8%B4%9D%E5%92%8C%E7%A7%BB%E5%8A%A8%E6%96%87%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">拷贝和移动文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tree"><span class="nav-number">4.1.</span> <span class="nav-text">tree</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cp"><span class="nav-number">4.2.</span> <span class="nav-text">cp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mv"><span class="nav-number">4.3.</span> <span class="nav-text">mv</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="nav-number">5.</span> <span class="nav-text">查看文件内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cat"><span class="nav-number">5.1.</span> <span class="nav-text">cat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#more"><span class="nav-number">5.2.</span> <span class="nav-text">more</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grep"><span class="nav-number">5.3.</span> <span class="nav-text">grep</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#echo-%E6%96%87%E5%AD%97%E5%86%85%E5%AE%B9"><span class="nav-number">6.1.</span> <span class="nav-text">echo 文字内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91-%E5%92%8C"><span class="nav-number">6.2.</span> <span class="nav-text">重定向 &gt; 和 &gt;&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-number">6.3.</span> <span class="nav-text">管道 |</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

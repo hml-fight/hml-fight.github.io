@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-Django（十七、后台管理）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="Django">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/01/14/OcS4bBtF5Tj9Dng.png">
+<meta property="og:image" content="https://s2.loli.net/2022/01/14/KPztMQNiOdrJERf.png">
+<meta property="og:image" content="https://s2.loli.net/2022/01/14/5psyBIF6grxSUqX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/01/14/vNdETYChybBsr6c.png">
+<meta property="og:image" content="http://example.com/image/image_fSA2SVlTlt.png">
+<meta property="og:image" content="http://example.com/image/image_aEEMzwvkmE.png">
+<meta property="og:image" content="http://example.com/image/image_gcS8ulig3L.png">
+<meta property="og:image" content="http://example.com/image/image_OKNUGZhsUG.png">
+<meta property="og:image" content="http://example.com/image/image_BS5-s9jyL0.png">
+<meta property="og:image" content="http://example.com/image/image_MumXz4Z5xZ.png">
+<meta property="og:image" content="http://example.com/image/image_8H9tuE7MDR.png">
+<meta property="og:image" content="http://example.com/image/image_OF8ETaKxl-.png">
+<meta property="og:image" content="http://example.com/image/image_h7sGVO9ttA.png">
+<meta property="og:image" content="http://example.com/image/image_MH8bvPKCQk.png">
+<meta property="og:image" content="http://example.com/image/image_yeUZCjZ9aY.png">
+<meta property="og:image" content="http://example.com/image/image_n-QnV6h7ZS.png">
+<meta property="og:image" content="http://example.com/image/image_LvhxEm8YPu.png">
+<meta property="og:image" content="http://example.com/image/image_lWROguyoF9.png">
+<meta property="og:image" content="http://example.com/image/image_Sfo2n3yDC9.png">
+<meta property="og:image" content="http://example.com/image/image_Vc42uItAnZ.png">
+<meta property="og:image" content="http://example.com/image/image_p0xZAo72IQ.png">
+<meta property="og:image" content="http://example.com/image/image_n0N8UVmGVN.png">
+<meta property="article:published_time" content="2022-05-14T07:33:29.495Z">
+<meta property="article:modified_time" content="2022-05-14T08:41:32.315Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/01/14/OcS4bBtF5Tj9Dng.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-Django（十七、后台管理） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/17-admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-Django（十七、后台管理）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:29 / 修改时间：16:41:32" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:29+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/Django/" itemprop="url" rel="index"><span itemprop="name">Django</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Django</p>
+<span id="more"></span>
+<h1 id="admin后台管理">admin后台管理</h1>
+<h2 id="admin后台管理-1">admin后台管理-1</h2>
+<figure>
+<img src="https://s2.loli.net/2022/01/14/OcS4bBtF5Tj9Dng.png"
+title="在这里插入图片描述" alt="在这里插入图片描述" />
+<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
+</figure>
+<h3 id="创建账号">创建账号</h3>
+<figure>
+<img src="https://s2.loli.net/2022/01/14/KPztMQNiOdrJERf.png"
+title="在这里插入图片描述" alt="在这里插入图片描述" />
+<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
+</figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(venv) D:\Django\untitled2&gt;python manage.py createsuperuser</span><br><span class="line">用户名 (leave blank to use <span class="string">&#x27;10938&#x27;</span>): 用户名</span><br><span class="line">电子邮件地址: 邮箱</span><br><span class="line">Password:</span><br><span class="line">Password (again):</span><br><span class="line">Superuser created successfully.</span><br></pre></td></tr></table></figure>
+<p>访问地址：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://127.0.0.1:8000/admin/"
+title="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin/</a></p>
+</blockquote>
+<figure>
+<img src="https://s2.loli.net/2022/01/14/5psyBIF6grxSUqX.png"
+title="在这里插入图片描述" alt="在这里插入图片描述" />
+<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
+</figure>
+<h3 id="小结">小结</h3>
+<figure>
+<img src="https://s2.loli.net/2022/01/14/vNdETYChybBsr6c.png"
+title="在这里插入图片描述" alt="在这里插入图片描述" />
+<figcaption aria-hidden="true">在这里插入图片描述</figcaption>
+</figure>
+<h2 id="admin后台管理-2">admin后台管理-2</h2>
+<h3 id="注册自定义模型类">注册自定义模型类</h3>
+<p><img src="/image/image_fSA2SVlTlt.png" /></p>
+<p>代码测试：</p>
+<p><img src="/image/image_aEEMzwvkmE.png" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Book</span><br><span class="line"></span><br><span class="line"><span class="comment"># Register your models here.</span></span><br><span class="line"></span><br><span class="line">admin.site.register(Book)</span><br></pre></td></tr></table></figure>
+<p>访问网址：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://127.0.0.1:8000/admin/"
+title="http://127.0.0.1:8000/admin/">http://127.0.0.1:8000/admin/</a></p>
+</blockquote>
+<p><img src="/image/image_gcS8ulig3L.png" /></p>
+<p><img src="/image/image_OKNUGZhsUG.png" /></p>
+<p>这里的显示格式和我们之前设置的相关：</p>
+<p><img src="/image/image_BS5-s9jyL0.png" /></p>
+<h3 id="模型管理类">模型管理类</h3>
+<p><img src="/image/image_MumXz4Z5xZ.png" /></p>
+<p><img src="/image/image_8H9tuE7MDR.png" /></p>
+<p><img src="/image/image_OF8ETaKxl-.png" /></p>
+<p>修改代码如下： 修改admin.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Book</span><br><span class="line"></span><br><span class="line"><span class="comment"># Register your models here.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BookManager</span>(admin.ModelAdmin):</span><br><span class="line"></span><br><span class="line">    list_display = [<span class="string">&#x27;id&#x27;</span>,<span class="string">&#x27;title&#x27;</span>,<span class="string">&#x27;pub&#x27;</span>,<span class="string">&#x27;price&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">admin.site.register(Book,BookManager)</span><br></pre></td></tr></table></figure>
+<p>刷新网页：</p>
+<p><img src="/image/image_h7sGVO9ttA.png" /></p>
+<p>为什么系统会知道我们每一列的中文呢？</p>
+<p>常用的模型类：</p>
+<p><img src="/image/image_MH8bvPKCQk.png" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BookManager</span>(admin.ModelAdmin):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 列表页显示那些字段的列</span></span><br><span class="line">    list_display = [<span class="string">&#x27;id&#x27;</span>,<span class="string">&#x27;title&#x27;</span>,<span class="string">&#x27;pub&#x27;</span>,<span class="string">&#x27;price&#x27;</span>]</span><br><span class="line">    <span class="comment"># 控制list_display中的字段 那些可以连接到修改页</span></span><br><span class="line">    list_display_links = [<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">    <span class="comment"># 添加过滤器</span></span><br><span class="line">    list_filter = [<span class="string">&#x27;pub&#x27;</span>]</span><br><span class="line">    <span class="comment"># 添加搜索框 [进行模糊查询，可以继续添加参数]</span></span><br><span class="line">    search_fields = [<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">    <span class="comment"># 添加可在列表页编辑的字段 与 list_display_links 互斥</span></span><br><span class="line">    list_editable = [<span class="string">&#x27;price&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_yeUZCjZ9aY.png" /></p>
+<p><img src="/image/image_n-QnV6h7ZS.png" /></p>
+<p><img src="/image/image_LvhxEm8YPu.png" /></p>
+<p>代码测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Meta</span>:</span><br><span class="line">       db_table = <span class="string">&#x27;book&#x27;</span></span><br><span class="line">       verbose_name = <span class="string">&#x27;图书&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/image/image_lWROguyoF9.png" /></p>
+<p>运行结果如下：</p>
+<p><img src="/image/image_Sfo2n3yDC9.png" /></p>
+<p>多了个s，原因是因为单词的复数形式。 修改代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Meta:</span><br><span class="line">    db_table = &#x27;book&#x27;</span><br><span class="line">    verbose_name = &#x27;图书&#x27;</span><br><span class="line">    verbose_name_plural = verbose_name</span><br></pre></td></tr></table></figure>
+<p>让单复数显示相同。运行结果如下：</p>
+<p><img src="/image/image_Vc42uItAnZ.png" /></p>
+<h3 id="练习">练习</h3>
+<p><img src="/image/image_p0xZAo72IQ.png" /></p>
+<h3 id="小结-1">小结</h3>
+<p><img src="/image/image_n0N8UVmGVN.png" /></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/16-%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%8E%9F%E7%94%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/16-%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%8E%9F%E7%94%9F%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/" rel="prev" title="web相关-Django（十六、聚合查询和原生数据库操作）">
+      <i class="fa fa-chevron-left"></i> web相关-Django（十六、聚合查询和原生数据库操作）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/6-Django/18-%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84/18-%E5%85%B3%E7%B3%BB%E6%98%A0%E5%B0%84/" rel="next" title="web相关-Django（十八、关系映射）">
+      web相关-Django（十八、关系映射） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">admin后台管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86-1"><span class="nav-number">1.1.</span> <span class="nav-text">admin后台管理-1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.1.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.1.2.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#admin%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86-2"><span class="nav-number">1.2.</span> <span class="nav-text">admin后台管理-2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%9E%8B%E7%B1%BB"><span class="nav-number">1.2.1.</span> <span class="nav-text">注册自定义模型类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%AE%A1%E7%90%86%E7%B1%BB"><span class="nav-number">1.2.2.</span> <span class="nav-text">模型管理类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">1.2.3.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

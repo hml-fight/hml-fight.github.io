@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JS编程基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web相关-JS基础（十、函数）">
+<meta property="og:url" content="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/10-JavaScript%20%E5%87%BD%E6%95%B0/10-JavaScript%20%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="JS编程基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image-20220103152256675_CAF1AK-ZJO.png">
+<meta property="og:image" content="http://example.com/image/image-20220103152541252_GPrGZO4Es3.png">
+<meta property="og:image" content="http://example.com/image/image-20220103154144650_pBXhfwuLbg.png">
+<meta property="article:published_time" content="2022-05-14T07:33:28.578Z">
+<meta property="article:modified_time" content="2022-05-14T08:00:45.720Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image-20220103152256675_CAF1AK-ZJO.png">
+
+<link rel="canonical" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/10-JavaScript%20%E5%87%BD%E6%95%B0/10-JavaScript%20%E5%87%BD%E6%95%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>web相关-JS基础（十、函数） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/10-JavaScript%20%E5%87%BD%E6%95%B0/10-JavaScript%20%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          web相关-JS基础（十、函数）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-14 15:33:28 / 修改时间：16:00:45" itemprop="dateCreated datePublished" datetime="2022-05-14T15:33:28+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index"><span itemprop="name">web</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/JS%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">JS基础</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>JS编程基础</p>
+<span id="more"></span>
+<h1 id="javascript-函数">JavaScript 函数</h1>
+<h1 id="函数的概念">函数的概念</h1>
+<p>在 JS
+里面，可能会定义非常多的相同代码或者功能相似的代码，这些代码可能需要大量重复使用。</p>
+<p>虽然
+for循环语句也能实现一些简单的重复操作，但是比较具有局限性，此时我们就可以使用
+JS 中的函数。</p>
+<p><strong>函数</strong>**：<strong>就是封装了一段可被重复调用执行的</strong>代码块**。通过此代码块可以实现大量代码的重复使用。</p>
+<h1 id="函数的使用">函数的使用</h1>
+<p>函数在使用时分为两步：声明函数和调用函数。</p>
+<h2 id="声明函数">声明函数</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 声明函数</span></span><br><span class="line"><span class="keyword">function</span> 函数名() &#123;</span><br><span class="line">    <span class="comment">//函数体代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>function 是声明函数的关键字,必须小写</p></li>
+<li><p>由于函数一般是为了实现某个功能才定义的，
+所以通常我们将函数名命名为动词，比如 getSum</p></li>
+</ul>
+<h2 id="调用函数">调用函数</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line">函数名();  <span class="comment">// 通过调用函数名来执行函数体代码</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>调用的时候千万不要忘记添加小括号</p></li>
+<li><p>口诀：函数不调用，自己不执行。</p></li>
+</ul>
+<p>注意：<strong>声明函数本身并不会执行代码，只有调用函数时才会执行函数体代码。</strong></p>
+<h2 id="函数的封装">函数的封装</h2>
+<ul>
+<li><p>函数的封装是把一个或者多个功能通过<strong>函数的方式****封装起来</strong>，对外只提供一个简单的函数接口</p></li>
+<li><p>简单理解：封装类似于将电脑配件整合组装到机箱中 (
+类似快递打包）</p></li>
+</ul>
+<h2
+id="案例利用函数计算1-100之间的累加和">案例：利用函数计算1-100之间的累加和</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">   计算1-100之间值的函数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 声明函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="keyword">var</span> sumNum = <span class="number">0</span>;<span class="comment">// 准备一个变量，保存数字和</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</span><br><span class="line">    sumNum += i;<span class="comment">// 把每个数值 都累加 到变量中</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">alert</span>(sumNum);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line"><span class="title function_">getSum</span>();</span><br></pre></td></tr></table></figure>
+<h1 id="函数的参数">函数的参数</h1>
+<h2 id="形参和实参">形参和实参</h2>
+<p>在声明函数时，可以在函数名称后面的小括号中添加一些参数，这些参数被称为<strong>形参</strong>，而在调用该函数时，同样也需要传递相应的参数，这些参数被称为<strong>实参</strong>。</p>
+<p><img src="/image/image-20220103152256675_CAF1AK-ZJO.png" /></p>
+<p><strong>参数****的作用</strong> :
+在<strong>函数内部</strong>某些值不能固定，我们可以通过参数在<strong>调用函数时传递</strong>不同的值进去。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 带参数的函数声明</span></span><br><span class="line"><span class="keyword">function</span> 函数名(形参<span class="number">1</span>, 形参<span class="number">2</span> , 形参<span class="number">3.</span>..) &#123; <span class="comment">// 可以定义任意多的参数，用逗号分隔</span></span><br><span class="line">  <span class="comment">// 函数体</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 带参数的函数调用</span></span><br><span class="line">函数名(实参<span class="number">1</span>, 实参<span class="number">2</span>, 实参<span class="number">3.</span>..); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="案例-利用函数求任意两个数的和">案例：
+利用函数求任意两个数的和</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params">num1, num2</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(num1 + num2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">1</span>, <span class="number">3</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">6</span>, <span class="number">5</span>); <span class="comment">// 11</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="函数参数的传递过程">函数参数的传递过程</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 声明函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getSum</span>(<span class="params">num1, num2</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(num1 + num2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">1</span>, <span class="number">3</span>); <span class="comment">// 4</span></span><br><span class="line"><span class="title function_">getSum</span>(<span class="number">6</span>, <span class="number">5</span>); <span class="comment">// 11</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>调用的时候实参值是传递给形参的
+形参简单理解为：<strong>不用****声明的变量</strong>
+实参和形参的多个参数之间用逗号（,）分隔</p>
+</blockquote>
+<h2 id="函数形参和实参个数不匹配问题">函数形参和实参个数不匹配问题</h2>
+<p><img src="/image/image-20220103152541252_GPrGZO4Es3.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sum</span>(<span class="params">num1, num2</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(num1 + num2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">sum</span>(<span class="number">100</span>, <span class="number">200</span>);             <span class="comment">// 形参和实参个数相等，输出正确结果</span></span><br><span class="line"><span class="title function_">sum</span>(<span class="number">100</span>, <span class="number">400</span>, <span class="number">500</span>, <span class="number">700</span>);   <span class="comment">// 实参个数多于形参，只取到形参的个数</span></span><br><span class="line"><span class="title function_">sum</span>(<span class="number">200</span>);                  <span class="comment">// 实参个数少于形参，多的形参定义为undefined，结果为NaN</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong> 在JavaScript中，形参的默认值是undefined。</p>
+<h2 id="小结">小结</h2>
+<p>l函数可以带参数也可以不带参数</p>
+<p>l 声明函数的时候，函数名括号里面的是形参，形参的默认值为
+undefined</p>
+<p>l 调用函数的时候，函数名括号里面的是实参</p>
+<p>l 多个参数中间用逗号分隔</p>
+<p>l
+形参的个数可以和实参个数不匹配，但是结果不可预计，我们尽量要匹配</p>
+<h1 id="函数的返回值">函数的返回值</h1>
+<h2 id="return-语句">return 语句</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 声明函数</span></span><br><span class="line"><span class="keyword">function</span> 函数名（）&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span>  需要返回的值；</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line">函数名();    <span class="comment">// 此时调用函数就可以得到函数体内return 后面的值</span></span><br></pre></td></tr></table></figure>
+<p>l在使用 return 语句时，函数会停止执行，并返回指定的值</p>
+<p>l 如果函数没有 return ，返回的值是 undefined</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 声明函数</span></span><br><span class="line"><span class="keyword">function</span> sum（）&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span>  <span class="number">666</span>；</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line"><span class="title function_">sum</span>();      <span class="comment">// 此时 sum 的值就等于666，因为 return 语句会把自身后面的值返回给调用者 </span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="案例-1利用函数求任意两个数的最大值">案例
+1：利用函数求任意两个数的最大值</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getMax</span>(<span class="params">num1, num2</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> num1 &gt; num2 ? num1 : num2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">getMax</span>(<span class="number">1</span>, <span class="number">2</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">getMax</span>(<span class="number">11</span>, <span class="number">2</span>));</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="案例-2利用函数求任意一个数组中的最大值">案例
+2：利用函数求任意一个数组中的最大值</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//定义一个获取数组中最大数的函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getMaxFromArr</span>(<span class="params">numArray</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> maxNum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="number">0</span>;i &lt; numArray.<span class="property">length</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(numArray[i] &gt; maxNum)&#123;</span><br><span class="line">            maxNum = numArray[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> maxNum;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> arrNum = [<span class="number">5</span>,<span class="number">2</span>,<span class="number">99</span>,<span class="number">101</span>,<span class="number">67</span>,<span class="number">77</span>];</span><br><span class="line"><span class="keyword">var</span> maxN = <span class="title function_">getMaxFromArr</span>(arrNum); <span class="comment">// 这个实参是个数组</span></span><br><span class="line"><span class="title function_">alert</span>(<span class="string">&#x27;最大值为：&#x27;</span>+ maxN);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="return-终止函数">return 终止函数</h2>
+<p>return 语句之后的代码不被执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">add</span>(<span class="params">num1，num2</span>)&#123;</span><br><span class="line">    <span class="comment">//函数体</span></span><br><span class="line">    <span class="keyword">return</span> num1 + num2; <span class="comment">// 注意：return 后的代码不执行</span></span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;我不会被执行，因为前面有 return&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> resNum = <span class="title function_">add</span>(<span class="number">21</span>,<span class="number">6</span>); <span class="comment">// 调用函数，传入两个实参，并通过 resNum 接收函数返回值</span></span><br><span class="line"><span class="title function_">alert</span>(resNum);          </span><br></pre></td></tr></table></figure>
+<h2 id="return-的返回值">return 的返回值</h2>
+<p><strong>return</strong>
+<strong>只能返回一个值</strong>。如果用逗号隔开多个值，以最后一个为准。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">add</span>(<span class="params">num1，num2</span>)&#123;</span><br><span class="line">    <span class="comment">//函数体</span></span><br><span class="line">    <span class="keyword">return</span> num1，num2;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> resNum = <span class="title function_">add</span>(<span class="number">21</span>,<span class="number">6</span>); <span class="comment">// 调用函数，传入两个实参，并通过 resNum 接收函数返回值</span></span><br><span class="line"><span class="title function_">alert</span>(resNum);          <span class="comment">// 6</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2
+id="案例创建一个函数实现两个数之间的加减乘除运算并将结果返回">案例：创建一个函数，实现两个数之间的加减乘除运算，并将结果返回</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> a = <span class="built_in">parseFloat</span>(<span class="title function_">prompt</span>(<span class="string">&#x27;请输入第一个数&#x27;</span>));</span><br><span class="line"><span class="keyword">var</span> b = <span class="built_in">parseFloat</span>(<span class="title function_">prompt</span>(<span class="string">&#x27;请输入第二个数&#x27;</span>));</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">count</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> arr = [a + b, a - b, a * b, a / b];</span><br><span class="line">    <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> result = <span class="title function_">count</span>(a, b);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br></pre></td></tr></table></figure>
+<h2 id="函数没有-return-返回-undefined">函数没有 return 返回
+undefined</h2>
+<p>函数都是有返回值的</p>
+<p>1.如果有return 则返回 return 后面的值</p>
+<p>2.如果没有return 则返回 undefined</p>
+<h2 id="break-continue-return-的区别">break ,continue ,return
+的区别</h2>
+<ul>
+<li><p>break ：结束当前的循环体（如 for、while）</p></li>
+<li><p>continue ：跳出本次循环，继续执行下次循环（如
+for、while）</p></li>
+<li><p>return ：不仅可以退出循环，还能够返回 return
+语句中的值，同时还可以结束当前的函数体内的代码</p></li>
+</ul>
+<h2 id="作业">作业</h2>
+<p>①
+写一个函数，用户输入任意两个数字的任意算术运算（简单的计算器小功能），并能弹出运算后的结果。</p>
+<p>②
+写一个函数，用户输入任意两个数字的最大值，并能出弹运算后的结果。</p>
+<p>③
+写一个函数，用户输入任意三个不同数字的最大值，并能弹出运算后的结果。</p>
+<p>④
+写一个函数，用户输入一个数判断是否是素数，并返弹出回值(又叫质数，只能被1和自身整数的数)</p>
+<h1 id="arguments的使用">arguments的使用</h1>
+<p>当我们不确定有多少个参数传递的时候，可以用 arguments 来获取。在
+JavaScript 中，arguments
+实际上它是当前函数的一个内置对象。所有函数都内置了一个 arguments
+对象，arguments 对象中存储了传递的所有实参。</p>
+<p><strong>arguments</strong>展示形式是一个伪数组，因此可以进行遍历。伪数组具有以下特点：</p>
+<ul>
+<li><p>具有 length 属性</p></li>
+<li><p>按索引方式储存数据</p></li>
+<li><p>不具有数组的 push , pop 等方法</p></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">案例：利用函数求任意个数的最大值 </span><br><span class="line"><span class="keyword">function</span> <span class="title function_">maxValue</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> max = <span class="variable language_">arguments</span>[<span class="number">0</span>];</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="variable language_">arguments</span>.<span class="property">length</span>; i++) &#123;</span><br><span class="line">         <span class="keyword">if</span> (max &lt; <span class="variable language_">arguments</span>[i]) &#123;</span><br><span class="line">                    max = <span class="variable language_">arguments</span>[i];</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">maxValue</span>(<span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">9</span>));</span><br><span class="line"> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">maxValue</span>(<span class="number">12</span>, <span class="number">4</span>, <span class="number">9</span>));</span><br></pre></td></tr></table></figure>
+<h1 id="函数案例">函数案例</h1>
+<h2 id="案例-1利用函数封装方式翻转任意一个数组">案例
+1利用函数封装方式，翻转任意一个数组</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">reverse</span>(<span class="params">arr</span>) &#123;</span><br><span class="line"><span class="keyword">var</span> newArr = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = arr.<span class="property">length</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">newArr[newArr.<span class="property">length</span>] = arr[i];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> newArr;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> arr1 = <span class="title function_">reverse</span>([<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">9</span>]);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr1);</span><br></pre></td></tr></table></figure>
+<h2 id="案例-2-利用函数封装方式对数组排序----冒泡排序">案例 2
+利用函数封装方式，对数组排序 -- 冒泡排序</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sort</span>(<span class="params">arr</span>) &#123;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span> - <span class="number">1</span>; i++) &#123;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; arr.<span class="property">length</span> - i - <span class="number">1</span>; j++) &#123;</span><br><span class="line"><span class="keyword">if</span> (arr[j] &gt; arr[j + <span class="number">1</span>]) &#123;</span><br><span class="line"><span class="keyword">var</span> temp = arr[j];</span><br><span class="line">arr[j] = arr[j + <span class="number">1</span>];</span><br><span class="line">arr[j + <span class="number">1</span>] = temp;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="案例-3判断闰年">案例 3：判断闰年</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isRun</span>(<span class="params">year</span>) &#123;</span><br><span class="line">     <span class="keyword">var</span> flag = <span class="literal">false</span>;</span><br><span class="line">     <span class="keyword">if</span> (year % <span class="number">4</span> === <span class="number">0</span> &amp;&amp; year % <span class="number">100</span> !== <span class="number">0</span> || year % <span class="number">400</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        flag = <span class="literal">true</span>;</span><br><span class="line">     &#125;</span><br><span class="line">    <span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">isRun</span>(<span class="number">2010</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">isRun</span>(<span class="number">2012</span>));</span><br></pre></td></tr></table></figure>
+<h1 id="函数的两种声明方式">函数的两种声明方式</h1>
+<h2 id="自定义函数方式命名函数">自定义函数方式(命名函数)</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 声明定义方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;...&#125;</span><br><span class="line"><span class="comment">// 调用  </span></span><br><span class="line"><span class="title function_">fn</span>();  </span><br></pre></td></tr></table></figure>
+<p>l因为有名字，所以也被称为命名函数</p>
+<p>l
+调用函数的代码既可以放到声明函数的前面，也可以放在声明函数的后面</p>
+<h2 id="函数表达式方式匿名函数">函数表达式方式(匿名函数）</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// 这是函数表达式写法，匿名函数后面跟分号结束</span></span><br><span class="line"><span class="keyword">var</span> fn = <span class="keyword">function</span>(<span class="params"></span>)&#123;...&#125;；</span><br><span class="line"><span class="comment">// 调用的方式，函数调用必须写到函数体下面</span></span><br><span class="line"><span class="title function_">fn</span>();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>l因为函数没有名字，所以也被称为匿名函数</p>
+<p>l 这个fn 里面存储的是一个函数</p>
+<p>l 函数表达式方式原理跟声明变量方式是一致的</p>
+<p>l 函数调用的代码必须写到函数体后面</p>
+<h2 id="作业-1">作业</h2>
+<p>①写一个函数，实现反转任意数组。</p>
+<p>② 写一个函数，实现对数字数组的排序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sort</span>(<span class="params">arr</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span> - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; arr.<span class="property">length</span> - i - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (arr[j] &gt; arr[j+<span class="number">1</span>]) &#123;</span><br><span class="line">                temp = arr[j];</span><br><span class="line">                arr[j] = arr[j+<span class="number">1</span>];</span><br><span class="line">                arr[j+<span class="number">1</span>] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">sort</span>([<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2345</span>,<span class="number">2232</span>,<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">reverse</span>(<span class="params">arr</span>) &#123;</span><br><span class="line">    newArr = []</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = arr.<span class="property">length</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">        newArr[newArr.<span class="property">length</span>] = arr[i]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> newArr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">reverse</span>([<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">2345</span>,<span class="number">2232</span>,<span class="number">1</span>]))</span><br></pre></td></tr></table></figure>
+<h1 id="小组项目-做一个简易计算器">小组项目： 做一个简易计算器</h1>
+<p><img src="/image/image-20220103154144650_pBXhfwuLbg.png" /></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!<span class="variable constant_">DOCTYPE</span> html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">    &lt;head&gt;</span><br><span class="line">        &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">        &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</span><br><span class="line">        &lt;title&gt;Document&lt;/title&gt;</span><br><span class="line">        &lt;script&gt;</span><br><span class="line">            var balance = 1000;</span><br><span class="line">            while (true)&#123;</span><br><span class="line">                var choose = prompt(&#x27;欢迎使用简易计算器：\n1.加法运算\n2.减法运算\n3.乘法运算\n4.除法运算\n5.退出&#x27;)</span><br><span class="line">                if (choose == 5) &#123;</span><br><span class="line">                    break</span><br><span class="line">                &#125;</span><br><span class="line">                var n1 = parseInt(prompt(&#x27;输入第一个值:&#x27;)) </span><br><span class="line">                var n2 = parseInt(prompt(&#x27;输入第二个值:&#x27;)) </span><br><span class="line">                if (choose == 1) &#123;</span><br><span class="line">                    </span><br><span class="line">                    alert(&#x27;值为：&#x27; + (n1 + n2))</span><br><span class="line">                </span><br><span class="line">                &#125; else if (choose == 2) &#123;</span><br><span class="line">    </span><br><span class="line">                    alert(&#x27;值为：&#x27; + (n1 - n2))</span><br><span class="line"></span><br><span class="line">                &#125; else if (choose == 3) &#123;</span><br><span class="line">                    alert(&#x27;值为：&#x27; + (n1 * n2))</span><br><span class="line">                &#125; else if (choose == 4) &#123;</span><br><span class="line">                    alert(&#x27;值为：&#x27; + (n1 / n2))</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    alert(&#x27;SB，滚！！！&#x27;)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &lt;/script&gt;</span><br><span class="line">        </span><br><span class="line">    &lt;/head&gt;</span><br><span class="line">    &lt;body&gt;</span><br><span class="line">        </span><br><span class="line">    &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+              <a href="/tags/js/" rel="tag"># js</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/09-JavaScript%20%E6%95%B0%E7%BB%84/09-JavaScript%20%E6%95%B0%E7%BB%84/" rel="prev" title="web相关-JS基础（九、数组）">
+      <i class="fa fa-chevron-left"></i> web相关-JS基础（九、数组）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Web%E7%9B%B8%E5%85%B3/2-JavaScript%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/11-JavaScript%20%E4%BD%9C%E7%94%A8%E5%9F%9F/11-JavaScript%20%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="next" title="web相关-JS基础（十、作用域）">
+      web相关-JS基础（十、作用域） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#javascript-%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">JavaScript 函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">函数的概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">函数的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">声明函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E7%94%A8%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">调用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%B0%81%E8%A3%85"><span class="nav-number">3.3.</span> <span class="nav-text">函数的封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E8%AE%A1%E7%AE%971-100%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B4%AF%E5%8A%A0%E5%92%8C"><span class="nav-number">3.4.</span> <span class="nav-text">案例：利用函数计算1-100之间的累加和</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">函数的参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BD%A2%E5%8F%82%E5%92%8C%E5%AE%9E%E5%8F%82"><span class="nav-number">4.1.</span> <span class="nav-text">形参和实参</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E6%B1%82%E4%BB%BB%E6%84%8F%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E5%92%8C"><span class="nav-number">4.2.</span> <span class="nav-text">案例：
+利用函数求任意两个数的和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E7%9A%84%E4%BC%A0%E9%80%92%E8%BF%87%E7%A8%8B"><span class="nav-number">4.3.</span> <span class="nav-text">函数参数的传递过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%BD%A2%E5%8F%82%E5%92%8C%E5%AE%9E%E5%8F%82%E4%B8%AA%E6%95%B0%E4%B8%8D%E5%8C%B9%E9%85%8D%E9%97%AE%E9%A2%98"><span class="nav-number">4.4.</span> <span class="nav-text">函数形参和实参个数不匹配问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">5.</span> <span class="nav-text">函数的返回值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#return-%E8%AF%AD%E5%8F%A5"><span class="nav-number">5.1.</span> <span class="nav-text">return 语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-1%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E6%B1%82%E4%BB%BB%E6%84%8F%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="nav-number">5.2.</span> <span class="nav-text">案例
+1：利用函数求任意两个数的最大值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-2%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E6%B1%82%E4%BB%BB%E6%84%8F%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="nav-number">5.3.</span> <span class="nav-text">案例
+2：利用函数求任意一个数组中的最大值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#return-%E7%BB%88%E6%AD%A2%E5%87%BD%E6%95%B0"><span class="nav-number">5.4.</span> <span class="nav-text">return 终止函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#return-%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">5.5.</span> <span class="nav-text">return 的返回值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E4%B8%A4%E4%B8%AA%E6%95%B0%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E8%BF%90%E7%AE%97%E5%B9%B6%E5%B0%86%E7%BB%93%E6%9E%9C%E8%BF%94%E5%9B%9E"><span class="nav-number">5.6.</span> <span class="nav-text">案例：创建一个函数，实现两个数之间的加减乘除运算，并将结果返回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%B2%A1%E6%9C%89-return-%E8%BF%94%E5%9B%9E-undefined"><span class="nav-number">5.7.</span> <span class="nav-text">函数没有 return 返回
+undefined</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#break-continue-return-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">5.8.</span> <span class="nav-text">break ,continue ,return
+的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A"><span class="nav-number">5.9.</span> <span class="nav-text">作业</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#arguments%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">arguments的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%A1%88%E4%BE%8B"><span class="nav-number">7.</span> <span class="nav-text">函数案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-1%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F%E7%BF%BB%E8%BD%AC%E4%BB%BB%E6%84%8F%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84"><span class="nav-number">7.1.</span> <span class="nav-text">案例
+1利用函数封装方式，翻转任意一个数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-2-%E5%88%A9%E7%94%A8%E5%87%BD%E6%95%B0%E5%B0%81%E8%A3%85%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F----%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F"><span class="nav-number">7.2.</span> <span class="nav-text">案例 2
+利用函数封装方式，对数组排序 -- 冒泡排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B-3%E5%88%A4%E6%96%AD%E9%97%B0%E5%B9%B4"><span class="nav-number">7.3.</span> <span class="nav-text">案例 3：判断闰年</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%A3%B0%E6%98%8E%E6%96%B9%E5%BC%8F"><span class="nav-number">8.</span> <span class="nav-text">函数的两种声明方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%96%B9%E5%BC%8F%E5%91%BD%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">8.1.</span> <span class="nav-text">自定义函数方式(命名函数)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%96%B9%E5%BC%8F%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">8.2.</span> <span class="nav-text">函数表达式方式(匿名函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E4%B8%9A-1"><span class="nav-number">8.3.</span> <span class="nav-text">作业</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%84%E9%A1%B9%E7%9B%AE-%E5%81%9A%E4%B8%80%E4%B8%AA%E7%AE%80%E6%98%93%E8%AE%A1%E7%AE%97%E5%99%A8"><span class="nav-number">9.</span> <span class="nav-text">小组项目： 做一个简易计算器</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

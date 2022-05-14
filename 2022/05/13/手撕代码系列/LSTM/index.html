@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="基于python和pytorch的lstm代码设计实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手撕LSTM">
+<meta property="og:url" content="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/LSTM/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="基于python和pytorch的lstm代码设计实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/image_yaqqlFYxgR.png">
+<meta property="og:image" content="http://example.com/image/image_izUAs6jRQo.png">
+<meta property="og:image" content="http://example.com/image/image_7C8LYEIl1s.png">
+<meta property="og:image" content="http://example.com/image/image_d79KHSTdWN.png">
+<meta property="article:published_time" content="2022-05-13T10:40:06.555Z">
+<meta property="article:modified_time" content="2022-05-13T13:41:11.177Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/image_yaqqlFYxgR.png">
+
+<link rel="canonical" href="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/LSTM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>手撕LSTM | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/LSTM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          手撕LSTM
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 18:40:06 / 修改时间：21:41:11" itemprop="dateCreated datePublished" datetime="2022-05-13T18:40:06+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/" itemprop="url" rel="index"><span itemprop="name">手撕代码系列</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>基于python和pytorch的lstm代码设计实现</p>
+<span id="more"></span>
+<h1 id="什么是lstm">什么是LSTM</h1>
+<p>长短期记忆（Long short-term memory,
+LSTM）是一种特殊的RNN，主要是为了解决长序列训练过程中的梯度消失和梯度爆炸问题。简单来说，就是相比普通的RNN，LSTM能够在更长的序列中有更好的表现。</p>
+<p>LSTM结构（图右）和普通RNN的主要输入输出区别如下所示。</p>
+<p><img src="/image/image_yaqqlFYxgR.png" /></p>
+<p>相比RNN只有一个传递状态<span
+class="math inline">\(h^t\)</span>，LSTM有两个传输状态，一个<span
+class="math inline">\(c^t(cell\ state)\)</span>和一个<span
+class="math inline">\(h^t(hidden\ state)\)</span>。（Tips：RNN中的<span
+class="math inline">\(h^t\)</span>对应LSTM中的<span
+class="math inline">\(c^t\)</span>）</p>
+<p>其中对于传递下去的<span
+class="math inline">\(c^t\)</span>改变的很慢，通常输出的<span
+class="math inline">\(c^t\)</span>是上一个状态传过来的<span
+class="math inline">\(c^{t-1}\)</span>加上一些数值。</p>
+<p>而<span
+class="math inline">\(h^t\)</span>则在不同的节点下往往有很大的区别。</p>
+<h1 id="深入lstm结构">深入LSTM结构</h1>
+<p>下面具体对LSTM的内部结构来进行剖析。</p>
+<p>首先使用LSTM的当前输入<span
+class="math inline">\(x^t\)</span>和上一个状态传递下来的<span
+class="math inline">\(h^{t-1}\)</span>拼接训练得到四个状态。</p>
+<p><img src="/image/image_izUAs6jRQo.png" /></p>
+<p><img src="/image/image_7C8LYEIl1s.png" /></p>
+<p>其中，<span
+class="math inline">\(z^f,z^i,z^o\)</span>是由拼接向量乘以权重矩阵之后，再通过一个<span
+class="math inline">\(Softmax\)</span>激活函数转换成0到1之间的数值，来作为一种门控状态。而<span
+class="math inline">\(z\)</span>则是将结果通过一个<span
+class="math inline">\(tanh\)</span>激活函数将转换成-1到1之间的值（这里使用<span
+class="math inline">\(tanh\)</span>是因为这里是将其做为输入数据，而不是门控信号）。</p>
+<p><strong>下面开始进一步介绍这四个状态在LSTM内部的使用。（敲黑板）</strong></p>
+<p><img src="/image/image_d79KHSTdWN.png" /></p>
+<p>其中<span class="math inline">\(\odot\)</span>是Hadamard
+Product，也就是操作矩阵中对应的元素相乘，因此要求两个相乘矩阵是同型的。<span
+class="math inline">\(\oplus\)</span>则代表进行矩阵加法。</p>
+<p>LSTM内部主要有三个阶段：</p>
+<p>1-忘记阶段。这个阶段主要是对上一个节点传进来的输入进行<strong>选择性</strong>忘记。简单来说就是会
+“忘记不重要的，记住重要的”。具体来说是通过计算得到的<span
+class="math inline">\(z^f\)</span>（f表示forget）来作为忘记门控，来控制上一个状态的<span
+class="math inline">\(c^{t-1}\)</span>哪些需要留哪些需要忘。</p>
+<p>
+2-选择记忆阶段。这个阶段将这个阶段的输入有选择性地进行“记忆”。主要是会对输入
+<span
+class="math inline">\(x^t\)</span>进行选择记忆。哪些重要则着重记录下来，哪些不重要，则少记一些。当前的输入内容由前面计算得到的
+<span class="math inline">\(z\)</span> 表示。而选择的门控信号则是由<span
+class="math inline">\(z^{i}\)</span>（i代表information）来进行控制。</p>
+<blockquote>
+<p>将上面两步得到的结果相加，即可得到传输给下一个状态的 <span
+class="math inline">\(c^t\)</span>。也就是上图中的第一个公式。</p>
+</blockquote>
+<p>3-输出阶段。这个阶段将决定哪些将会被当成当前状态的输出。主要是通过
+<span
+class="math inline">\(z^o\)</span>来进行控制的。并且还对上一阶段得到的<span
+class="math inline">\(c^o\)</span>进行了放缩（通过一个tanh激活函数进行变化）。</p>
+<p>与普通RNN类似，输出<span
+class="math inline">\(y^t\)</span>往往最终也是通过<span
+class="math inline">\(h^t\)</span> 变化得到。</p>
+<h1 id="手撕lstm">手撕LSTM</h1>
+<h2 id="简易版">简易版：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NaiveCustomLSTM</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size: <span class="built_in">int</span>, hidden_size: <span class="built_in">int</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 一般数据输入为[bs, suq_size, feature_size]</span></span><br><span class="line">        <span class="comment"># 输入每个tokenize的size(即每个词向量编码长度)</span></span><br><span class="line">        self.input_size = input_size</span><br><span class="line">        <span class="comment"># 隐层每个tokenize的size</span></span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line"></span><br><span class="line">        <span class="comment"># i_t</span></span><br><span class="line">        self.W_i = nn.Parameter(torch.Tensor(input_size, hidden_size))</span><br><span class="line">        self.U_i = nn.Parameter(torch.Tensor(hidden_size, hidden_size))</span><br><span class="line">        self.b_i = nn.Parameter(torch.Tensor(hidden_size))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># f_t</span></span><br><span class="line">        self.W_f = nn.Parameter(torch.Tensor(input_size, hidden_size))</span><br><span class="line">        self.U_f = nn.Parameter(torch.Tensor(hidden_size, hidden_size))</span><br><span class="line">        self.b_f = nn.Parameter(torch.Tensor(hidden_size))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># c_t</span></span><br><span class="line">        self.W_c = nn.Parameter(torch.Tensor(input_size, hidden_size))</span><br><span class="line">        self.U_c = nn.Parameter(torch.Tensor(hidden_size, hidden_size))</span><br><span class="line">        self.b_c = nn.Parameter(torch.Tensor(hidden_size))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># o_t</span></span><br><span class="line">        self.W_o = nn.Parameter(torch.Tensor(input_size, hidden_size))</span><br><span class="line">        self.U_o = nn.Parameter(torch.Tensor(hidden_size, hidden_size))</span><br><span class="line">        self.b_o = nn.Parameter(torch.Tensor(hidden_size))</span><br><span class="line"></span><br><span class="line">        self.init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        权重与偏置初始化</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        stdv = <span class="number">1.0</span> / math.sqrt(self.hidden_size)</span><br><span class="line">        <span class="keyword">for</span> weight <span class="keyword">in</span> self.parameters():</span><br><span class="line">            weight.data.uniform_(-stdv, stdv)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, init_states=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        assumes x.shape represents (batch_size, sequence_size, input_size)</span></span><br><span class="line"><span class="string">        input: 前馈操作接收init_states参数，该参数是上面方程的（h_t, c_t）参数的元组，</span></span><br><span class="line"><span class="string">                如果不引入，则设置为零。然后，我们对每个保留（h_t, c_t）的序列元素执行LSTM方程的前馈，</span></span><br><span class="line"><span class="string">                并将其作为序列下一个元素的状态引入.</span></span><br><span class="line"><span class="string">        return: 预测和最后一个状态元组</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        bs, seq_sz, _ = x.size()</span><br><span class="line">        hidden_seq = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> init_states <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 初始化历史状态</span></span><br><span class="line">            h_t, c_t = (</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device),</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device)</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            h_t, c_t = init_states</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(seq_sz):</span><br><span class="line">            <span class="comment"># 获取单个词的feature 向量</span></span><br><span class="line">            x_t = x[:, t, :]</span><br><span class="line"></span><br><span class="line">            i_t = torch.sigmoid(x_t @ self.W_i + h_t @ self.U_i + self.b_i)</span><br><span class="line">            f_t = torch.sigmoid(x_t @ self.W_f + h_t @ self.U_f + self.b_f)</span><br><span class="line">            g_t = torch.sigmoid(x_t @ self.W_c + h_t @ self.U_c + self.b_c)</span><br><span class="line">            o_t = torch.sigmoid(x_t @ self.W_o + h_t @ self.U_o + self.b_o)</span><br><span class="line">            c_t = f_t * c_t + i_t * g_t</span><br><span class="line">            h_t = o_t * torch.tanh(c_t)</span><br><span class="line"></span><br><span class="line">            hidden_seq.append(h_t.unsqueeze(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># reshape hidden_seq p/ retornar</span></span><br><span class="line">        hidden_seq = torch.cat(hidden_seq, <span class="number">0</span>)</span><br><span class="line">        hidden_seq = hidden_seq.transpose(<span class="number">0</span>, <span class="number">1</span>).contiguous()</span><br><span class="line">        <span class="keyword">return</span> hidden_seq, (h_t, c_t)</span><br></pre></td></tr></table></figure>
+<h2 id="优化版1">优化版1：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CustomLSTM</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_sz, hidden_sz</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 一般数据输入为[bs, suq_size, feature_size]</span></span><br><span class="line">        <span class="comment"># 输入每个tokenize的size(即每个词向量编码长度)</span></span><br><span class="line">        self.input_size = input_sz</span><br><span class="line">        <span class="comment"># 隐层每个tokenize的size</span></span><br><span class="line">        self.hidden_size = hidden_sz</span><br><span class="line"></span><br><span class="line">        self.W = nn.Parameter(torch.Tensor(input_sz, hidden_sz * <span class="number">4</span>))</span><br><span class="line">        self.U = nn.Parameter(torch.Tensor(hidden_sz, hidden_sz * <span class="number">4</span>))</span><br><span class="line">        self.bias = nn.Parameter(torch.Tensor(hidden_sz * <span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">        self.init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot; 权重与偏置初始化</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        stdv = <span class="number">1.0</span> / math.sqrt(self.hidden_size)</span><br><span class="line">        <span class="keyword">for</span> weight <span class="keyword">in</span> self.parameters():</span><br><span class="line">            weight.data.uniform_(-stdv, stdv)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, init_states=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;assumes x.shape represents (batch_size, sequence_size, input_size)</span></span><br><span class="line"><span class="string">        input: 前馈操作接收init_states参数，该参数是上面方程的（h_t, c_t）参数的元组，</span></span><br><span class="line"><span class="string">                如果不引入，则设置为零。然后，我们对每个保留（h_t, c_t）的序列元素执行LSTM方程的前馈，</span></span><br><span class="line"><span class="string">                并将其作为序列下一个元素的状态引入.</span></span><br><span class="line"><span class="string">        return: 预测和最后一个状态元组</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        bs, seq_sz, _ = x.size()</span><br><span class="line">        hidden_seq = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> init_states <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 初始化历史状态</span></span><br><span class="line">            h_t, c_t = (</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device),</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device),</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            h_t, c_t = init_states</span><br><span class="line"></span><br><span class="line">        HS = self.hidden_size</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(seq_sz):</span><br><span class="line">            <span class="comment"># 获取单个词的feature 向量</span></span><br><span class="line">            x_t = x[:, t, :]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># batch the computations into a single matrix multiplication</span></span><br><span class="line">            gate = x_t @ self.W + h_t @ self.U + self.bias</span><br><span class="line">            i_t, f_t, g_t, o_t = (</span><br><span class="line">                torch.sigmoid(gate[:, :HS]),</span><br><span class="line">                torch.sigmoid(gate[:, HS:HS*<span class="number">2</span>]),</span><br><span class="line">                torch.sigmoid(gate[:, HS*<span class="number">2</span>:HS*<span class="number">3</span>]),</span><br><span class="line">                torch.sigmoid(gate[:, HS*<span class="number">3</span>:])</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">            c_t = f_t * c_t + i_t * g_t</span><br><span class="line">            h_t = o_t * torch.tanh(c_t)</span><br><span class="line"></span><br><span class="line">            hidden_seq.append(h_t.unsqueeze(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># reshape hidden_seq p/ retornar</span></span><br><span class="line">        hidden_seq = torch.cat(hidden_seq, dim=<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># reshape from shape (sequence, batch, feature) to (batch, sequence, feature)</span></span><br><span class="line">        hidden_seq = hidden_seq.transpose(<span class="number">0</span>, <span class="number">1</span>).contiguous()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> hidden_seq, (h_t, c_t)</span><br></pre></td></tr></table></figure>
+<h2 id="优化版2">优化版2：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CustomLSTMPeephole</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_sz, hidden_sz, peephole=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line">        <span class="comment"># 一般数据输入为[bs, seq_size, feature_size]</span></span><br><span class="line">        <span class="comment"># 输入每个tokenize的size(即每个词向量编码长度)</span></span><br><span class="line">        self.input_size = input_sz</span><br><span class="line">        <span class="comment"># 隐层每个tokenize的size</span></span><br><span class="line">        self.hidden_size = hidden_sz</span><br><span class="line">        self.peephole = peephole</span><br><span class="line"></span><br><span class="line">        self.W = nn.Parameter(torch.Tensor(input_sz, hidden_sz * <span class="number">4</span>))</span><br><span class="line">        self.U = nn.Parameter(torch.Tensor(hidden_sz, hidden_sz * <span class="number">4</span>))</span><br><span class="line">        self.bias = nn.Parameter(torch.Tensor(hidden_sz * <span class="number">4</span>))</span><br><span class="line"></span><br><span class="line">        self.init_weights()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot; 权重与偏置初始化</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        stdv = <span class="number">1.0</span> / math.sqrt(self.hidden_size)</span><br><span class="line">        <span class="keyword">for</span> weight <span class="keyword">in</span> self.parameters():</span><br><span class="line">            weight.data.uniform_(-stdv, stdv)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, init_states=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;assumes x.shape represents (batch_size, sequence_size, input_size)</span></span><br><span class="line"><span class="string">        input: 前馈操作接收init_states参数，该参数是上面方程的（h_t, c_t）参数的元组，</span></span><br><span class="line"><span class="string">                如果不引入，则设置为零。然后，我们对每个保留（h_t, c_t）的序列元素执行LSTM方程的前馈，</span></span><br><span class="line"><span class="string">                并将其作为序列下一个元素的状态引入.</span></span><br><span class="line"><span class="string">        return: 预测和最后一个状态元组</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        bs, seq_sz, _ = x.size()</span><br><span class="line">        hidden_seq = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> init_states <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 初始化历史状态</span></span><br><span class="line">            h_t, c_t = (</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device),</span><br><span class="line">                torch.zeros(bs, self.hidden_size).to(x.device),</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            h_t, c_t = init_states</span><br><span class="line"></span><br><span class="line">        HS = self.hidden_size</span><br><span class="line">        <span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(seq_sz):</span><br><span class="line">            <span class="comment"># 获取单个词的feature 向量</span></span><br><span class="line">            x_t = x[:, t, :]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># batch the computations into a single matrix multiplication</span></span><br><span class="line">            <span class="keyword">if</span> self.peephole:</span><br><span class="line">                gate = x_t @ self.W + h_t @ self.U + self.bias</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                gate = x_t @ self.W + h_t @ self.U + self.bias</span><br><span class="line">                g_t = torch.tanh(gate[:, HS*<span class="number">2</span>:HS*<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">            i_t, f_t, o_t = (</span><br><span class="line">                torch.sigmoid(gate[:, :HS]),  <span class="comment"># input</span></span><br><span class="line">                torch.sigmoid(gate[:, HS:HS*<span class="number">2</span>]),  <span class="comment"># forget</span></span><br><span class="line">                torch.sigmoid(gate[:, HS*<span class="number">3</span>:]),  <span class="comment"># output</span></span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.peephole:</span><br><span class="line">                c_t = f_t * c_t + i_t * torch.sigmoid(x_t @ self.W + self.bias)[:, HS*<span class="number">2</span>:HS*<span class="number">3</span>]</span><br><span class="line">                h_t = torch.tanh(o_t * c_t)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                c_t = f_t * c_t + i_t * g_t</span><br><span class="line">                h_t = o_t * torch.tanh(c_t)</span><br><span class="line"></span><br><span class="line">            hidden_seq.append(h_t.unsqueeze(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># reshape hidden_seq p/ retornar</span></span><br><span class="line">        hidden_seq = torch.cat(hidden_seq, dim=<span class="number">0</span>)</span><br><span class="line">        <span class="comment"># reshape from shape (sequence, batch, feature) to (batch, sequence, feature)</span></span><br><span class="line">        hidden_seq = hidden_seq.transpose(<span class="number">0</span>, <span class="number">1</span>).contiguous()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> hidden_seq, (h_t, c_t)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag"># 人工智能</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E7%99%BE%E9%9D%A2%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E5%8D%B7%E7%A7%AF/" rel="prev" title="百面深度学习-卷积">
+      <i class="fa fa-chevron-left"></i> 百面深度学习-卷积
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/%E6%89%8B%E6%92%95%E4%BB%A3%E7%A0%81%E7%B3%BB%E5%88%97/GRU/" rel="next" title="手撕GRU">
+      手撕GRU <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFlstm"><span class="nav-number">1.</span> <span class="nav-text">什么是LSTM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5lstm%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">深入LSTM结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%92%95lstm"><span class="nav-number">3.</span> <span class="nav-text">手撕LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E7%89%88"><span class="nav-number">3.1.</span> <span class="nav-text">简易版：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%89%881"><span class="nav-number">3.2.</span> <span class="nav-text">优化版1：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%89%882"><span class="nav-number">3.3.</span> <span class="nav-text">优化版2：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

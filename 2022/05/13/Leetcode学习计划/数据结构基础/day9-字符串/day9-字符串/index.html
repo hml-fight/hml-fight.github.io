@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="数据结构基础-字符串">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode学习计划-数据结构基础（day9-字符串）">
+<meta property="og:url" content="http://example.com/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/index.html">
+<meta property="og:site_name" content="Pluto&#39;s blog">
+<meta property="og:description" content="数据结构基础-字符串">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-13T15:26:17.099Z">
+<meta property="article:modified_time" content="2022-05-13T15:33:43.249Z">
+<meta property="article:author" content="Pluto">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="数据结构">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Leetcode学习计划-数据结构基础（day9-字符串） | Pluto's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Pluto's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/resources/" rel="section"><i class="download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/day9-%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/boji.png">
+      <meta itemprop="name" content="Pluto">
+      <meta itemprop="description" content="努力吧，少年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Pluto's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Leetcode学习计划-数据结构基础（day9-字符串）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-13 23:26:17 / 修改时间：23:33:43" itemprop="dateCreated datePublished" datetime="2022-05-13T23:26:17+08:00">2022-05-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index"><span itemprop="name">Leetcode</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">数据结构基础</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>数据结构基础-字符串</p>
+<span id="more"></span>
+<h1 id="day9-字符串">day9-字符串</h1>
+<h1 id="重复的dna序列">重复的DNA序列</h1>
+<p>DNA序列 由一系列核苷酸组成，缩写为 'A', 'C', 'G' 和 'T'.。</p>
+<p>例如，"ACGAATTCCG" 是一个 DNA序列 。 在研究 DNA 时，识别 DNA
+中的重复序列非常有用。</p>
+<p>给定一个表示 DNA序列 的字符串 s ，返回所有在 DNA
+分子中出现不止一次的 长度为 10 的序列(子字符串)。你可以按 任意顺序
+返回答案。</p>
+<p>示例 1：</p>
+<p>输入：s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+输出：["AAAAACCCCC","CCCCCAAAAA"] 示例 2：</p>
+<p>输入：s = "AAAAAAAAAAAAA" 输出：["AAAAAAAAAA"]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findRepeatedDnaSequences</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        <span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line">        L = <span class="number">10</span></span><br><span class="line">        ans = []</span><br><span class="line">        cnt = defaultdict(<span class="built_in">int</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(s) - L + <span class="number">1</span>):</span><br><span class="line">            sub = s[i: i+L]</span><br><span class="line">            cnt[sub] += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> cnt[sub] == <span class="number">2</span>:</span><br><span class="line">                ans.append(sub)</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<h2 id="分析">分析：</h2>
+<p>简单哈希</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">L = <span class="number">10</span></span><br><span class="line"><span class="built_in">bin</span> = &#123;<span class="string">&#x27;A&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;C&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;G&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;T&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">findRepeatedDnaSequences</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">str</span>]:</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        <span class="keyword">if</span> n &lt;= L:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        ans = []</span><br><span class="line">        x = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> ch <span class="keyword">in</span> s[:L - <span class="number">1</span>]:</span><br><span class="line">            x = (x &lt;&lt; <span class="number">2</span>) | <span class="built_in">bin</span>[ch]</span><br><span class="line">        cnt = defaultdict(<span class="built_in">int</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - L + <span class="number">1</span>):</span><br><span class="line">            x = ((x &lt;&lt; <span class="number">2</span>) | <span class="built_in">bin</span>[s[i + L - <span class="number">1</span>]]) &amp; ((<span class="number">1</span> &lt;&lt; (L * <span class="number">2</span>)) - <span class="number">1</span>)</span><br><span class="line">            cnt[x] += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> cnt[x] == <span class="number">2</span>:</span><br><span class="line">                ans.append(s[i : i + L])</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<h2 id="分析-1">分析：</h2>
+<p>由于 ss 中只含有 44 种字符，我们可以将每个字符用 22
+个比特表示，即：</p>
+<p><span class="math inline">\(A\)</span> 表示为二进制 <span
+class="math inline">\(00\)</span>； <span
+class="math inline">\(C\)</span> 表示为二进制 <span
+class="math inline">\(01\)</span>； <span
+class="math inline">\(G\)</span> 表示为二进制 <span
+class="math inline">\(10\)</span>； $ T $ 表示为二进制 <span
+class="math inline">\(11\)</span>。 如此一来，一个长为<span
+class="math inline">\(10\)</span> 的字符串就可以用 20 个比特表示，而一个
+int 整数有 32 个比特，足够容纳该字符串，因此我们可以将 s 的每个长为 10
+的子串用一个 int 整数表示（只用低 20 位）。</p>
+<p>注意到上述字符串到整数的映射是一一映射，每个整数都对应着一个唯一的字符串，因此我们可以将方法一中的哈希表改为存储每个长为
+10 的子串的整数表示。</p>
+<p>如果我们对每个长为 10
+的子串都单独计算其整数表示，那么时间复杂度仍然和方法一一样为
+O(NL)。为了优化时间复杂度，我们可以用一个大小固定为
+10的滑动窗口来计算子串的整数表示。设当前滑动窗口对应的整数表示为
+x，当我们要计算下一个子串时，就将滑动窗口向右移动一位，此时会有一个新的字符进入窗口，以及窗口最左边的字符离开窗口，这些操作对应的位运算，按计算顺序表示如下：</p>
+<p>滑动窗口向右移动一位：<span class="math inline">\(x = x &lt;&lt;
+2\)</span>，由于每个字符用 2 个比特表示，所以要左移 2位； 一个新的字符
+ch 进入窗口：<span class="math inline">\(x = x |
+bin[ch]\)</span>，这里<span class="math inline">\(bin[ch]\)</span>
+为字符 ch 的对应二进制； 窗口最左边的字符离开窗口：x = x &amp; ((1
+&lt;&lt; 20) - 1)，由于我们只考虑 x的低
+20位比特，需要将其余位置零，即与上 (1 &lt;&lt; 20) - 1。
+将这三步合并，就可以用 O(1)的时间计算出下一个子串的整数表示，即 x = ((x
+&lt;&lt; 2) | bin[ch]) &amp; ((1 &lt;&lt; 20) - 1)。</p>
+<h1 id="最长回文子串">最长回文子串</h1>
+<p>给你一个字符串 s，找到 s 中最长的回文子串。</p>
+<p>示例 1：</p>
+<p>输入：s = "babad" 输出："bab" 解释："aba" 同样是符合题意的答案。 示例
+2：</p>
+<p>输入：s = "cbbd" 输出："bb"</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        window = n</span><br><span class="line">        <span class="keyword">while</span> window &gt;= <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - window + <span class="number">1</span>):</span><br><span class="line">                temp = s[i: i + window]</span><br><span class="line">                <span class="keyword">if</span> temp == temp[::-<span class="number">1</span>]:</span><br><span class="line">                    <span class="keyword">return</span> temp</span><br><span class="line">            window -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> s[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="分析-2">分析：</h2>
+<p>设定窗口大小遍历即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        n = <span class="built_in">len</span>(s)</span><br><span class="line">        <span class="keyword">if</span> n &lt; <span class="number">2</span>:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line"></span><br><span class="line">        max_len = <span class="number">1</span></span><br><span class="line">        begin = <span class="number">0</span></span><br><span class="line">        <span class="comment"># dp[i][j]表示 s[i..j] 是否是回文串</span></span><br><span class="line">        dp = [[<span class="literal">False</span>] * n <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">            dp[i][i] = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 递推开始</span></span><br><span class="line">        <span class="comment"># 先枚举子串长度</span></span><br><span class="line">        <span class="keyword">for</span> L <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>, n + <span class="number">1</span>):</span><br><span class="line">            <span class="comment"># 枚举左边界</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">                <span class="comment"># 由L和i可以确定右边界，即j-i+1=L得：</span></span><br><span class="line">                j = L + i - <span class="number">1</span></span><br><span class="line">                <span class="comment"># 如果右边界越界，退出循环</span></span><br><span class="line">                <span class="keyword">if</span> j &gt;= n:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> s[i] != s[j]:</span><br><span class="line">                    dp[i][j] = <span class="literal">False</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> j - i &lt; <span class="number">3</span>:</span><br><span class="line">                        dp[i][j] = <span class="literal">True</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        dp[i][j] = dp[i+<span class="number">1</span>][j-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 记录长度</span></span><br><span class="line">                <span class="keyword">if</span> dp[i][j] <span class="keyword">and</span> j - i + <span class="number">1</span> &gt; max_len:</span><br><span class="line">                    max_len = j - i + <span class="number">1</span></span><br><span class="line">                    begin = i</span><br><span class="line">        <span class="keyword">return</span> s[begin: begin + max_len]</span><br></pre></td></tr></table></figure>
+<h2 id="分析-3">分析：</h2>
+<p>对于一个子串而言，如果它是回文串，并且长度大于2，那么将它首尾的两个字母去除之后，它仍然是个回文串。例如对于字符串
+<span class="math inline">\(“ababa”\)</span>，如果<span
+class="math inline">\(&quot;bab&quot;\)</span>是回文串，<span
+class="math inline">\(“ababa”\)</span>一定是回文串，这是因为它的首尾两个字母都是<span
+class="math inline">\(&quot;a&quot;\)</span>。</p>
+<p>故我们使用动态规划解决本题。使用<span
+class="math inline">\(P(i,j)\)</span>表示字符串<span
+class="math inline">\(s\)</span>的第<span
+class="math inline">\(i\)</span>到<span
+class="math inline">\(j\)</span>个字母组成的串是否为回文串：</p>
+$$ P(i,j) =
+<span class="math display">\[\begin{cases}
+True, &amp; 如果s_i,...,s_j是回文串 \\
+
+False,&amp; 其他情况 \\
+\end{cases}\]</span>
+<p>$$</p>
+<p>这里的其他情况包含两种可能性：</p>
+<ol type="1">
+<li><p><span
+class="math inline">\(s[i,j]\)</span>本身不是一个回文串</p></li>
+<li><p><span class="math inline">\(i&gt;j\)</span>,此时<span
+class="math inline">\(s[i,j]\)</span>本身不合法</p></li>
+</ol>
+<p>故转移方程为:</p>
+<p>$$</p>
+<p>P(i,j)=P(i+1,j-1)|(S_i==S_j) $$</p>
+<p>也就是说，只有<span
+class="math inline">\(s[i+1,j-1]\)</span>是回文串，并且<span
+class="math inline">\(S\)</span>的第<span
+class="math inline">\(i\)</span>和第<span
+class="math inline">\(j\)</span>个字母相同时，<span
+class="math inline">\(S[i:j]\)</span>才会是回文串。</p>
+<p>上文的所有讨论是建立在子串长度大于2的前提之上的，我们还需要考虑动态规划中的边界条件，即子串的长度为1或
+2。对于长度为1的子串，它显然是个回文串；对于长度为2的子串，只要它的两个字母相同，它就是一个回文串。因此我们就可以写出动态规划的边界条件：</p>
+<p><span class="math display">\[
+\begin
+{cases}P(i,j)=True \\
+P(i,i+1)=(S_i==S_{i+1})\\
+\end{cases}
+\]</span></p>
+<p>根据这个思路，我们就可以完成动态规划了，最终的答案即为所有<span
+class="math inline">\(P(i,j)=True\)</span>中 $ j-i+1
+$（即子串长度）的最大值。注意：在状态转移方程中，我们是从长度较短的字符串向长度较长的字符串进行转移的，因此一定要注意动态规划的循环顺序。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%9F%BA%E7%A1%80/day8-%E5%AD%97%E7%AC%A6%E4%B8%B2/day8-%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="prev" title="Leetcode学习计划-数据结构基础（day8-字符串）">
+      <i class="fa fa-chevron-left"></i> Leetcode学习计划-数据结构基础（day8-字符串）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/05/13/Leetcode%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/%E7%AE%97%E6%B3%95%E5%85%A5%E9%97%A8/day1-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/day1-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/" rel="next" title="Leetcode学习计划-算法入门（day1-二分查找）">
+      Leetcode学习计划-算法入门（day1-二分查找） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#day9-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.</span> <span class="nav-text">day9-字符串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E5%A4%8D%E7%9A%84dna%E5%BA%8F%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">重复的DNA序列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">2.1.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90-1"><span class="nav-number">2.2.</span> <span class="nav-text">分析：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2"><span class="nav-number">3.</span> <span class="nav-text">最长回文子串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90-2"><span class="nav-number">3.1.</span> <span class="nav-text">分析：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90-3"><span class="nav-number">3.2.</span> <span class="nav-text">分析：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Pluto"
+      src="/images/boji.png">
+  <p class="site-author-name" itemprop="name">Pluto</p>
+  <div class="site-description" itemprop="description">努力吧，少年</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">157</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-5 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Pluto</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
